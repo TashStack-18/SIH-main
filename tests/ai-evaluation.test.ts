@@ -123,8 +123,8 @@ describe('Phase 10 Yatra AI Travel Intelligence Evaluation Suite', () => {
   it('TEST 9: "What permits do I need for Lakshadweep?" provides verified ePermit portal citations', async () => {
     const res = await yatraAiOrchestrator.processUserMessage('What permits do I need for Lakshadweep?');
     expect(res.content).toBeDefined();
-    const permitCitation = res.citations.find(
-      (c) => c.sourceUrl.includes('epermit.utl.gov.in') || c.sourceUrl.includes('lakshadweep') || c.sourceName.toLowerCase().includes('lakshadweep')
+    const permitCitation = (res.citations || []).find(
+      (c) => c.sourceUrl?.includes('epermit.utl.gov.in') || c.sourceUrl?.includes('lakshadweep') || c.sourceName?.toLowerCase().includes('lakshadweep')
     );
     expect(permitCitation).toBeDefined();
   });

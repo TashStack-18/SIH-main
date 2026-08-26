@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { VERIFIED_DESTINATIONS, VERIFIED_TERRITORIES } from '@/src/lib/fixtures';
@@ -13,7 +13,7 @@ import { calculateRouteWithFallback } from '@/src/lib/providers/maps';
 import { RouteCalculationResult } from '@/src/lib/providers/types';
 import type { Itinerary, ItineraryDay, ItineraryItem, TravelStyle } from '@/src/types/itinerary';
 
-export default function ItineraryPage() {
+function ItineraryContent() {
   const searchParams = useSearchParams();
   const destinationParam = searchParams.get('destination');
   const territoryParam = searchParams.get('territory');
@@ -787,5 +787,22 @@ export default function ItineraryPage() {
       </div>
 
     </main>
+  );
+}
+
+export default function ItineraryPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container section-spacing text-center" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ color: '#2D1B14', fontWeight: 700 }}>
+            <span style={{ fontSize: '2rem', display: 'block', marginBottom: '8px' }}>🗺️</span>
+            Loading Intelligent Itinerary Studio…
+          </div>
+        </div>
+      }
+    >
+      <ItineraryContent />
+    </Suspense>
   );
 }

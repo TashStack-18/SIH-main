@@ -12,7 +12,18 @@ export type ItineraryItemType =
   | 'HOTEL'
   | 'RESTAURANT'
   | 'TRANSPORT'
+  | 'HERITAGE'
+  | 'MONUMENT'
+  | 'VIEWPOINT'
+  | 'ACTIVITY'
   | 'CUSTOM';
+
+export type StopStatus = 
+  | 'PLANNED'
+  | 'ACTIVE'
+  | 'COMPLETED'
+  | 'SKIPPED'
+  | 'REMOVED';
 
 export type TravelStyle = 
   | 'ADVENTURE'
@@ -21,7 +32,9 @@ export type TravelStyle =
   | 'PHOTOGRAPHY'
   | 'RELAXED'
   | 'FAMILY'
-  | 'CULTURAL';
+  | 'CULTURAL'
+  | 'BALANCED'
+  | 'FAST-PACED';
 
 export interface ItineraryItem {
   id: string;
@@ -33,6 +46,7 @@ export interface ItineraryItem {
   durationMinutes?: number;
   estimatedCost?: number;
   location?: Coordinates;
+  status?: StopStatus;
 }
 
 export interface ItineraryDay {

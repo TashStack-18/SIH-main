@@ -34,6 +34,7 @@ export interface DetourCalculationResult {
   newTotalDistanceKm: number;
   originName: string;
   destinationName: string;
+  originLeg: string;
 }
 
 export class SpatialEngine {
@@ -158,6 +159,7 @@ export class SpatialEngine {
       newTotalDistanceKm: Math.round(newTotalDist * 10) / 10,
       originName: origin.name,
       destinationName: destination.name,
+      originLeg: `${origin.name} → ${destination.name}`,
     };
   }
 
