@@ -66,8 +66,6 @@ export function HeroCarousel() {
         {/* Union Territory Tag */}
         <div className="hero-ut-tag">
           <span>🏛️ {current.shortName.toUpperCase()}</span>
-          <span>•</span>
-          <span>{current.capital.toUpperCase()} CAPITAL</span>
         </div>
 
         {/* Serif Headline (Playfair Display) */}

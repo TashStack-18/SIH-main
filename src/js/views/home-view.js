@@ -41,9 +41,7 @@ export function renderHomeView() {
             
             <div class="container hero-content">
               <div class="hero-ut-tag">
-                <span>🏛️ UNION TERRITORY ${idx + 1} OF 8</span>
-                <span>•</span>
-                <span>${ut.capital.toUpperCase()}</span>
+                <span>🏛️ ${ut.name.toUpperCase()}</span>
               </div>
               
               <h1 class="hero-title">${ut.name.toUpperCase()}</h1>
