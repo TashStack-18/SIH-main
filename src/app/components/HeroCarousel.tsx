@@ -134,16 +134,8 @@ export function HeroCarousel() {
         </div>
       </div>
 
-      {/* Bottom Carousel Controller - Elevated cleanly above search bar */}
+      {/* Bottom Carousel Controller - Elevated progress indicators */}
       <div className="hero-footer-bar">
-        
-        {/* Slide Counter */}
-        <div className="hero-counter">
-          <span>0{currentIndex + 1}</span>
-          <span style={{ opacity: 0.5, margin: "0 4px" }}>/</span>
-          <span style={{ opacity: 0.7 }}>0{territories.length}</span>
-        </div>
-
         {/* Progress Bars / Dots */}
         <div className="hero-progress-group">
           {territories.map((ut, idx) => {

@@ -1604,7 +1604,7 @@ h4 { font-size: 1.125rem; font-weight: 600; }
   right: 0;
   z-index: 20;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   max-width: var(--container-max-width);
   margin: 0 auto;
