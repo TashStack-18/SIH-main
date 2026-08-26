@@ -95,9 +95,6 @@ export default function HomePage() {
       <section className="section-spacing" style={{ backgroundColor: "var(--stitch-surface-variant, #F0EADE)" }} aria-label="8 Union Territories Explorer">
         <div className="container">
           <div className="section-header">
-            <span className="badge badge-official" style={{ width: "fit-content", background: "rgba(200, 142, 68, 0.2)", color: "#2D1B14", borderColor: "#C88E44" }}>
-              National Geographic Scope
-            </span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14]">
               Explore the 8 Union Territories
             </h2>
@@ -137,9 +134,6 @@ export default function HomePage() {
       {/* 6. Travel by Experience */}
       <section className="section-spacing container" aria-label="Signature Experience Categories">
         <div className="section-header">
-          <span className="badge badge-verified" style={{ width: "fit-content", marginBottom: "6px" }}>
-            Curated Themes
-          </span>
           <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
             Travel by Experience
           </h2>
@@ -182,9 +176,6 @@ export default function HomePage() {
         <div className="container">
           <div className="section-header-row">
             <div>
-              <span className="badge badge-warning" style={{ marginBottom: "6px", background: "#fef3c7", color: "#92400e", borderColor: "#f59e0b" }}>
-                2026 Official Calendars
-              </span>
               <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14]">
                 Cultural Festivals & Events
               </h2>

@@ -186,7 +186,6 @@ export function renderHomeView() {
       <section class="section-spacing" style="background-color: var(--color-bg-surface-elevated);" aria-label="8 Union Territories Explorer">
         <div class="container">
           <div class="section-header">
-            <span class="badge badge-official" style="width: fit-content;">National Geographic Scope</span>
             <h2>Explore the 8 Union Territories</h2>
             <p class="sub-text">From the trans-Himalayan summits of Ladakh to the tropical coral lagoons of Lakshadweep.</p>
           </div>
@@ -238,7 +237,6 @@ export function renderHomeView() {
         <div class="container">
           <div class="section-header-row">
             <div>
-              <span class="badge badge-warning" style="margin-bottom: 6px;">2026 Official Calendars</span>
               <h2>Cultural Festivals & Events</h2>
               <p class="sub-text">Verified festival schedules with explicit date precisions directly from UT Tourism departments.</p>
             </div>
