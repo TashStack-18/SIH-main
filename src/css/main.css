@@ -1530,6 +1530,13 @@ h4 { font-size: 1.125rem; font-weight: 600; }
   margin-bottom: 20px;
 }
 
+.hero-arrows-inline {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: 4px;
+}
+
 .hero-btn-primary {
   background: #C88E44;
   color: #ffffff;
@@ -1593,7 +1600,7 @@ h4 { font-size: 1.125rem; font-weight: 600; }
 
 .hero-footer-bar {
   position: absolute;
-  bottom: 24px;
+  bottom: 75px;
   left: 0;
   right: 0;
   z-index: 20;
@@ -1602,15 +1609,17 @@ h4 { font-size: 1.125rem; font-weight: 600; }
   align-items: center;
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
   color: rgba(255, 255, 255, 0.9);
+  pointer-events: auto;
 }
 
 .hero-counter {
   font-family: var(--font-family-mono);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.08em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .hero-progress-group {
@@ -1635,12 +1644,13 @@ h4 { font-size: 1.125rem; font-weight: 600; }
 }
 
 .hero-arrow-btn {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -1653,6 +1663,7 @@ h4 { font-size: 1.125rem; font-weight: 600; }
   background: #C88E44;
   border-color: #C88E44;
   transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(200, 142, 68, 0.5);
 }
 
 /* --- FLOATING SEARCH BAR --- */
