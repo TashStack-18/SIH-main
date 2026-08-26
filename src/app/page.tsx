@@ -79,7 +79,11 @@ export default function HomePage() {
                     <Link href={`/destinations/${dest.slug}`} className="btn btn-sm btn-outline">
                       Details
                     </Link>
-                    <Link href="/itinerary" className="btn btn-sm btn-primary" style={{ background: "#2D1B14", borderColor: "#2D1B14" }}>
+                    <Link
+                      href={`/itinerary?destination=${dest.slug}&territory=${dest.territoryId}&source=home_card`}
+                      className="btn btn-sm btn-primary"
+                      style={{ background: "#2D1B14", borderColor: "#2D1B14" }}
+                    >
                       + Itinerary
                     </Link>
                   </div>

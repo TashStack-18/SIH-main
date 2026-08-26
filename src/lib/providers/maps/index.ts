@@ -3,12 +3,14 @@
  * Phase 9B: Multi-Tier Resilient Routing & Geocoding Pipeline
  */
 
+import { TomTomRoutingProvider } from './tomTomRoutingProvider';
 import { MapboxProvider } from './mapboxProvider';
 import { GoogleMapsProvider } from './googleMapsProvider';
 import { PostgisRoutingFallbackProvider } from './postgisRoutingFallback';
 import { RouteCalculationResult, RouteWaypoint, GeocodingFeature } from '../types';
 import { providerCache, deduplicateRequest, CircuitBreaker } from '../cache';
 
+const tomtom = new TomTomRoutingProvider();
 const mapbox = new MapboxProvider();
 const googleMaps = new GoogleMapsProvider();
 const postgisFallback = new PostgisRoutingFallbackProvider();
@@ -39,15 +41,19 @@ export async function calculateRouteWithFallback(
     try {
       const result = await routeCircuitBreaker.execute(
         async () => {
-          // Primary: Mapbox
+          // Tier 1: TomTom (Phase 11 Primary)
+          const tomtomResult = await tomtom.calculateRoute(waypoints, mode);
+          if (tomtomResult) return tomtomResult;
+
+          // Tier 2: Mapbox
           const mbResult = await mapbox.calculateRoute(waypoints, mode);
           if (mbResult) return mbResult;
 
-          // Secondary: Google Maps
+          // Tier 3: Google Maps
           const gmResult = await googleMaps.calculateRoute(waypoints, mode);
           if (gmResult) return gmResult;
 
-          throw new Error('Mapbox and Google Maps routing unavailable');
+          throw new Error('Remote routing providers unavailable');
         },
         async () => {
           const fallback = await postgisFallback.calculateRoute(waypoints, mode);

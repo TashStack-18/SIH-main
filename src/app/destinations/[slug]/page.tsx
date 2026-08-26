@@ -59,7 +59,11 @@ export default async function DestinationDetailPage({
           <p style={{ fontSize: "1.25rem", color: "rgba(255,255,255,0.92)", maxWidth: "780px", marginBottom: "24px" }}>{dest.tagline}</p>
 
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", alignItems: "center" }}>
-            <Link href="/itinerary" className="btn btn-lg btn-secondary" style={{ textDecoration: "none", fontWeight: 700 }}>
+            <Link
+              href={`/itinerary?destination=${dest.slug}&territory=${dest.territoryId}&source=destination_detail`}
+              className="btn btn-lg btn-secondary"
+              style={{ textDecoration: "none", fontWeight: 700 }}
+            >
               + Add to My Itinerary
             </Link>
             <Link
