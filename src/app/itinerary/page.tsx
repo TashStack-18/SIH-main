@@ -11,7 +11,7 @@ import { RecommendationEngine } from '@/src/lib/itinerary/recommendationEngine';
 import { SpatialEngine, DetourCalculationResult } from '@/src/lib/geospatial/spatialEngine';
 import { calculateRouteWithFallback } from '@/src/lib/providers/maps';
 import { RouteCalculationResult } from '@/src/lib/providers/types';
-import type { Itinerary, ItineraryDay, ItineraryItem, TravelStyle } from '@/src/types/itinerary';
+import type { Itinerary, ItineraryDay, ItineraryItem, TravelStyle, StopStatus } from '@/src/types/itinerary';
 
 function ItineraryContent() {
   const searchParams = useSearchParams();
@@ -147,19 +147,21 @@ function ItineraryContent() {
           if (exists) return prev;
 
           // Append to Day 2 or new day
-          const updatedDays = [...prev.days];
+          const updatedDays: ItineraryDay[] = JSON.parse(JSON.stringify(prev.days));
           const targetDay = updatedDays[1] || updatedDays[0];
-          targetDay.items.push({
-            id: `item-${Date.now()}`,
-            time: '02:00 PM',
-            title: match.name,
-            type: match.type as any,
-            destinationId: match.id,
-            notes: match.tagline || match.shortDescription,
-            durationMinutes: 90,
-            location: match.coordinates,
-            status: 'PLANNED',
-          });
+          if (targetDay) {
+            targetDay.items.push({
+              id: `item-${Date.now()}`,
+              time: '02:00 PM',
+              title: match.name,
+              type: match.type as any,
+              destinationId: match.id,
+              notes: match.tagline || match.shortDescription,
+              durationMinutes: 90,
+              location: match.coordinates,
+              status: 'PLANNED' as StopStatus,
+            });
+          }
 
           return {
             ...prev,
@@ -243,11 +245,11 @@ function ItineraryContent() {
   // Actions
   const handleToggleStopComplete = (stopId: string) => {
     setItinerary((prev) => {
-      const updatedDays = prev.days.map((d) => ({
+      const updatedDays: ItineraryDay[] = prev.days.map((d) => ({
         ...d,
         items: d.items.map((item) => {
           if (item.id === stopId) {
-            const nextStatus = item.status === 'COMPLETED' ? 'PLANNED' : 'COMPLETED';
+            const nextStatus: StopStatus = item.status === 'COMPLETED' ? 'PLANNED' : 'COMPLETED';
             return { ...item, status: nextStatus };
           }
           return item;
@@ -259,19 +261,21 @@ function ItineraryContent() {
 
   const handleAddDetourStop = (candidate: typeof VERIFIED_DESTINATIONS[0]) => {
     setItinerary((prev) => {
-      const updatedDays = [...prev.days];
+      const updatedDays: ItineraryDay[] = JSON.parse(JSON.stringify(prev.days));
       const targetDay = updatedDays[1] || updatedDays[0];
-      targetDay.items.push({
-        id: `stop-${Date.now()}`,
-        time: '01:30 PM',
-        title: candidate.name,
-        type: candidate.type as any,
-        destinationId: candidate.id,
-        notes: candidate.tagline || candidate.shortDescription,
-        durationMinutes: 90,
-        location: candidate.coordinates,
-        status: 'PLANNED',
-      });
+      if (targetDay) {
+        targetDay.items.push({
+          id: `stop-${Date.now()}`,
+          time: '01:30 PM',
+          title: candidate.name,
+          type: candidate.type as any,
+          destinationId: candidate.id,
+          notes: candidate.tagline || candidate.shortDescription,
+          durationMinutes: 90,
+          location: candidate.coordinates,
+          status: 'PLANNED' as StopStatus,
+        });
+      }
       return { ...prev, days: updatedDays };
     });
   };
