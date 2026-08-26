@@ -1,0 +1,10 @@
+/**
+ * 🇮🇳 BHARAT SAFE YATRA — ENVIRONMENT SCHEMA
+ */
+
+export const env = {
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  NEXT_PUBLIC_MAPBOX_TOKEN: process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "pk.eyJ1Ijoic2loMjAyNi1iaGFyYXRzYWZleWF0cmEiLCJhIjoiY2x5ZXBwbXlsMDFiMzJsc2J5Zmxwd254NSJ9.demo",
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+  NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || "/api/v1"
+};
