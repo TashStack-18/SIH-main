@@ -1523,18 +1523,17 @@ h4 { font-size: 1.125rem; font-weight: 600; }
 
 .hero-actions {
   display: flex;
-  gap: 14px;
+  gap: 16px;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
 
-.hero-arrows-inline {
+.hero-action-group {
   display: inline-flex;
-  gap: 8px;
   align-items: center;
-  margin-left: 4px;
+  gap: 10px;
 }
 
 .hero-btn-primary {
