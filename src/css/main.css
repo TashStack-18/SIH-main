@@ -1878,3 +1878,24 @@ h4 { font-size: 1.125rem; font-weight: 600; }
   overflow: hidden;
 }
 
+/* =========================================================================
+   YATRA AI 2.0 — DUAL-PANE RESPONSIVE WORKSPACE
+   ========================================================================= */
+
+@media (max-width: 991px) {
+  .yatra-ai-dual-layout {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .yatra-ai-context-wrapper {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
+}
+
+
