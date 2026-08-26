@@ -136,7 +136,6 @@ export function renderHomeView() {
       <section class="section-spacing container" aria-label="Popular Verified Destinations">
         <div class="section-header-row">
           <div>
-            <span class="badge badge-verified" style="margin-bottom: 6px;">100% Phase 5 Grounded</span>
             <h2>Popular Across Bharat</h2>
             <p class="sub-text">Hand-picked destinations with verified coordinates, entry guidelines, and seasonal intelligence.</p>
           </div>

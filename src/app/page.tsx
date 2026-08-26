@@ -33,9 +33,6 @@ export default function HomePage() {
       <section className="section-spacing container" aria-label="Popular Verified Destinations">
         <div className="section-header-row">
           <div>
-            <span className="badge badge-verified" style={{ marginBottom: "6px", background: "rgba(200, 142, 68, 0.15)", color: "#2D1B14", borderColor: "#C88E44" }}>
-              Verified Cultural Destinations
-            </span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
               Popular Across Bharat
             </h2>
