@@ -201,7 +201,6 @@ export default function HomePage() {
                 }}
               >
                 <div className="festival-date-badge" style={{ background: "#2D1B14", color: "#ffffff" }}>
-                  <span>📅</span>
                   <span>{fest.displayDate}</span>
                 </div>
                 <h3 className="font-serif" style={{ fontSize: "1.2rem", color: "#2D1B14", marginTop: "6px" }}>
@@ -214,7 +213,7 @@ export default function HomePage() {
                   {fest.description}
                 </p>
                 <div style={{ paddingTop: "12px", borderTop: "1px solid var(--color-border-subtle)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span className="badge badge-neutral" style={{ fontSize: "0.725rem" }}>{fest.datePrecision}</span>
+                  <span style={{ fontSize: "0.775rem", color: "#78685C", fontWeight: 600 }}>{fest.category}</span>
                   <Link href="/festivals" style={{ fontSize: "0.825rem", fontWeight: 700, color: "#2D1B14" }} className="hover:text-[#C88E44]">
                     View Details →
                   </Link>

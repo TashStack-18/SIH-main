@@ -106,7 +106,6 @@ export default async function SearchPage({
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "var(--space-lg)" }}>
               {matchedFestivals.map(f => (
                 <div key={f.id} className="card card-hoverable" style={{ padding: "var(--space-lg)" }}>
-                  <span className="badge badge-warning" style={{ fontSize: "0.65rem", marginBottom: "4px" }}>{f.datePrecision}</span>
                   <h3 style={{ fontSize: "1.15rem", marginBottom: "4px" }}>{f.name}</h3>
                   <div style={{ fontSize: "0.85rem", color: "var(--color-primary)", fontWeight: 600, marginBottom: "8px" }}>{f.displayDate} • {f.location}</div>
                   <p style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", marginBottom: "12px" }}>{f.description}</p>

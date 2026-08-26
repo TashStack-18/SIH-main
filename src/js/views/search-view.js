@@ -92,7 +92,6 @@ export function renderSearchView(query = '') {
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-lg);">
               ${matchedFestivals.map(f => `
                 <div class="card card-hoverable" style="padding: var(--space-lg);">
-                  <span class="badge badge-warning" style="font-size: 0.65rem; margin-bottom: 4px;">${f.datePrecision}</span>
                   <h3 style="font-size: 1.15rem; margin-bottom: 4px;">${f.name}</h3>
                   <div style="font-size: 0.85rem; color: var(--color-primary); font-weight: 600; margin-bottom: 8px;">${f.displayDate} • ${f.location}</div>
                   <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 12px;">${f.description}</p>

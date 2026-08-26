@@ -247,14 +247,13 @@ export function renderHomeView() {
             ${featuredFestivals.map(fest => `
               <div class="festival-card">
                 <div class="festival-date-badge">
-                  <span>📅</span>
                   <span>${fest.displayDate}</span>
                 </div>
                 <h3 style="font-size: 1.15rem; color: var(--color-text-primary); margin-top: 4px;">${fest.name}</h3>
                 <div style="font-size: 0.8rem; font-weight: 600; color: var(--color-primary);">${fest.location} (${fest.territoryName})</div>
                 <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; flex-grow: 1;">${fest.description}</p>
                 <div style="padding-top: 10px; border-top: 1px solid var(--color-border-subtle); display: flex; justify-content: space-between; align-items: center;">
-                  <span class="badge badge-neutral">${fest.datePrecision}</span>
+                  <span style="font-size: 0.775rem; color: #78685C; font-weight: 600;">${fest.category}</span>
                   <a href="#/festivals" style="font-size: 0.825rem; font-weight: 700; color: var(--color-primary);">View Details →</a>
                 </div>
               </div>

@@ -22,9 +22,6 @@ export default function FestivalsPage() {
           <article key={fest.id} className="card card-hoverable" style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ position: "relative", height: "200px", overflow: "hidden" }}>
               <img src={fest.image} alt={fest.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
-              <div style={{ position: "absolute", top: "12px", left: "12px" }}>
-                <span className="badge badge-warning">📅 {fest.datePrecision}</span>
-              </div>
               <div style={{ position: "absolute", bottom: "12px", left: "12px", right: "12px" }}>
                 <div style={{ background: "rgba(15,23,42,0.85)", backdropFilter: "blur(8px)", padding: "6px 12px", borderRadius: "var(--radius-sm)", color: "#ffffff", fontSize: "0.85rem", fontWeight: 700 }}>
                   {fest.displayDate}
@@ -38,7 +35,7 @@ export default function FestivalsPage() {
               </div>
               <h2 style={{ fontSize: "1.3rem", marginBottom: "6px" }}>{fest.name}</h2>
               <div style={{ fontSize: "0.825rem", color: "var(--color-text-muted)", marginBottom: "10px" }}>
-                📍 {fest.location}
+                {fest.location}
               </div>
               <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", lineHeight: 1.5, marginBottom: "var(--space-md)", flexGrow: 1 }}>
                 {fest.description}

@@ -85,9 +85,6 @@ export function renderFestivalsView() {
             
             <div style="position: relative; height: 200px; overflow: hidden;">
               <img src="${fest.image}" alt="${fest.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" />
-              <div style="position: absolute; top: 12px; left: 12px;">
-                <span class="badge badge-warning">📅 ${fest.datePrecision}</span>
-              </div>
               <div style="position: absolute; bottom: 12px; left: 12px; right: 12px;">
                 <div style="background: rgba(15,23,42,0.85); backdrop-filter: blur(8px); padding: 6px 12px; border-radius: var(--radius-sm); color: #ffffff; font-size: 0.85rem; font-weight: 700;">
                   ${fest.displayDate}
@@ -101,7 +98,7 @@ export function renderFestivalsView() {
               </div>
               <h2 style="font-size: 1.3rem; margin-bottom: 6px;">${fest.name}</h2>
               <div style="font-size: 0.825rem; color: var(--color-text-muted); margin-bottom: 10px;">
-                📍 ${fest.location}
+                ${fest.location}
               </div>
               <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5; margin-bottom: var(--space-md); flex-grow: 1;">
                 ${fest.description}
