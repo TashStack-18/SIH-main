@@ -19,10 +19,6 @@ export function HeroCarousel() {
     setCurrentIndex((prev) => (prev - 1 + territories.length) % territories.length);
   }, [territories.length]);
 
-  const goToSlide = (idx: number) => {
-    setCurrentIndex(idx);
-  };
-
   // Auto-advance timer (6 seconds)
   useEffect(() => {
     if (isPaused) return;
@@ -131,29 +127,6 @@ export function HeroCarousel() {
           <span>
             {current.weatherSnapshot.temp}°C • {current.weatherSnapshot.condition}
           </span>
-        </div>
-      </div>
-
-      {/* Bottom Carousel Controller - Elevated progress indicators */}
-      <div className="hero-footer-bar">
-        {/* Progress Bars / Dots */}
-        <div className="hero-progress-group">
-          {territories.map((ut, idx) => {
-            const isActive = idx === currentIndex;
-            return (
-              <button
-                key={ut.id}
-                type="button"
-                onClick={() => goToSlide(idx)}
-                aria-label={`Go to ${ut.name} slide`}
-                className="hero-progress-dot"
-                style={{
-                  width: isActive ? "32px" : "8px",
-                  background: isActive ? "#C88E44" : "rgba(255, 255, 255, 0.4)",
-                }}
-              />
-            );
-          })}
         </div>
       </div>
     </section>
