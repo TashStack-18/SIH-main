@@ -14,7 +14,7 @@ describe('Phase 10 Yatra AI Travel Intelligence Evaluation Suite', () => {
     const res = await yatraAiOrchestrator.processUserMessage('Plan 5 days in Ladakh.');
     expect(res).toBeDefined();
     expect(res.content).toBeDefined();
-    expect(res.citations.length).toBeGreaterThanOrEqual(1);
+    expect(res.citations?.length || 0).toBeGreaterThanOrEqual(1);
 
     // Verify presence of verified Ladakh guidance (acclimatization or Pangong/Leh)
     const text = res.content.toLowerCase();
