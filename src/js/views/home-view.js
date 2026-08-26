@@ -137,7 +137,7 @@ export function renderHomeView() {
         <div class="section-header-row">
           <div>
             <span class="badge badge-verified" style="margin-bottom: 6px;">100% Phase 5 Grounded</span>
-            <h2>Popular Across Bharat's 8 UTs</h2>
+            <h2>Popular Across Bharat</h2>
             <p class="sub-text">Hand-picked destinations with verified coordinates, entry guidelines, and seasonal intelligence.</p>
           </div>
           <a href="#/destinations" class="btn btn-outline">View All Destinations →</a>

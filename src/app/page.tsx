@@ -37,7 +37,7 @@ export default function HomePage() {
               Verified Cultural Destinations
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
-              Popular Across Bharat&apos;s 8 UTs
+              Popular Across Bharat
             </h2>
             <p className="sub-text">
               Hand-picked destinations with verified coordinates, entry guidelines, and seasonal intelligence.
