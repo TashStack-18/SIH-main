@@ -36,6 +36,9 @@ export interface UnionTerritory {
   capital: string;
   historicalName?: string;
   tagline: string;
+  heroLabel?: string;
+  heroHeading?: string;
+  heroDescription?: string;
   shortDescription: string;
   description: string;
   heroImage: string;
