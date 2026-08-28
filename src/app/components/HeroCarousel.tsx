@@ -61,17 +61,17 @@ export function HeroCarousel() {
         
         {/* Union Territory Tag */}
         <div className="hero-ut-tag">
-          <span>🏛️ {current.shortName.toUpperCase()}</span>
+          <span>🏛️ {current.heroLabel || current.shortName}</span>
         </div>
 
         {/* Serif Headline (Playfair Display) */}
         <h1 className="hero-title">
-          {current.name === "Ladakh" ? "Timeless Traditions of Ladakh." : `Timeless Heritage of ${current.name}.`}
+          {current.heroHeading || current.name}
         </h1>
 
         {/* Subtitle */}
         <p className="hero-tagline">
-          {current.tagline}
+          {current.heroDescription || current.tagline}
         </p>
 
         {/* Dual CTA Action Buttons Framed by Left and Right Navigation Arrows */}

@@ -41,12 +41,12 @@ export function renderHomeView() {
             
             <div class="container hero-content">
               <div class="hero-ut-tag">
-                <span>🏛️ ${ut.name.toUpperCase()}</span>
+                <span>🏛️ ${ut.heroLabel || ut.name}</span>
               </div>
               
-              <h1 class="hero-title">${ut.name.toUpperCase()}</h1>
+              <h1 class="hero-title">${ut.heroHeading || ut.name.toUpperCase()}</h1>
               
-              <p class="hero-description">${ut.tagline}</p>
+              <p class="hero-description">${ut.heroDescription || ut.tagline}</p>
               
               <div class="hero-actions">
                 <a href="#/territories/${ut.slug}" class="btn btn-lg btn-secondary">
