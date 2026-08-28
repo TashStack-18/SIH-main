@@ -81,8 +81,8 @@ export function YatraAiTravelContext({
     <div
       className="yatra-ai-context-panel"
       style={{
-        background: 'var(--stitch-surface-variant, #F0EADE)',
-        border: '1px solid rgba(200, 142, 68, 0.35)',
+        background: 'var(--color-bg-surface-elevated)',
+        border: '1px solid var(--color-border-subtle)',
         borderRadius: 'var(--radius-xl)',
         padding: 'var(--space-xl)',
         height: '100%',
@@ -99,7 +99,7 @@ export function YatraAiTravelContext({
           justifyContent: 'space-between',
           alignItems: 'center',
           paddingBottom: '14px',
-          borderBottom: '1px solid rgba(156, 141, 127, 0.3)',
+          borderBottom: '1px solid var(--color-border-subtle)',
           marginBottom: '16px',
         }}
       >
@@ -120,10 +120,10 @@ export function YatraAiTravelContext({
               : '🧭'}
           </span>
           <div>
-            <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#2D1B14', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--color-text-primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               {mode === 'DEFAULT' ? 'Travel Intelligence' : `${mode} Workspace`}
             </div>
-            <div style={{ fontSize: '0.725rem', color: '#78685C' }}>
+            <div style={{ fontSize: '0.725rem', color: 'var(--color-text-muted)' }}>
               Real-time context synchronized with your conversation
             </div>
           </div>
@@ -134,7 +134,7 @@ export function YatraAiTravelContext({
             type="button"
             onClick={onClearContext}
             className="btn btn-sm btn-ghost"
-            style={{ fontSize: '0.75rem', color: '#ba1a1a', fontWeight: 600, padding: '4px 8px' }}
+            style={{ fontSize: '0.75rem', color: 'var(--color-danger)', fontWeight: 600, padding: '4px 8px' }}
           >
             Reset
           </button>
@@ -148,7 +148,7 @@ export function YatraAiTravelContext({
             <span
               key={idx}
               className="badge badge-verified"
-              style={{ background: '#2D1B14', color: '#ffffff', fontSize: '0.7rem', padding: '3px 8px' }}
+              style={{ background: 'var(--color-primary)', color: 'var(--color-text-inverse)', fontSize: '0.7rem', padding: '3px 8px' }}
             >
               {chip}
             </span>
@@ -167,7 +167,7 @@ export function YatraAiTravelContext({
               borderRadius: 'var(--radius-lg)',
               overflow: 'hidden',
               height: '180px',
-              border: '1px solid rgba(200, 142, 68, 0.4)',
+              border: '1px solid var(--color-border-subtle)',
             }}
           >
             <img
@@ -179,7 +179,7 @@ export function YatraAiTravelContext({
               style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)',
+                background: 'linear-gradient(to top, rgba(45, 27, 20, 0.88) 0%, rgba(45, 27, 20, 0.2) 60%, transparent 100%)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-end',
@@ -195,7 +195,7 @@ export function YatraAiTravelContext({
             </div>
           </div>
 
-          <p style={{ fontSize: '0.85rem', color: '#4A3C31', lineHeight: 1.45, margin: 0 }}>
+          <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', lineHeight: 1.45, margin: 0 }}>
             {context.destinationData.shortDescription}
           </p>
 
@@ -205,21 +205,21 @@ export function YatraAiTravelContext({
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
               gap: '8px',
-              background: '#ffffff',
+              background: 'var(--color-bg-surface)',
               padding: '12px',
               borderRadius: 'var(--radius-md)',
-              border: '1px solid rgba(211, 201, 189, 0.8)',
+              border: '1px solid var(--color-border-subtle)',
             }}
           >
             <div>
-              <span style={{ fontSize: '0.7rem', color: '#78685C', textTransform: 'uppercase', fontWeight: 700 }}>Best Time:</span>
-              <div style={{ fontSize: '0.825rem', fontWeight: 700, color: '#2D1B14' }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Best Time:</span>
+              <div style={{ fontSize: '0.825rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
                 {context.destinationData.weather?.bestTime || 'May – September'}
               </div>
             </div>
             <div>
-              <span style={{ fontSize: '0.7rem', color: '#78685C', textTransform: 'uppercase', fontWeight: 700 }}>Altitude:</span>
-              <div style={{ fontSize: '0.825rem', fontWeight: 700, color: '#2D1B14' }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Altitude:</span>
+              <div style={{ fontSize: '0.825rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
                 {context.destinationData.coordinates?.altitude || 'Verified Coordinates'}
               </div>
             </div>
@@ -230,14 +230,14 @@ export function YatraAiTravelContext({
             <Link
               href={`/itinerary?destination=${context.destinationData.slug}&territory=${context.destinationData.territoryId}&source=yatra_ai`}
               className="btn btn-sm btn-primary"
-              style={{ flex: 1, background: '#2D1B14', borderColor: '#2D1B14', color: '#ffffff', fontWeight: 700, textAlign: 'center', textDecoration: 'none' }}
+              style={{ flex: 1, textAlign: 'center', textDecoration: 'none' }}
             >
               + Add to Itinerary
             </Link>
             <Link
               href={`/destinations/${context.destinationData.slug}`}
               className="btn btn-sm btn-outline"
-              style={{ borderColor: '#C88E44', color: '#2D1B14', fontWeight: 700, textDecoration: 'none' }}
+              style={{ textDecoration: 'none' }}
             >
               Full Profile ↗
             </Link>
@@ -252,14 +252,14 @@ export function YatraAiTravelContext({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div
             style={{
-              background: '#2D1B14',
-              color: '#ffffff',
+              background: 'var(--color-primary)',
+              color: 'var(--color-text-inverse)',
               borderRadius: 'var(--radius-lg)',
               padding: '16px',
-              border: '1px solid #C88E44',
+              border: '1px solid var(--color-accent)',
             }}
           >
-            <span className="badge badge-warning" style={{ background: '#C88E44', color: '#ffffff', fontSize: '0.7rem', marginBottom: '6px' }}>
+            <span className="badge badge-warning" style={{ background: 'var(--color-accent)', color: '#ffffff', fontSize: '0.7rem', marginBottom: '6px' }}>
               ACTIVE TRIP PLAN
             </span>
             <h3 className="font-serif" style={{ fontSize: '1.2rem', color: '#ffffff', margin: '4px 0' }}>
@@ -272,13 +272,13 @@ export function YatraAiTravelContext({
 
           <div
             style={{
-              background: '#ffffff',
+              background: 'var(--color-bg-surface)',
               borderRadius: 'var(--radius-md)',
               padding: '12px',
-              border: '1px solid rgba(211, 201, 189, 0.8)',
+              border: '1px solid var(--color-border-subtle)',
             }}
           >
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#78685C', textTransform: 'uppercase', marginBottom: '8px' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '8px' }}>
               Proposed Stops Sequence
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -287,7 +287,7 @@ export function YatraAiTravelContext({
                 { dayNumber: 2, title: 'Khardung La Pass', stops: ['Khardung La (5,359m)', 'Hunder Dunes'] },
                 { dayNumber: 3, title: 'Pangong Tso Lake', stops: ['Diskit Gompa', 'Pangong Eco Domes'] },
               ]).map((day, idx) => (
-                <div key={idx} style={{ fontSize: '0.8rem', color: '#2D1B14', padding: '4px 0', borderBottom: '1px dashed rgba(211, 201, 189, 0.6)' }}>
+                <div key={idx} style={{ fontSize: '0.8rem', color: 'var(--color-text-primary)', padding: '4px 0', borderBottom: '1px dashed var(--color-border-subtle)' }}>
                   <strong>Day {day.dayNumber}:</strong> {day.title}
                 </div>
               ))}
@@ -297,7 +297,7 @@ export function YatraAiTravelContext({
           <Link
             href="/itinerary"
             className="btn btn-sm btn-primary"
-            style={{ background: '#ba1a1a', borderColor: '#ba1a1a', color: '#ffffff', fontWeight: 700, textAlign: 'center', textDecoration: 'none' }}
+            style={{ textAlign: 'center', textDecoration: 'none' }}
           >
             🚀 Open in Itinerary Studio
           </Link>
@@ -311,15 +311,15 @@ export function YatraAiTravelContext({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div
             style={{
-              background: '#1b2433',
+              background: 'var(--color-primary)',
               borderRadius: 'var(--radius-lg)',
               padding: '16px',
-              color: '#FAF7F2',
-              border: '1px solid #C88E44',
+              color: 'var(--color-text-inverse)',
+              border: '1px solid var(--color-accent)',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <span className="badge badge-verified" style={{ background: '#C88E44', color: '#ffffff', fontSize: '0.7rem' }}>
+              <span className="badge badge-verified" style={{ background: 'var(--color-accent)', color: '#ffffff', fontSize: '0.7rem' }}>
                 TOMTOM ROUTE TRAJECTORY
               </span>
               <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)' }}>
@@ -330,23 +330,23 @@ export function YatraAiTravelContext({
             <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FAF7F2', marginBottom: '4px' }}>
               {context.routeData?.origin || 'Leh'} → {context.routeData?.destination || 'Nubra Valley'}
             </div>
-            <div style={{ fontSize: '0.85rem', color: '#C88E44', fontWeight: 600 }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--color-accent)', fontWeight: 600 }}>
               ~{context.routeData?.distanceKm || 128} km • {Math.floor((context.routeData?.durationMinutes || 240) / 60)}h {(context.routeData?.durationMinutes || 240) % 60}m via Khardung La
             </div>
           </div>
 
           <div
             style={{
-              background: '#ffffff',
+              background: 'var(--color-bg-surface)',
               borderRadius: 'var(--radius-md)',
               padding: '12px',
-              border: '1px solid rgba(211, 201, 189, 0.8)',
+              border: '1px solid var(--color-border-subtle)',
             }}
           >
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#78685C', textTransform: 'uppercase', marginBottom: '6px' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '6px' }}>
               Route Waypoints
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.8rem', color: '#2D1B14' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.8rem', color: 'var(--color-text-primary)' }}>
               <div>① South Pullu Checkpost (Permit Verification)</div>
               <div>② Khardung La Pass (Highest Elevation: 5,359m)</div>
               <div>③ North Pullu Army Transit Camp</div>
@@ -357,7 +357,7 @@ export function YatraAiTravelContext({
           <Link
             href="/map"
             className="btn btn-sm btn-outline"
-            style={{ borderColor: '#2D1B14', color: '#2D1B14', fontWeight: 700, textAlign: 'center', textDecoration: 'none' }}
+            style={{ textAlign: 'center', textDecoration: 'none' }}
           >
             🗺️ Explore 3D Geospatial Map
           </Link>
@@ -371,15 +371,15 @@ export function YatraAiTravelContext({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div
             style={{
-              background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-              color: '#ffffff',
+              background: 'var(--color-primary)',
+              color: 'var(--color-text-inverse)',
               borderRadius: 'var(--radius-lg)',
               padding: '16px',
-              border: '1px solid rgba(200, 142, 68, 0.4)',
+              border: '1px solid var(--color-border-subtle)',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <span className="badge badge-verified" style={{ background: '#16a34a', color: '#ffffff', fontSize: '0.7rem' }}>
+              <span className="badge badge-verified" style={{ background: 'var(--color-success)', color: '#ffffff', fontSize: '0.7rem' }}>
                 LIVE WEATHER TELEMETRY
               </span>
               <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)' }}>
@@ -390,7 +390,7 @@ export function YatraAiTravelContext({
             <div style={{ fontSize: '2rem', fontWeight: 800, color: '#FAF7F2' }}>
               {context.weatherData?.tempC ?? 14}°C
             </div>
-            <div style={{ fontSize: '0.95rem', color: '#C88E44', fontWeight: 600 }}>
+            <div style={{ fontSize: '0.95rem', color: 'var(--color-accent)', fontWeight: 600 }}>
               {context.weatherData?.condition || 'Partly Cloudy • High UV Index'}
             </div>
             <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', marginTop: '4px' }}>
@@ -403,19 +403,19 @@ export function YatraAiTravelContext({
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
               gap: '8px',
-              background: '#ffffff',
+              background: 'var(--color-bg-surface)',
               padding: '12px',
               borderRadius: 'var(--radius-md)',
-              border: '1px solid rgba(211, 201, 189, 0.8)',
+              border: '1px solid var(--color-border-subtle)',
             }}
           >
             <div>
-              <span style={{ fontSize: '0.7rem', color: '#78685C', textTransform: 'uppercase', fontWeight: 700 }}>Humidity:</span>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2D1B14' }}>{context.weatherData?.humidity ?? 32}%</div>
+              <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Humidity:</span>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>{context.weatherData?.humidity ?? 32}%</div>
             </div>
             <div>
-              <span style={{ fontSize: '0.7rem', color: '#78685C', textTransform: 'uppercase', fontWeight: 700 }}>Wind Speed:</span>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2D1B14' }}>{context.weatherData?.windKmh ?? 14} km/h</div>
+              <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Wind Speed:</span>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>{context.weatherData?.windKmh ?? 14} km/h</div>
             </div>
           </div>
         </div>
@@ -428,20 +428,20 @@ export function YatraAiTravelContext({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div
             style={{
-              background: '#ffffff',
+              background: 'var(--color-bg-surface)',
               borderRadius: 'var(--radius-lg)',
               padding: '16px',
-              border: '1px solid rgba(200, 142, 68, 0.4)',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+              border: '1px solid var(--color-border-subtle)',
+              boxShadow: 'var(--shadow-card)',
             }}
           >
-            <span className="badge badge-verified" style={{ background: '#2D1B14', color: '#ffffff', fontSize: '0.7rem', marginBottom: '8px' }}>
+            <span className="badge badge-verified" style={{ background: 'var(--color-primary)', color: '#ffffff', fontSize: '0.7rem', marginBottom: '8px' }}>
               OFFICIAL VERIFIED PROVIDER
             </span>
-            <h3 className="font-serif" style={{ fontSize: '1.15rem', color: '#2D1B14', margin: '4px 0' }}>
+            <h3 className="font-serif" style={{ fontSize: '1.15rem', color: 'var(--color-text-primary)', margin: '4px 0' }}>
               {context.bookingData?.providerName || 'JKTDC / UT Licensed Heritage Stays'}
             </h3>
-            <div style={{ fontSize: '0.8rem', color: '#78685C', marginBottom: '12px' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '12px' }}>
               {context.bookingData?.location || 'Leh & Nubra Valley'} • Direct Government Portal
             </div>
 
@@ -450,7 +450,7 @@ export function YatraAiTravelContext({
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-sm btn-primary"
-              style={{ display: 'block', background: '#16a34a', borderColor: '#16a34a', color: '#ffffff', fontWeight: 700, textAlign: 'center', textDecoration: 'none' }}
+              style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
             >
               Check Official Provider ↗
             </a>
@@ -465,19 +465,19 @@ export function YatraAiTravelContext({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div
             style={{
-              background: '#fff7ed',
+              background: 'var(--color-bg-surface)',
               borderRadius: 'var(--radius-lg)',
               padding: '16px',
-              border: '1px solid #f97316',
+              border: '1px solid var(--color-danger)',
             }}
           >
-            <span className="badge badge-warning" style={{ background: '#ea580c', color: '#ffffff', fontSize: '0.7rem', marginBottom: '6px' }}>
+            <span className="badge badge-danger" style={{ fontSize: '0.7rem', marginBottom: '6px' }}>
               EMERGENCY MEDICAL & POLICE RADAR
             </span>
-            <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#9a3412', margin: '4px 0' }}>
+            <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-text-primary)', margin: '4px 0' }}>
               Sonam Norboo Memorial Hospital (SNM)
             </div>
-            <div style={{ fontSize: '0.8rem', color: '#7c2d12' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
               District Hospital • High Altitude Trauma & Hyperbaric Oxygen Unit
             </div>
           </div>
@@ -485,15 +485,15 @@ export function YatraAiTravelContext({
           <div style={{ display: 'flex', gap: '8px' }}>
             <a
               href="tel:112"
-              className="btn btn-sm btn-primary"
-              style={{ flex: 1, background: '#ba1a1a', borderColor: '#ba1a1a', color: '#ffffff', fontWeight: 700, textAlign: 'center', textDecoration: 'none' }}
+              className="btn btn-sm btn-emergency"
+              style={{ flex: 1, textAlign: 'center', textDecoration: 'none' }}
             >
               🚨 Call 112 Emergency
             </a>
             <Link
               href="/safety"
               className="btn btn-sm btn-outline"
-              style={{ borderColor: '#2D1B14', color: '#2D1B14', fontWeight: 700, textDecoration: 'none' }}
+              style={{ textDecoration: 'none' }}
             >
               Safety Hub ↗
             </Link>
@@ -506,7 +506,7 @@ export function YatraAiTravelContext({
           ========================================================================= */}
       {mode === 'DEFAULT' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#78685C', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>
             Featured Union Territories
           </div>
 
@@ -516,10 +516,10 @@ export function YatraAiTravelContext({
                 key={ut.id}
                 onClick={() => onSelectPrompt?.(`Tell me about exploring ${ut.name}`)}
                 style={{
-                  background: '#ffffff',
+                  background: 'var(--color-bg-surface)',
                   borderRadius: 'var(--radius-md)',
                   padding: '10px 12px',
-                  border: '1px solid rgba(211, 201, 189, 0.7)',
+                  border: '1px solid var(--color-border-subtle)',
                   cursor: 'pointer',
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -528,14 +528,14 @@ export function YatraAiTravelContext({
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.875rem', color: '#2D1B14' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--color-text-primary)' }}>
                     {ut.name}
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: '#78685C' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
                     {ut.tagline}
                   </div>
                 </div>
-                <span style={{ fontSize: '0.8rem', color: '#C88E44', fontWeight: 700 }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--color-accent)', fontWeight: 700 }}>
                   Ask AI →
                 </span>
               </div>

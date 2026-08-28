@@ -74,7 +74,7 @@ export default async function SearchPage({
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "var(--space-lg)" }}>
               {matchedDestinations.map(d => (
                 <div key={d.id} className="card card-hoverable" style={{ padding: "var(--space-lg)" }}>
-                  <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-primary)", textTransform: "uppercase", marginBottom: "4px" }}>{d.territoryName} • {d.type}</div>
+                  <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-accent)", textTransform: "uppercase", marginBottom: "4px" }}>{d.territoryName} • {d.type}</div>
                   <h3 style={{ fontSize: "1.15rem", marginBottom: "6px" }}>{d.name}</h3>
                   <p style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", marginBottom: "12px" }}>{d.shortDescription}</p>
                   <Link href={`/destinations/${d.slug}`} className="btn btn-sm btn-outline">Explore Place →</Link>
@@ -107,7 +107,7 @@ export default async function SearchPage({
               {matchedFestivals.map(f => (
                 <div key={f.id} className="card card-hoverable" style={{ padding: "var(--space-lg)" }}>
                   <h3 style={{ fontSize: "1.15rem", marginBottom: "4px" }}>{f.name}</h3>
-                  <div style={{ fontSize: "0.85rem", color: "var(--color-primary)", fontWeight: 600, marginBottom: "8px" }}>{f.displayDate} • {f.location}</div>
+                  <div style={{ fontSize: "0.85rem", color: "var(--color-accent)", fontWeight: 600, marginBottom: "8px" }}>{f.displayDate} • {f.location}</div>
                   <p style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", marginBottom: "12px" }}>{f.description}</p>
                   <Link href="/festivals" className="btn btn-sm btn-outline">View in Calendar →</Link>
                 </div>

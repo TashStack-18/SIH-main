@@ -72,8 +72,8 @@ export function YatraAiConversation({
     <div
       className="yatra-ai-conversation-pane"
       style={{
-        background: '#ffffff',
-        border: '1px solid rgba(200, 142, 68, 0.35)',
+        background: 'var(--color-bg-surface)',
+        border: '1px solid var(--color-border-subtle)',
         borderRadius: 'var(--radius-xl)',
         height: '100%',
         display: 'flex',
@@ -86,8 +86,8 @@ export function YatraAiConversation({
       <div
         style={{
           padding: '16px 20px',
-          background: 'var(--stitch-surface-variant, #F0EADE)',
-          borderBottom: '1px solid rgba(156, 141, 127, 0.3)',
+          background: 'var(--color-bg-surface-elevated)',
+          borderBottom: '1px solid var(--color-border-subtle)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -99,15 +99,15 @@ export function YatraAiConversation({
               width: '10px',
               height: '10px',
               borderRadius: '50%',
-              background: '#16a34a',
+              background: 'var(--color-success)',
               boxShadow: '0 0 0 3px rgba(22, 163, 74, 0.2)',
             }}
           />
           <div>
-            <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#2D1B14' }}>
+            <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
               YATRA AI
             </div>
-            <div style={{ fontSize: '0.75rem', color: '#78685C' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
               Your intelligent travel companion • Ready
             </div>
           </div>
@@ -117,7 +117,7 @@ export function YatraAiConversation({
           type="button"
           onClick={onClearChat}
           className="btn btn-sm btn-ghost"
-          style={{ fontSize: '0.75rem', color: '#78685C', padding: '4px 8px' }}
+          style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', padding: '4px 8px' }}
           title="Start fresh conversation"
         >
           + New Chat
@@ -140,17 +140,17 @@ export function YatraAiConversation({
         {isInitialWelcome && (
           <div
             style={{
-              background: 'rgba(240, 234, 222, 0.6)',
+              background: 'var(--color-bg-surface-elevated)',
               borderRadius: 'var(--radius-lg)',
               padding: '16px 20px',
-              border: '1px solid rgba(200, 142, 68, 0.3)',
+              border: '1px solid var(--color-border-subtle)',
               marginBottom: '4px',
             }}
           >
-            <h2 className="font-serif" style={{ fontSize: '1.25rem', color: '#2D1B14', margin: '0 0 6px' }}>
+            <h2 className="font-serif" style={{ fontSize: '1.25rem', color: 'var(--color-text-primary)', margin: '0 0 6px' }}>
               Plan your next journey.
             </h2>
-            <p style={{ fontSize: '0.875rem', color: '#4A3C31', margin: '0 0 14px', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', margin: '0 0 14px', lineHeight: 1.5 }}>
               Ask me anything about India&apos;s 8 Union Territories — from itinerary pacing and permits to live weather telemetry.
             </p>
 
@@ -161,13 +161,13 @@ export function YatraAiConversation({
                   type="button"
                   onClick={() => onSelectPrompt(qp.prompt)}
                   style={{
-                    background: '#ffffff',
-                    border: '1px solid rgba(200, 142, 68, 0.4)',
+                    background: 'var(--color-bg-surface)',
+                    border: '1px solid var(--color-border-subtle)',
                     borderRadius: '9999px',
                     padding: '6px 12px',
                     fontSize: '0.775rem',
                     fontWeight: 600,
-                    color: '#2D1B14',
+                    color: 'var(--color-text-primary)',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                   }}
@@ -199,7 +199,7 @@ export function YatraAiConversation({
                 style={{
                   fontSize: '0.725rem',
                   fontWeight: 600,
-                  color: '#78685C',
+                  color: 'var(--color-text-muted)',
                   alignSelf: isUser ? 'flex-end' : 'flex-start',
                   padding: '0 4px',
                 }}
@@ -210,11 +210,11 @@ export function YatraAiConversation({
               {/* Message Body */}
               <div
                 style={{
-                  background: isUser ? '#2D1B14' : 'var(--stitch-surface-variant, #F0EADE)',
-                  color: isUser ? '#ffffff' : '#2D1B14',
+                  background: isUser ? 'var(--color-primary)' : 'var(--color-bg-surface-elevated)',
+                  color: isUser ? 'var(--color-text-inverse)' : 'var(--color-text-primary)',
                   padding: '14px 18px',
                   borderRadius: 'var(--radius-lg)',
-                  border: isUser ? 'none' : '1px solid rgba(211, 201, 189, 0.8)',
+                  border: isUser ? 'none' : '1px solid var(--color-border-subtle)',
                   fontSize: '0.9rem',
                   lineHeight: 1.55,
                   whiteSpace: 'pre-line',
@@ -227,19 +227,19 @@ export function YatraAiConversation({
               {msg.citations && msg.citations.length > 0 && (
                 <div
                   style={{
-                    background: '#ffffff',
-                    border: '1px solid rgba(211, 201, 189, 0.8)',
+                    background: 'var(--color-bg-surface)',
+                    border: '1px solid var(--color-border-subtle)',
                     borderRadius: '8px',
                     padding: '6px 12px',
                     fontSize: '0.75rem',
-                    color: '#78685C',
+                    color: 'var(--color-text-muted)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
                     flexWrap: 'wrap',
                   }}
                 >
-                  <strong style={{ color: '#2D1B14' }}>Sources:</strong>
+                  <strong style={{ color: 'var(--color-text-primary)' }}>Sources:</strong>
                   {msg.citations.map((cite, idx) => (
                     <a
                       key={idx}
@@ -247,7 +247,7 @@ export function YatraAiConversation({
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
-                        color: '#C88E44',
+                        color: 'var(--color-accent)',
                         textDecoration: 'none',
                         fontWeight: 700,
                       }}
@@ -262,8 +262,8 @@ export function YatraAiConversation({
               {msg.actionProposal && (
                 <div
                   style={{
-                    background: '#ffffff',
-                    border: '1px solid #C88E44',
+                    background: 'var(--color-bg-surface)',
+                    border: '1px solid var(--color-accent)',
                     borderRadius: '8px',
                     padding: '10px 14px',
                     display: 'flex',
@@ -274,10 +274,10 @@ export function YatraAiConversation({
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#C88E44', textTransform: 'uppercase' }}>
+                    <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-accent)', textTransform: 'uppercase' }}>
                       Suggested Action
                     </div>
-                    <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2D1B14' }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
                       {msg.actionProposal.title}
                     </div>
                   </div>
@@ -285,7 +285,7 @@ export function YatraAiConversation({
                   <Link
                     href={msg.actionProposal.territorySlug ? `/territories/${msg.actionProposal.territorySlug}` : '/itinerary'}
                     className="btn btn-sm btn-primary"
-                    style={{ background: '#2D1B14', borderColor: '#2D1B14', color: '#ffffff', fontWeight: 700, whiteSpace: 'nowrap', textDecoration: 'none' }}
+                    style={{ whiteSpace: 'nowrap', textDecoration: 'none' }}
                   >
                     Open Action →
                   </Link>
@@ -303,10 +303,10 @@ export function YatraAiConversation({
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: 'var(--stitch-surface-variant, #F0EADE)',
+              background: 'var(--color-bg-surface-elevated)',
               padding: '10px 16px',
               borderRadius: 'var(--radius-md)',
-              border: '1px solid rgba(200, 142, 68, 0.3)',
+              border: '1px solid var(--color-border-subtle)',
             }}
           >
             <div
@@ -314,11 +314,11 @@ export function YatraAiConversation({
                 width: '8px',
                 height: '8px',
                 borderRadius: '50%',
-                background: '#C88E44',
+                background: 'var(--color-accent)',
                 animation: 'pulse 1.5s infinite',
               }}
             />
-            <span style={{ fontSize: '0.825rem', color: '#4A3C31', fontStyle: 'italic' }}>
+            <span style={{ fontSize: '0.825rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
               Searching verified records across 8 Union Territories…
             </span>
           </div>
@@ -330,8 +330,8 @@ export function YatraAiConversation({
         onSubmit={handleSubmit}
         style={{
           padding: '12px 16px',
-          background: 'var(--stitch-surface-variant, #F0EADE)',
-          borderTop: '1px solid rgba(156, 141, 127, 0.3)',
+          background: 'var(--color-bg-surface-elevated)',
+          borderTop: '1px solid var(--color-border-subtle)',
           display: 'flex',
           gap: '10px',
           alignItems: 'flex-end',
@@ -350,12 +350,12 @@ export function YatraAiConversation({
               width: '100%',
               minHeight: '44px',
               maxHeight: '120px',
-              background: '#ffffff',
-              border: '1px solid rgba(200, 142, 68, 0.4)',
+              background: 'var(--color-bg-surface)',
+              border: '1px solid var(--color-border-subtle)',
               borderRadius: 'var(--radius-lg)',
               padding: '10px 14px',
               fontSize: '0.875rem',
-              color: '#2D1B14',
+              color: 'var(--color-text-primary)',
               resize: 'none',
               outline: 'none',
               lineHeight: 1.4,
@@ -370,9 +370,6 @@ export function YatraAiConversation({
           className="btn btn-primary"
           style={{
             height: '44px',
-            background: '#2D1B14',
-            borderColor: '#2D1B14',
-            color: '#ffffff',
             fontWeight: 700,
             padding: '0 18px',
             borderRadius: 'var(--radius-lg)',

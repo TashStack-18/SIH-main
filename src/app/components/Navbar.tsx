@@ -45,11 +45,11 @@ export function Navbar() {
       className="navbar fixed top-0 w-full z-50 transition-all duration-300"
       style={{
         background: isScrolled
-          ? (isDark ? "rgba(11, 15, 25, 0.92)" : "rgba(250, 247, 242, 0.92)")
-          : (isDark ? "rgba(11, 15, 25, 0.75)" : "rgba(250, 247, 242, 0.85)"),
+          ? (isDark ? "rgba(19, 27, 46, 0.94)" : "rgba(250, 247, 242, 0.94)")
+          : (isDark ? "rgba(19, 27, 46, 0.85)" : "rgba(250, 247, 242, 0.88)"),
         backdropFilter: "blur(14px)",
         WebkitBackdropFilter: "blur(14px)",
-        borderBottom: "1px solid var(--stitch-outline-variant, rgba(200, 142, 68, 0.2))",
+        borderBottom: "1px solid var(--color-border-subtle)",
         boxShadow: isScrolled ? "0 10px 30px -15px rgba(45, 27, 20, 0.12)" : "none",
       }}
       role="banner"
@@ -84,7 +84,7 @@ export function Navbar() {
               fontWeight: 700,
               fontSize: "1.25rem",
               letterSpacing: "-0.01em",
-              color: isDark ? "#FAF7F2" : "#2D1B14",
+              color: "var(--color-text-primary)",
             }}
           >
             Heritage Yatra
@@ -106,9 +106,9 @@ export function Navbar() {
                   fontWeight: isActive ? 700 : 500,
                   textDecoration: "none",
                   color: isActive
-                    ? "var(--stitch-accent, #C88E44)"
-                    : (isDark ? "rgba(255,255,255,0.75)" : "var(--stitch-on-surface-variant, #4A3C31)"),
-                  borderBottom: isActive ? "2px solid var(--stitch-accent, #C88E44)" : "2px solid transparent",
+                    ? "var(--color-accent)"
+                    : "var(--color-text-secondary)",
+                  borderBottom: isActive ? "2px solid var(--color-accent)" : "2px solid transparent",
                   transition: "all 0.2s ease",
                 }}
               >
@@ -127,7 +127,7 @@ export function Navbar() {
             className="btn btn-sm btn-ghost btn-icon-only"
             aria-label="Search destinations and festivals"
             style={{
-              color: isDark ? "#FAF7F2" : "#2D1B14",
+              color: "var(--color-text-primary)",
               borderRadius: "50%",
               width: "38px",
               height: "38px",
@@ -147,8 +147,8 @@ export function Navbar() {
             href="/ai"
             className="btn btn-sm btn-outline"
             style={{
-              borderColor: "var(--stitch-accent, #C88E44)",
-              color: "var(--stitch-accent, #C88E44)",
+              borderColor: "var(--color-accent)",
+              color: "var(--color-accent)",
               fontWeight: 700,
               fontSize: "0.825rem",
               textDecoration: "none",
@@ -157,7 +157,7 @@ export function Navbar() {
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              background: "rgba(200, 142, 68, 0.08)",
+              background: "var(--color-brand-accent-light)",
             }}
             aria-label="Open Yatra AI Travel Studio"
           >
@@ -170,7 +170,7 @@ export function Navbar() {
             className="btn btn-sm btn-ghost btn-icon-only"
             aria-label="User Profile"
             style={{
-              color: isDark ? "#FAF7F2" : "#2D1B14",
+              color: "var(--color-text-primary)",
               borderRadius: "50%",
               width: "38px",
               height: "38px",
@@ -192,7 +192,7 @@ export function Navbar() {
             onClick={toggleTheme}
             aria-label={`Toggle ${isDark ? "Light" : "Dark"} Mode`}
             style={{
-              color: isDark ? "#FAF7F2" : "#2D1B14",
+              color: "var(--color-text-primary)",
               borderRadius: "50%",
               width: "38px",
               height: "38px",
@@ -233,8 +233,6 @@ export function Navbar() {
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              background: "#ba1a1a",
-              color: "#ffffff",
             }}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">

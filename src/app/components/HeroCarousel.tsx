@@ -64,7 +64,7 @@ export function HeroCarousel() {
           <span>🏛️ {current.heroLabel || current.shortName}</span>
         </div>
 
-        {/* Serif Headline (Playfair Display) */}
+        {/* Hero Headline */}
         <h1 className="hero-title">
           {current.heroHeading || current.name}
         </h1>

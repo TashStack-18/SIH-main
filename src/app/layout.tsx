@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans, Playfair_Display, JetBrains_Mono } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "@/src/css/main.css";
 import { siteConfig } from "@/src/config/site";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-family-body" });
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-family-sans" });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-family-serif" });
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-family-mono" });
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-family-serif",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-family-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -35,8 +45,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="light" className={`${inter.variable} ${jakarta.variable} ${playfair.variable} ${mono.variable}`}>
-      <body style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "var(--color-bg-canvas, #FAF7F2)", color: "var(--color-text-primary, #2D1B14)" }}>
+    <html lang="en" data-theme="light" className={`${cormorant.variable} ${dmSans.variable} ${dmSans.className}`}>
+      <body className={dmSans.className} style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "var(--color-bg-canvas, #FAF7F2)", color: "var(--color-text-primary, #2D1B14)", fontFamily: "var(--font-family-body)" }}>
         <div id="root" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
           <Navbar />
           <div style={{ flexGrow: 1 }}>

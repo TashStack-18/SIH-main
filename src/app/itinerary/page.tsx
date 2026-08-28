@@ -315,8 +315,8 @@ function ItineraryContent() {
       <div
         className="itinerary-header-box"
         style={{
-          background: 'var(--stitch-surface-variant, #F0EADE)',
-          border: '1px solid rgba(200, 142, 68, 0.4)',
+          background: 'var(--color-bg-surface-elevated)',
+          border: '1px solid var(--color-border-subtle)',
           borderRadius: 'var(--radius-xl)',
           padding: 'var(--space-2xl)',
           marginBottom: 'var(--space-xl)',
@@ -326,21 +326,21 @@ function ItineraryContent() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap' }}>
-              <span className="badge badge-verified" style={{ background: '#2D1B14', color: '#ffffff' }}>
+              <span className="badge badge-verified" style={{ background: 'var(--color-primary)', color: 'var(--color-text-inverse)' }}>
                 🇮🇳 {itinerary.territoryName}
               </span>
-              <span className="badge badge-neutral" style={{ background: 'rgba(200, 142, 68, 0.2)', color: '#2D1B14' }}>
+              <span className="badge badge-neutral" style={{ background: 'var(--color-brand-accent-light)', color: 'var(--color-text-primary)' }}>
                 {itinerary.travelStyle} Style
               </span>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: saveStatus === 'SAVING' ? '#eab308' : '#16a34a' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: saveStatus === 'SAVING' ? 'var(--color-warning)' : 'var(--color-success)' }}>
                 {saveStatus === 'SAVING' ? '⏳ Saving…' : '✓ Live Autosaved'}
               </span>
             </div>
 
-            <h1 className="font-serif" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', color: '#2D1B14', margin: '0 0 6px' }}>
+            <h1 className="font-serif" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', color: 'var(--color-text-primary)', margin: '0 0 6px' }}>
               {itinerary.title}
             </h1>
-            <p style={{ color: '#4A3C31', fontSize: '0.95rem', margin: 0 }}>
+            <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem', margin: 0 }}>
               {itinerary.durationDays} Days • {itinerary.travellers} Travellers • Verified TomTom Grounding
             </p>
           </div>
@@ -350,7 +350,7 @@ function ItineraryContent() {
             <button
               onClick={() => setShowAiEditor((prev) => !prev)}
               className="btn btn-outline"
-              style={{ borderColor: '#C88E44', color: '#2D1B14', fontWeight: 700 }}
+              style={{ fontWeight: 700 }}
             >
               🤖 Yatra AI Co-Editor
             </button>
@@ -358,9 +358,9 @@ function ItineraryContent() {
               onClick={() => setIsJourneyMode((prev) => !prev)}
               className="btn btn-primary"
               style={{
-                background: isJourneyMode ? '#16a34a' : '#ba1a1a',
-                borderColor: isJourneyMode ? '#16a34a' : '#ba1a1a',
-                color: '#ffffff',
+                background: isJourneyMode ? 'var(--color-success)' : 'var(--color-emergency)',
+                borderColor: isJourneyMode ? 'var(--color-success)' : 'var(--color-emergency)',
+                color: 'var(--color-text-inverse)',
                 fontWeight: 700,
               }}
             >
@@ -374,7 +374,7 @@ function ItineraryContent() {
           style={{
             marginTop: '20px',
             paddingTop: '16px',
-            borderTop: '1px solid rgba(156, 141, 127, 0.3)',
+            borderTop: '1px solid var(--color-border-subtle)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -384,7 +384,7 @@ function ItineraryContent() {
         >
           {/* Duration Selector */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: '#78685C' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>
               Duration Scaling:
             </span>
             <div style={{ display: 'flex', gap: '6px' }}>
@@ -396,9 +396,6 @@ function ItineraryContent() {
                   style={{
                     padding: '4px 12px',
                     fontSize: '0.8rem',
-                    background: itinerary.durationDays === d ? '#2D1B14' : 'transparent',
-                    borderColor: '#2D1B14',
-                    color: itinerary.durationDays === d ? '#ffffff' : '#2D1B14',
                   }}
                 >
                   {d} Days
@@ -409,15 +406,15 @@ function ItineraryContent() {
 
           {/* Journey Completion Progress */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '220px' }}>
-            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#2D1B14' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
               {completedCount} / {totalStopsCount} Stops ({progressPercent}%)
             </div>
-            <div style={{ flex: 1, height: '8px', background: 'rgba(45, 27, 20, 0.15)', borderRadius: '9999px', overflow: 'hidden' }}>
+            <div style={{ flex: 1, height: '8px', background: 'rgba(200, 142, 68, 0.2)', borderRadius: '9999px', overflow: 'hidden' }}>
               <div
                 style={{
                   width: `${progressPercent}%`,
                   height: '100%',
-                  background: '#16a34a',
+                  background: 'var(--color-success)',
                   transition: 'width 0.4s ease',
                 }}
               />
@@ -530,17 +527,17 @@ function ItineraryContent() {
             <div
               className="next-stop-card"
               style={{
-                background: '#2D1B14',
-                color: '#ffffff',
+                background: 'var(--color-primary)',
+                color: 'var(--color-text-inverse)',
                 borderRadius: 'var(--radius-lg)',
                 padding: 'var(--space-lg)',
                 marginBottom: 'var(--space-xl)',
-                border: '1px solid #C88E44',
+                border: '1px solid var(--color-accent)',
                 boxShadow: '0 8px 24px rgba(45, 27, 20, 0.25)',
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                <span className="badge badge-warning" style={{ background: '#C88E44', color: '#ffffff' }}>
+                <span className="badge badge-warning" style={{ background: 'var(--color-accent)', color: '#ffffff' }}>
                   NEXT STOP • ACTIVE ROUTE
                 </span>
                 <span style={{ fontSize: '0.8rem', color: '#D3C9BD' }}>
@@ -557,13 +554,13 @@ function ItineraryContent() {
               </p>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
-                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#C88E44' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-accent)' }}>
                   {routeResult?.totalDistanceKm ? `${routeResult.totalDistanceKm} km Total` : 'Route Active'}
                 </div>
                 <button
                   onClick={() => handleToggleStopComplete(nextStop.id)}
                   className="btn btn-sm btn-primary"
-                  style={{ background: '#16a34a', borderColor: '#16a34a', color: '#ffffff', fontWeight: 700 }}
+                  style={{ background: 'var(--color-success)', borderColor: 'var(--color-success)', color: '#ffffff', fontWeight: 700 }}
                 >
                   ✓ Mark Stop Visited
                 </button>
@@ -576,10 +573,10 @@ function ItineraryContent() {
             {itinerary.days.map((day) => (
               <section
                 key={day.dayNumber}
-                className="itinerary-day-card"
+                className="itinerary-day-card card"
                 style={{
-                  background: 'var(--color-bg-surface, #ffffff)',
-                  border: '1px solid var(--color-border-subtle, rgba(211, 201, 189, 0.8))',
+                  background: 'var(--color-bg-surface)',
+                  border: '1px solid var(--color-border-subtle)',
                   borderRadius: 'var(--radius-lg)',
                   overflow: 'hidden',
                   boxShadow: 'var(--shadow-card)',
@@ -588,22 +585,22 @@ function ItineraryContent() {
                 {/* Day Header */}
                 <div
                   style={{
-                    background: 'var(--stitch-surface-variant, #F0EADE)',
+                    background: 'var(--color-bg-surface-elevated)',
                     padding: '14px 20px',
-                    borderBottom: '1px solid rgba(200, 142, 68, 0.2)',
+                    borderBottom: '1px solid var(--color-border-subtle)',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}
                 >
                   <div>
-                    <span className="badge badge-neutral" style={{ background: '#2D1B14', color: '#ffffff', marginBottom: '4px' }}>
+                    <span className="badge badge-neutral" style={{ background: 'var(--color-primary)', color: 'var(--color-text-inverse)', marginBottom: '4px' }}>
                       Day {day.dayNumber}
                     </span>
-                    <h3 className="font-serif" style={{ fontSize: '1.25rem', color: '#2D1B14', margin: '4px 0 2px' }}>
+                    <h3 className="font-serif" style={{ fontSize: '1.25rem', color: 'var(--color-text-primary)', margin: '4px 0 2px' }}>
                       {day.title}
                     </h3>
-                    <div style={{ fontSize: '0.8rem', color: '#78685C' }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
                       {day.summary}
                     </div>
                   </div>
@@ -626,11 +623,11 @@ function ItineraryContent() {
                             padding: '12px',
                             borderRadius: '10px',
                             background: isActive
-                              ? 'rgba(200, 142, 68, 0.1)'
+                              ? 'var(--color-brand-accent-light)'
                               : isCompleted
                               ? 'rgba(22, 163, 74, 0.05)'
                               : 'transparent',
-                            border: `1px solid ${isActive ? '#C88E44' : 'transparent'}`,
+                            border: `1px solid ${isActive ? 'var(--color-accent)' : 'transparent'}`,
                             cursor: 'pointer',
                             transition: 'all 0.2s ease',
                           }}
@@ -646,9 +643,9 @@ function ItineraryContent() {
                               width: '26px',
                               height: '26px',
                               borderRadius: '50%',
-                              background: isCompleted ? '#16a34a' : '#FAF7F2',
-                              border: `2px solid ${isCompleted ? '#16a34a' : '#9C8D7F'}`,
-                              color: isCompleted ? '#ffffff' : '#2D1B14',
+                              background: isCompleted ? 'var(--color-success)' : 'var(--color-bg-canvas)',
+                              border: `2px solid ${isCompleted ? 'var(--color-success)' : 'var(--color-border-strong)'}`,
+                              color: isCompleted ? '#ffffff' : 'var(--color-text-primary)',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
@@ -664,10 +661,10 @@ function ItineraryContent() {
                           {/* Stop Details */}
                           <div style={{ flex: 1 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
-                              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#C88E44', textTransform: 'uppercase' }}>
+                              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-accent)', textTransform: 'uppercase' }}>
                                 {item.type} • {item.time}
                               </span>
-                              <span style={{ fontSize: '0.75rem', color: '#78685C' }}>
+                              <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
                                 ~{item.durationMinutes || 90} mins
                               </span>
                             </div>
@@ -676,7 +673,7 @@ function ItineraryContent() {
                               style={{
                                 fontSize: '1rem',
                                 fontWeight: 700,
-                                color: '#2D1B14',
+                                color: 'var(--color-text-primary)',
                                 textDecoration: isCompleted ? 'line-through' : 'none',
                                 opacity: isCompleted ? 0.7 : 1,
                               }}
@@ -685,7 +682,7 @@ function ItineraryContent() {
                             </div>
 
                             {item.notes && (
-                              <p style={{ fontSize: '0.825rem', color: '#4A3C31', margin: '4px 0 0', lineHeight: 1.4 }}>
+                              <p style={{ fontSize: '0.825rem', color: 'var(--color-text-secondary)', margin: '4px 0 0', lineHeight: 1.4 }}>
                                 {item.notes}
                               </p>
                             )}
@@ -704,10 +701,10 @@ function ItineraryContent() {
             <div style={{ marginTop: 'var(--space-2xl)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                 <div>
-                  <h3 className="font-serif" style={{ fontSize: '1.25rem', color: '#2D1B14', margin: 0 }}>
+                  <h3 className="font-serif" style={{ fontSize: '1.25rem', color: 'var(--color-text-primary)', margin: 0 }}>
                     Nearby on Route (Low Detour)
                   </h3>
-                  <div style={{ fontSize: '0.8rem', color: '#78685C' }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
                     Verified stops along your path computed with real added driving delta.
                   </div>
                 </div>
@@ -718,8 +715,8 @@ function ItineraryContent() {
                   <div
                     key={rec.candidateDestination.id}
                     style={{
-                      background: 'var(--color-bg-surface, #ffffff)',
-                      border: '1px solid rgba(200, 142, 68, 0.4)',
+                      background: 'var(--color-bg-surface)',
+                      border: '1px solid var(--color-border-subtle)',
                       borderRadius: '12px',
                       padding: '12px 16px',
                       display: 'flex',
@@ -730,14 +727,14 @@ function ItineraryContent() {
                   >
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#2D1B14' }}>
+                        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
                           {rec.candidateDestination.name}
                         </span>
                         <span className="badge badge-warning" style={{ fontSize: '0.7rem' }}>
                           {rec.detourDisplay}
                         </span>
                       </div>
-                      <div style={{ fontSize: '0.775rem', color: '#78685C', marginTop: '2px' }}>
+                      <div style={{ fontSize: '0.775rem', color: 'var(--color-text-muted)', marginTop: '2px' }}>
                         Along {rec.originLeg} • {rec.candidateDestination.type}
                       </div>
                     </div>
@@ -745,7 +742,7 @@ function ItineraryContent() {
                     <button
                       onClick={() => handleAddDetourStop(rec.candidateDestination)}
                       className="btn btn-sm btn-outline"
-                      style={{ borderColor: '#C88E44', color: '#2D1B14', fontWeight: 700, whiteSpace: 'nowrap' }}
+                      style={{ whiteSpace: 'nowrap' }}
                     >
                       + Add to Route
                     </button>

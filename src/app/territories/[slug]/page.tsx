@@ -38,7 +38,7 @@ export default async function TerritoryDetailPage({
           </div>
 
           <h1 style={{ color: "#ffffff", fontSize: "clamp(2.2rem, 5vw, 3.5rem)", marginBottom: "8px" }}>{territory.name}</h1>
-          <p style={{ fontSize: "1.2rem", color: "var(--brand-terracotta-500)", fontWeight: 600, maxWidth: "780px" }}>{territory.tagline}</p>
+          <p style={{ fontSize: "1.2rem", color: "var(--color-accent)", fontWeight: 600, maxWidth: "780px" }}>{territory.tagline}</p>
         </div>
       </section>
 
@@ -107,7 +107,7 @@ export default async function TerritoryDetailPage({
             </div>
 
             <div style={{ marginTop: "16px", fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
-              Official Portal: <a href={territory.officialPortal} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-primary)", textDecoration: "underline" }}>{territory.officialPortal} ↗</a>
+              Official Portal: <a href={territory.officialPortal} target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-accent)", textDecoration: "underline" }}>{territory.officialPortal} ↗</a>
             </div>
           </section>
 

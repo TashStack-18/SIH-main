@@ -11,30 +11,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          navy: {
-            50: "var(--brand-navy-50)",
-            100: "var(--brand-navy-100)",
-            500: "var(--brand-navy-500)",
-            600: "var(--brand-navy-600)",
-            700: "var(--brand-navy-700)",
-            800: "var(--brand-navy-800)",
-            900: "var(--brand-navy-900)",
-          },
-          terracotta: {
-            50: "var(--brand-terracotta-50)",
-            100: "var(--brand-terracotta-100)",
-            500: "var(--brand-terracotta-500)",
-            600: "var(--brand-terracotta-600)",
-            700: "var(--brand-terracotta-700)",
-          },
-          emerald: {
-            50: "var(--brand-emerald-50)",
-            100: "var(--brand-emerald-100)",
-            500: "var(--brand-emerald-500)",
-            600: "var(--brand-emerald-600)",
-            700: "var(--brand-emerald-700)",
-          }
+        primary: {
+          DEFAULT: "var(--color-primary)",
+          hover: "var(--color-primary-hover)",
+          light: "var(--color-primary-light)",
+        },
+        accent: {
+          DEFAULT: "var(--color-accent)",
+          hover: "var(--color-accent-hover)",
+          light: "var(--color-accent-light)",
         },
         canvas: "var(--color-bg-canvas)",
         surface: {
@@ -45,10 +30,11 @@ const config: Config = {
         emergency: "var(--color-emergency)",
       },
       fontFamily: {
-        sans: ["var(--font-family-sans)"],
-        body: ["var(--font-family-body)"],
-        serif: ["var(--font-family-serif)"],
-        mono: ["var(--font-family-mono)"],
+        sans: ["var(--font-family-sans)", "sans-serif"],
+        body: ["var(--font-family-body)", "sans-serif"],
+        serif: ["var(--font-family-serif)", "serif"],
+        display: ["var(--font-family-display)", "serif"],
+        mono: ["var(--font-family-mono)", "monospace"],
       },
       boxShadow: {
         subtle: "var(--shadow-subtle)",

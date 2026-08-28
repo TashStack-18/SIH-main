@@ -19,8 +19,8 @@ export default function ProfilePage() {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "var(--space-2xl)" }}>
         <div className="card" style={{ padding: "var(--space-xl)" }}>
-          <div style={{ display: "flex", alignitems: "center", gap: "16px", marginBottom: "20px" }}>
-            <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "var(--color-primary)", color: "#ffffff", fontSize: "1.5rem", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
+            <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "var(--color-primary)", color: "var(--color-text-inverse)", fontSize: "1.5rem", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800 }}>
               BY
             </div>
             <div>

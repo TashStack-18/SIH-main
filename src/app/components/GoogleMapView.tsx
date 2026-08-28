@@ -506,13 +506,13 @@ export default function GoogleMapView() {
         setSelectedEmergency(null);
 
         const contentString = `
-          <div style="font-family: inherit; max-width: 240px; color: #0f172a; padding: 4px;">
+          <div style="font-family: inherit; max-width: 240px; color: #2D1B14; padding: 4px;">
             <img src="${dest.image}" alt="${dest.name}" style="width: 100%; height: 110px; object-fit: cover; border-radius: 6px; margin-bottom: 8px;" />
-            <div style="font-size: 11px; font-weight: 700; color: #2563eb; text-transform: uppercase;">${dest.territoryName}</div>
-            <div style="font-size: 14px; font-weight: 800; margin: 2px 0;">${dest.name}</div>
-            ${dest.coordinates.altitude ? `<div style="font-size: 11px; color: #d97706; font-weight: 700; margin-bottom: 4px;">⛰️ ${dest.coordinates.altitude}</div>` : ''}
-            <p style="font-size: 11px; color: #475569; line-height: 1.4; margin: 4px 0 8px;">${dest.shortDescription}</p>
-            <a href="/destinations/${dest.slug}" style="display: block; background: #2563eb; color: #ffffff; text-align: center; padding: 6px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-decoration: none;">
+            <div style="font-size: 11px; font-weight: 700; color: #C88E44; text-transform: uppercase;">${dest.territoryName}</div>
+            <div style="font-size: 14px; font-weight: 800; margin: 2px 0; color: #2D1B14;">${dest.name}</div>
+            ${dest.coordinates.altitude ? `<div style="font-size: 11px; color: #C88E44; font-weight: 700; margin-bottom: 4px;">⛰️ ${dest.coordinates.altitude}</div>` : ''}
+            <p style="font-size: 11px; color: #4A3C31; line-height: 1.4; margin: 4px 0 8px;">${dest.shortDescription}</p>
+            <a href="/destinations/${dest.slug}" style="display: block; background: #2D1B14; color: #ffffff; text-align: center; padding: 6px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-decoration: none;">
               Explore Destination →
             </a>
           </div>
@@ -531,7 +531,7 @@ export default function GoogleMapView() {
     filteredEmergency.forEach(em => {
       const emergencyIcon = {
         path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm2 8h-3V7h-2v3H6v2h3v3h2v-3h3v-2z',
-        fillColor: '#ef4444',
+        fillColor: '#ba1a1a',
         fillOpacity: 1,
         strokeWeight: 1.5,
         strokeColor: '#ffffff',
@@ -550,13 +550,13 @@ export default function GoogleMapView() {
       marker.addListener('click', () => {
         setSelectedEmergency(em);
         const contentString = `
-          <div style="font-family: inherit; max-width: 230px; color: #0f172a; padding: 4px;">
-            <div style="display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; color: #dc2626; text-transform: uppercase;">
+          <div style="font-family: inherit; max-width: 230px; color: #2D1B14; padding: 4px;">
+            <div style="display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; color: #ba1a1a; text-transform: uppercase;">
               🚨 24x7 Emergency Unit
             </div>
-            <div style="font-size: 13px; font-weight: 800; margin: 4px 0;">${em.name}</div>
-            <div style="font-size: 11px; color: #64748b; margin-bottom: 8px;">${em.address}</div>
-            <a href="tel:${em.phone}" style="display: block; background: #dc2626; color: #ffffff; text-align: center; padding: 6px 10px; border-radius: 4px; font-size: 12px; font-weight: 800; text-decoration: none;">
+            <div style="font-size: 13px; font-weight: 800; margin: 4px 0; color: #2D1B14;">${em.name}</div>
+            <div style="font-size: 11px; color: #78685C; margin-bottom: 8px;">${em.address}</div>
+            <a href="tel:${em.phone}" style="display: block; background: #ba1a1a; color: #ffffff; text-align: center; padding: 6px 10px; border-radius: 4px; font-size: 12px; font-weight: 800; text-decoration: none;">
               📞 Call ${em.phone}
             </a>
           </div>

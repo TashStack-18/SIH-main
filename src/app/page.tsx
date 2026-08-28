@@ -40,14 +40,14 @@ export default function HomePage() {
               Hand-picked destinations with verified coordinates, entry guidelines, and seasonal intelligence.
             </p>
           </div>
-          <Link href="/destinations" className="btn btn-outline" style={{ borderColor: "#C88E44", color: "var(--color-text-primary)" }}>
+          <Link href="/destinations" className="btn btn-outline">
             View All Destinations →
           </Link>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "var(--space-xl)" }}>
           {popularDestinations.map(dest => (
-            <article key={dest.id} className="destination-card card-hoverable" style={{ borderRadius: "var(--radius-xl)", overflow: "hidden", border: "1px solid rgba(211, 201, 189, 0.6)" }}>
+            <article key={dest.id} className="destination-card card-hoverable" style={{ borderRadius: "var(--radius-xl)", overflow: "hidden", border: "1px solid var(--color-border-subtle)" }}>
               <div className="destination-card-media" style={{ height: "220px", position: "relative" }}>
                 <img src={dest.image} alt={dest.name} className="destination-card-img" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
                 <div className="destination-card-badges">
@@ -58,7 +58,7 @@ export default function HomePage() {
               </div>
 
               <div className="destination-card-body" style={{ padding: "var(--space-lg)", background: "var(--color-bg-surface)" }}>
-                <div className="destination-card-location" style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--stitch-accent, #C88E44)", textTransform: "uppercase" }}>
+                <div className="destination-card-location" style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-accent)", textTransform: "uppercase" }}>
                   {dest.territoryName} • {dest.type}
                 </div>
                 <h3 className="destination-card-title font-serif" style={{ fontSize: "1.3rem", margin: "4px 0 8px", color: "var(--color-text-primary)" }}>
@@ -79,7 +79,6 @@ export default function HomePage() {
                     <Link
                       href={`/itinerary?destination=${dest.slug}&territory=${dest.territoryId}&source=home_card`}
                       className="btn btn-sm btn-primary"
-                      style={{ background: "#2D1B14", borderColor: "#2D1B14" }}
                     >
                       + Itinerary
                     </Link>
@@ -92,13 +91,13 @@ export default function HomePage() {
       </section>
 
       {/* 5. 8 Union Territories Explorer Grid */}
-      <section className="section-spacing" style={{ backgroundColor: "var(--stitch-surface-variant, #F0EADE)" }} aria-label="8 Union Territories Explorer">
+      <section className="section-spacing" style={{ backgroundColor: "var(--color-bg-surface-elevated)" }} aria-label="8 Union Territories Explorer">
         <div className="container">
           <div className="section-header">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14]">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
               Explore the 8 Union Territories
             </h2>
-            <p className="sub-text" style={{ color: "#4A3C31" }}>
+            <p className="sub-text" style={{ color: "var(--color-text-secondary)" }}>
               From the trans-Himalayan summits of Ladakh to the tropical coral lagoons of Lakshadweep.
             </p>
           </div>
@@ -121,7 +120,7 @@ export default function HomePage() {
                   </span>
                   <h3 className="ut-card-name font-serif">{ut.name}</h3>
                   <p className="ut-card-tagline" style={{ opacity: 0.9 }}>{ut.tagline}</p>
-                  <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "#C88E44" }}>
+                  <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--color-accent)" }}>
                     Explore Territory →
                   </span>
                 </div>
@@ -152,12 +151,13 @@ export default function HomePage() {
                 padding: "var(--space-lg)",
                 display: "block",
                 textDecoration: "none",
+                background: "var(--color-bg-surface)",
                 borderRadius: "var(--radius-lg)",
-                border: "1px solid rgba(211, 201, 189, 0.6)",
+                border: "1px solid var(--color-border-subtle)",
               }}
             >
               <div style={{ fontSize: "2.2rem", marginBottom: "12px" }}>{exp.icon}</div>
-              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#C88E44", textTransform: "uppercase" }}>
+              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-accent)", textTransform: "uppercase" }}>
                 {exp.count}
               </div>
               <h3 className="font-serif" style={{ fontSize: "1.2rem", margin: "4px 0 8px", color: "var(--color-text-primary)" }}>
@@ -172,18 +172,18 @@ export default function HomePage() {
       </section>
 
       {/* 7. 2026 Cultural Festival Calendar */}
-      <section className="section-spacing" style={{ backgroundColor: "var(--stitch-surface-variant, #F0EADE)" }} aria-label="2026 Cultural Festival Calendar">
+      <section className="section-spacing" style={{ backgroundColor: "var(--color-bg-surface-elevated)" }} aria-label="2026 Cultural Festival Calendar">
         <div className="container">
           <div className="section-header-row">
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14]">
+              <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
                 Cultural Festivals & Events
               </h2>
-              <p className="sub-text" style={{ color: "#4A3C31" }}>
+              <p className="sub-text" style={{ color: "var(--color-text-secondary)" }}>
                 Verified festival schedules with explicit date precisions directly from UT Tourism departments.
               </p>
             </div>
-            <Link href="/festivals" className="btn btn-outline" style={{ borderColor: "#C88E44", color: "#2D1B14" }}>
+            <Link href="/festivals" className="btn btn-outline">
               Full 2026 Calendar →
             </Link>
           </div>
@@ -192,29 +192,29 @@ export default function HomePage() {
             {featuredFestivals.map(fest => (
               <div
                 key={fest.id}
-                className="festival-card"
+                className="festival-card card-hoverable"
                 style={{
-                  background: "#ffffff",
+                  background: "var(--color-bg-surface)",
                   borderRadius: "var(--radius-lg)",
-                  border: "1px solid rgba(211, 201, 189, 0.6)",
+                  border: "1px solid var(--color-border-subtle)",
                   boxShadow: "var(--shadow-card)",
                 }}
               >
-                <div className="festival-date-badge" style={{ background: "#2D1B14", color: "#ffffff" }}>
+                <div className="festival-date-badge" style={{ background: "var(--color-primary)", color: "var(--color-text-inverse)" }}>
                   <span>{fest.displayDate}</span>
                 </div>
-                <h3 className="font-serif" style={{ fontSize: "1.2rem", color: "#2D1B14", marginTop: "6px" }}>
+                <h3 className="font-serif" style={{ fontSize: "1.2rem", color: "var(--color-text-primary)", marginTop: "6px" }}>
                   {fest.name}
                 </h3>
-                <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "#C88E44", marginBottom: "6px" }}>
+                <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-accent)", marginBottom: "6px" }}>
                   {fest.location} ({fest.territoryName})
                 </div>
                 <p style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", lineHeight: 1.5, flexGrow: 1 }}>
                   {fest.description}
                 </p>
                 <div style={{ paddingTop: "12px", borderTop: "1px solid var(--color-border-subtle)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.775rem", color: "#78685C", fontWeight: 600 }}>{fest.category}</span>
-                  <Link href="/festivals" style={{ fontSize: "0.825rem", fontWeight: 700, color: "#2D1B14" }} className="hover:text-[#C88E44]">
+                  <span style={{ fontSize: "0.775rem", color: "var(--color-text-muted)", fontWeight: 600 }}>{fest.category}</span>
+                  <Link href="/festivals" style={{ fontSize: "0.825rem", fontWeight: 700, color: "var(--color-text-primary)" }} className="hover:text-[#C88E44]">
                     View Details →
                   </Link>
                 </div>
@@ -228,8 +228,8 @@ export default function HomePage() {
       <section className="container" style={{ margin: "var(--space-3xl) auto" }} aria-label="Life Safety & SOS Emergency">
         <div
           style={{
-            background: "linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)",
-            border: "1px solid rgba(200, 142, 68, 0.4)",
+            background: "linear-gradient(135deg, #FFF8EE 0%, #F0EADE 100%)",
+            border: "1px solid rgba(200, 142, 68, 0.35)",
             borderRadius: "var(--radius-xl)",
             padding: "var(--space-2xl)",
             display: "flex",
@@ -242,17 +242,17 @@ export default function HomePage() {
         >
           <div style={{ maxWidth: "680px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-              <span className="badge badge-danger" style={{ background: "#ba1a1a", color: "#ffffff" }}>
+              <span className="badge badge-danger">
                 🚨 Life Safety Protocol
               </span>
-              <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#9a3412" }}>
+              <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-danger)" }}>
                 National Helpline: 112 • Tourist Support: 1363
               </span>
             </div>
-            <h3 className="font-serif" style={{ fontSize: "1.5rem", color: "#431407", marginBottom: "6px" }}>
+            <h3 className="font-serif" style={{ fontSize: "1.5rem", color: "var(--color-text-primary)", marginBottom: "6px" }}>
               Travel Safely with Real-Time Emergency Grounding
             </h3>
-            <p style={{ fontSize: "0.875rem", color: "#7c2d12", lineHeight: 1.55 }}>
+            <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", lineHeight: 1.55 }}>
               Bharat Safe Yatra maintains verified trauma centers, high-altitude oxygen facilities, coast guard stations, and real-time travel advisories across every Union Territory.
             </p>
           </div>
@@ -263,8 +263,6 @@ export default function HomePage() {
               className="btn btn-emergency btn-lg"
               style={{
                 textDecoration: "none",
-                background: "#ba1a1a",
-                color: "#ffffff",
                 fontWeight: 700,
                 borderRadius: "var(--radius-pill)",
                 padding: "12px 28px",

@@ -10,18 +10,18 @@ export default function AIPage() {
       {/* Top Breadcrumb & Page Introduction */}
       <div style={{ marginBottom: 'var(--space-lg)' }}>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '6px' }}>
-          <span className="badge badge-verified" style={{ background: '#2D1B14', color: '#ffffff' }}>
+          <span className="badge badge-verified" style={{ background: 'var(--color-primary)', color: 'var(--color-text-inverse)' }}>
             🇮🇳 Bharat Safe Yatra
           </span>
-          <span className="badge badge-neutral" style={{ background: 'rgba(200, 142, 68, 0.2)', color: '#2D1B14' }}>
+          <span className="badge badge-neutral" style={{ background: 'var(--color-brand-accent-light)', color: 'var(--color-text-primary)' }}>
             Yatra AI 2.0
           </span>
         </div>
 
-        <h1 className="font-serif" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.4rem)', color: '#2D1B14', margin: '0 0 4px' }}>
+        <h1 className="font-serif" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.4rem)', color: 'var(--color-text-primary)', margin: '0 0 4px' }}>
           Yatra AI Travel Companion
         </h1>
-        <p style={{ color: '#4A3C31', fontSize: '0.95rem', margin: 0 }}>
+        <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem', margin: 0 }}>
           Grounded tourism intelligence, route telemetry, and safety radar across India&apos;s 8 Union Territories.
         </p>
       </div>
@@ -36,11 +36,11 @@ export default function AIPage() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'var(--stitch-surface-variant, #F0EADE)',
-              border: '1px solid rgba(200, 142, 68, 0.35)',
+              background: 'var(--color-bg-surface-elevated)',
+              border: '1px solid var(--color-border-subtle)',
             }}
           >
-            <div style={{ color: '#2D1B14', fontWeight: 700 }}>
+            <div style={{ color: 'var(--color-text-primary)', fontWeight: 700 }}>
               <span style={{ fontSize: '2.2rem', display: 'block', marginBottom: '8px' }}>🤖</span>
               Initializing Yatra AI Travel Workspace…
             </div>

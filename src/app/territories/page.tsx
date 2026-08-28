@@ -26,7 +26,7 @@ export default function TerritoriesPage() {
                 <span className="badge badge-verified">✓ UT {idx + 1} of 8</span>
               </div>
               <div style={{ position: "absolute", bottom: "12px", right: "12px" }}>
-                <span className="badge badge-neutral" style={{ background: "rgba(15,23,42,0.7)", color: "#ffffff", backdropFilter: "blur(8px)" }}>
+                <span className="badge badge-neutral" style={{ background: "rgba(45, 27, 20, 0.75)", color: "#ffffff", backdropFilter: "blur(8px)" }}>
                   Capital: {ut.capital}
                 </span>
               </div>
@@ -34,7 +34,7 @@ export default function TerritoriesPage() {
 
             <div style={{ padding: "var(--space-lg)", display: "flex", flexDirection: "column", flexGrow: 1 }}>
               <h2 style={{ fontSize: "1.45rem", marginBottom: "6px" }}>{ut.name}</h2>
-              <p style={{ fontSize: "0.875rem", color: "var(--color-primary)", fontWeight: 600, marginBottom: "12px" }}>{ut.tagline}</p>
+              <p style={{ fontSize: "0.875rem", color: "var(--color-accent)", fontWeight: 600, marginBottom: "12px" }}>{ut.tagline}</p>
               <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", lineHeight: 1.55, marginBottom: "var(--space-md)", flexGrow: 1 }}>
                 {ut.shortDescription}
               </p>

@@ -7,9 +7,9 @@ export function Footer() {
       className="footer"
       role="contentinfo"
       style={{
-        background: "var(--stitch-surface-variant, #F0EADE)",
-        borderTop: "1px solid var(--stitch-outline-variant, #D3C9BD)",
-        color: "var(--stitch-on-surface-variant, #4A3C31)",
+        background: "var(--color-bg-surface-elevated)",
+        borderTop: "1px solid var(--color-border-subtle)",
+        color: "var(--color-text-secondary)",
         padding: "var(--space-3xl) 0 var(--space-xl)",
         marginTop: "auto",
       }}
@@ -35,7 +35,7 @@ export function Footer() {
                 fontWeight: 700,
                 fontSize: "1.2rem",
                 letterSpacing: "-0.01em",
-                color: "#2D1B14",
+                color: "var(--color-text-primary)",
               }}
             >
               Heritage Yatra
@@ -45,10 +45,10 @@ export function Footer() {
             Preserving traditions and securing journeys across India&apos;s 8 Union Territories with verified government intelligence, geospatial routing, and Yatra AI.
           </p>
           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            <span className="badge badge-verified" style={{ fontSize: "0.7rem", background: "rgba(200, 142, 68, 0.15)", color: "#2D1B14", borderColor: "#C88E44" }}>
+            <span className="badge badge-verified" style={{ fontSize: "0.7rem", background: "var(--color-brand-accent-light)", color: "var(--color-text-primary)", borderColor: "var(--color-accent)" }}>
               8 Union Territories
             </span>
-            <span className="badge badge-emergency" style={{ fontSize: "0.7rem", background: "#ba1a1a", color: "#ffffff" }}>
+            <span className="badge badge-danger" style={{ fontSize: "0.7rem" }}>
               24x7 Safety Guard
             </span>
           </div>
@@ -63,7 +63,7 @@ export function Footer() {
               marginBottom: "14px",
               textTransform: "uppercase",
               letterSpacing: "0.05em",
-              color: "#2D1B14",
+              color: "var(--color-text-primary)",
             }}
           >
             8 Union Territories
@@ -97,7 +97,7 @@ export function Footer() {
               marginBottom: "14px",
               textTransform: "uppercase",
               letterSpacing: "0.05em",
-              color: "#2D1B14",
+              color: "var(--color-text-primary)",
             }}
           >
             Quick Navigation
@@ -120,7 +120,7 @@ export function Footer() {
               marginBottom: "14px",
               textTransform: "uppercase",
               letterSpacing: "0.05em",
-              color: "#ba1a1a",
+              color: "var(--color-danger)",
             }}
           >
             Emergency Helplines
@@ -128,29 +128,29 @@ export function Footer() {
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             <div
               style={{
-                background: "rgba(255, 255, 255, 0.7)",
+                background: "var(--color-bg-surface)",
                 padding: "10px 14px",
                 borderRadius: "var(--radius-md)",
-                border: "1px solid rgba(211, 201, 189, 0.6)",
+                border: "1px solid var(--color-border-subtle)",
               }}
             >
-              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--stitch-outline, #9C8D7F)" }}>
+              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-text-muted)" }}>
                 National Emergency Service
               </div>
-              <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#ba1a1a" }}>112</div>
+              <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "var(--color-danger)" }}>112</div>
             </div>
             <div
               style={{
-                background: "rgba(255, 255, 255, 0.7)",
+                background: "var(--color-bg-surface)",
                 padding: "10px 14px",
                 borderRadius: "var(--radius-md)",
-                border: "1px solid rgba(211, 201, 189, 0.6)",
+                border: "1px solid var(--color-border-subtle)",
               }}
             >
-              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--stitch-outline, #9C8D7F)" }}>
+              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-text-muted)" }}>
                 All-India 24x7 Tourist Helpline
               </div>
-              <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#2D1B14" }}>1363</div>
+              <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "var(--color-text-primary)" }}>1363</div>
             </div>
           </div>
         </div>
@@ -160,7 +160,7 @@ export function Footer() {
       <div
         className="container"
         style={{
-          borderTop: "1px solid rgba(156, 141, 127, 0.3)",
+          borderTop: "1px solid var(--color-border-subtle)",
           paddingTop: "var(--space-lg)",
           display: "flex",
           justifyContent: "space-between",

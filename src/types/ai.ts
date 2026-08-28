@@ -14,6 +14,7 @@ export interface AIActionProposal {
   type: 'OPTIMIZE_ITINERARY' | 'ADD_STOP' | 'WEATHER_ALERT' | 'CHANGE_DURATION';
   title: string;
   day: number;
+  territorySlug?: string;
   item: {
     time: string;
     title: string;

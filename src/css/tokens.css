@@ -5,110 +5,107 @@
 
 :root {
   /* ==========================================
-     COLOR SYSTEM — LIGHT THEME (PRIMARY)
+     HERITAGE YATRA CORE BRAND PALETTE
      ========================================== */
-  
-  /* Brand Accents inspired by Indian Geography & Heritage */
-  --brand-navy-900: hsl(222, 47%, 11%);
-  --brand-navy-800: hsl(217, 50%, 18%);
-  --brand-navy-700: hsl(215, 65%, 26%);
-  --brand-navy-600: hsl(215, 88%, 36%); /* Primary Brand Navy */
-  --brand-navy-500: hsl(215, 90%, 45%);
-  --brand-navy-100: hsl(215, 90%, 94%);
-  --brand-navy-50:  hsl(215, 100%, 97%);
+  --color-brand-primary: #2D1B14;      /* Deep Heritage Espresso */
+  --color-brand-primary-hover: #431407;/* Rich Roasted Bark */
+  --color-brand-accent: #C88E44;       /* Saffron Ochre Gold */
+  --color-brand-accent-hover: #B27B36; /* Deep Ochre Gold */
+  --color-brand-accent-light: rgba(200, 142, 68, 0.12); /* Subtle Gold Tint */
 
-  --brand-terracotta-700: hsl(24, 85%, 38%);
-  --brand-terracotta-600: hsl(28, 85%, 52%); /* Warm Terracotta Saffron */
-  --brand-terracotta-500: hsl(30, 95%, 60%);
-  --brand-terracotta-100: hsl(28, 90%, 94%);
-  --brand-terracotta-50:  hsl(28, 100%, 97%);
+  /* Surface & Background Hierarchy */
+  --color-bg-canvas: #FAF7F2;          /* Level 0: Main Page Canvas (Warm Cream / Ivory) */
+  --color-bg-surface: #FFFFFF;         /* Level 1: Primary Card & Component Surface */
+  --color-bg-surface-elevated: #F0EADE;/* Level 2: Section Background / Sandstone Alt Surface */
+  --color-bg-surface-alt: #E8DEC8;     /* Level 3: Muted Parchment / Deep Sand */
+  --color-bg-subtle: #FAF7F2;          /* Subtle Inset Background */
+  --color-glass-bg: rgba(250, 247, 242, 0.92);
+  --color-glass-border: rgba(200, 142, 68, 0.25);
+  --color-bg-scrim: rgba(45, 27, 20, 0.72);
+  --color-bg-scrim-light: rgba(45, 27, 20, 0.35);
 
-  --brand-emerald-700: hsl(164, 80%, 26%);
-  --brand-emerald-600: hsl(164, 76%, 36%); /* Verdant Emerald */
-  --brand-emerald-500: hsl(164, 70%, 46%);
-  --brand-emerald-100: hsl(164, 70%, 92%);
-  --brand-emerald-50:  hsl(164, 80%, 97%);
-
-  /* Stitch Heritage Soul Theme Accents */
-  --stitch-primary: #2D1B14;
-  --stitch-on-primary: #ffffff;
-  --stitch-accent: #C88E44;
-  --stitch-background: #FAF7F2;
-  --stitch-surface: #FAF7F2;
-  --stitch-surface-variant: #F0EADE;
-  --stitch-on-surface-variant: #4A3C31;
-  --stitch-outline: #9C8D7F;
-  --stitch-outline-variant: #D3C9BD;
-
-  /* Primary Semantic Assignments */
-  --color-primary: var(--brand-navy-600);
-  --color-primary-hover: var(--brand-navy-700);
-  --color-primary-light: var(--brand-navy-50);
-  --color-primary-border: var(--brand-navy-100);
-
-  --color-secondary: var(--brand-terracotta-600);
-  --color-secondary-hover: var(--brand-terracotta-700);
-  --color-secondary-light: var(--brand-terracotta-50);
-
-  --color-accent: #C88E44;
-  --color-accent-light: #FFF8EE;
-
-  /* Backgrounds & Surfaces */
-  --color-bg-canvas: #f8fafc;
-  --color-bg-surface: #ffffff;
-  --color-bg-surface-elevated: #f1f5f9;
-  --color-bg-surface-alt: #e2e8f0;
-  --color-bg-scrim: rgba(15, 23, 42, 0.72);
-  --color-bg-scrim-light: rgba(15, 23, 42, 0.35);
-  --color-glass-bg: rgba(255, 255, 255, 0.82);
-  --color-glass-border: rgba(255, 255, 255, 0.6);
-
-  /* Typography */
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #334155;
-  --color-text-muted: #64748b;
-  --color-text-light: #94a3b8;
-  --color-text-inverse: #ffffff;
+  /* Typography Colors */
+  --color-text-primary: #2D1B14;       /* Deep Espresso Primary Headings & Text */
+  --color-text-secondary: #4A3C31;     /* Warm Umber Secondary Text & Descriptions */
+  --color-text-muted: #78685C;         /* Warm Taupe Captions & Metadata */
+  --color-text-light: #9C8D7F;         /* Subtle Sand Muted Text */
+  --color-text-inverse: #FFFFFF;       /* Pure White Text for Dark Backgrounds & Buttons */
 
   /* Borders & Dividers */
-  --color-border-subtle: #e2e8f0;
-  --color-border-medium: #cbd5e1;
-  --color-border-strong: #94a3b8;
+  --color-border-subtle: rgba(200, 142, 68, 0.2); /* Warm Subtle Border */
+  --color-border-medium: #D3C9BD;                 /* Defined Warm Border */
+  --color-border-strong: #9C8D7F;                 /* Strong Warm Border */
 
-  /* Status Colors */
-  --color-success: #10b981;
-  --color-success-bg: #ecfdf5;
-  --color-success-text: #065f46;
+  /* Buttons & Interactive Elements */
+  --color-btn-primary-bg: #2D1B14;
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-primary-hover: #431407;
+  --color-btn-accent-bg: #C88E44;
+  --color-btn-accent-text: #FFFFFF;
+  --color-btn-accent-hover: #B27B36;
+  --color-btn-outline-border: #C88E44;
+  --color-btn-outline-text: #2D1B14;
+  --color-btn-outline-hover-bg: rgba(200, 142, 68, 0.12);
 
-  --color-warning: #f59e0b;
-  --color-warning-bg: #fffbeb;
-  --color-warning-text: #92400e;
+  /* Primary Semantic Aliases */
+  --color-primary: var(--color-brand-primary);
+  --color-primary-hover: var(--color-brand-primary-hover);
+  --color-primary-light: var(--color-brand-accent-light);
+  --color-primary-border: var(--color-border-subtle);
 
-  --color-danger: #ef4444;
-  --color-danger-bg: #fef2f2;
-  --color-danger-text: #991b1b;
-  --color-emergency: #dc2626; /* Unmistakable Emergency Red */
+  --color-secondary: var(--color-brand-accent);
+  --color-secondary-hover: var(--color-brand-accent-hover);
+  --color-secondary-light: var(--color-brand-accent-light);
+
+  --color-accent: var(--color-brand-accent);
+  --color-accent-hover: var(--color-brand-accent-hover);
+  --color-accent-light: var(--color-brand-accent-light);
+
+  /* Stitch Heritage Soul Backward Compatibility */
+  --stitch-primary: var(--color-brand-primary);
+  --stitch-on-primary: #FFFFFF;
+  --stitch-accent: var(--color-brand-accent);
+  --stitch-background: var(--color-bg-canvas);
+  --stitch-surface: var(--color-bg-surface);
+  --stitch-surface-variant: var(--color-bg-surface-elevated);
+  --stitch-on-surface-variant: var(--color-text-secondary);
+  --stitch-outline: var(--color-border-strong);
+  --stitch-outline-variant: var(--color-border-medium);
+
+  /* Badges & Status Colors */
+  --color-verified-bg: rgba(200, 142, 68, 0.15);
+  --color-verified-border: #C88E44;
+  --color-verified-text: #2D1B14;
+
+  --color-official-bg: #F0EADE;
+  --color-official-border: #D3C9BD;
+  --color-official-text: #2D1B14;
+
+  --color-success: #16A34A;
+  --color-success-bg: rgba(22, 163, 74, 0.12);
+  --color-success-text: #15803D;
+
+  --color-warning: #D97706;
+  --color-warning-bg: rgba(217, 119, 6, 0.12);
+  --color-warning-text: #92400E;
+
+  --color-danger: #BA1A1A;
+  --color-danger-bg: rgba(186, 26, 26, 0.12);
+  --color-danger-text: #BA1A1A;
+  --color-emergency: #BA1A1A;
 
   --color-info: #0284c7;
   --color-info-bg: #f0f9ff;
   --color-info-text: #075985;
 
-  /* Verification Badges */
-  --color-verified-bg: #ecfdf5;
-  --color-verified-border: #a7f3d0;
-  --color-verified-text: #065f46;
-
-  --color-official-bg: #eff6ff;
-  --color-official-border: #bfdbfe;
-  --color-official-text: #1e40af;
-
   /* ==========================================
      TYPOGRAPHY TOKENS
      ========================================== */
-  --font-family-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-family-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-family-serif: 'Playfair Display', Georgia, serif;
-  --font-family-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  --font-family-serif: 'Cormorant Garamond', Garamond, 'Georgia', serif;
+  --font-family-display: 'Cormorant Garamond', Garamond, 'Georgia', serif;
+  --font-family-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-mono: 'DM Sans', 'JetBrains Mono', 'SF Mono', Consolas, monospace;
 
   /* ==========================================
      SPACING & LAYOUT TOKENS
@@ -129,7 +126,7 @@
   --mobile-nav-height: 64px;
 
   /* ==========================================
-     BORDER RADIUS TOKENS (Restrained System)
+     BORDER RADIUS TOKENS
      ========================================== */
   --radius-xs: 4px;
   --radius-sm: 8px;
@@ -141,12 +138,12 @@
   /* ==========================================
      SHADOWS & ELEVATION
      ========================================== */
-  --shadow-subtle: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
-  --shadow-card: 0 4px 16px rgba(15, 23, 42, 0.06), 0 1px 4px rgba(15, 23, 42, 0.03);
-  --shadow-hover: 0 12px 30px rgba(15, 23, 42, 0.1), 0 3px 8px rgba(15, 23, 42, 0.04);
-  --shadow-elevated: 0 16px 40px rgba(15, 23, 42, 0.12), 0 6px 12px rgba(15, 23, 42, 0.05);
-  --shadow-modal: 0 24px 60px rgba(15, 23, 42, 0.22), 0 10px 20px rgba(15, 23, 42, 0.08);
-  --shadow-sos: 0 0 24px rgba(220, 38, 38, 0.4);
+  --shadow-subtle: 0 1px 3px rgba(45, 27, 20, 0.04), 0 1px 2px rgba(45, 27, 20, 0.02);
+  --shadow-card: 0 4px 16px rgba(45, 27, 20, 0.06), 0 1px 4px rgba(45, 27, 20, 0.03);
+  --shadow-hover: 0 12px 30px rgba(45, 27, 20, 0.1), 0 3px 8px rgba(45, 27, 20, 0.04);
+  --shadow-elevated: 0 16px 40px rgba(45, 27, 20, 0.12), 0 6px 12px rgba(45, 27, 20, 0.05);
+  --shadow-modal: 0 24px 60px rgba(45, 27, 20, 0.22), 0 10px 20px rgba(45, 27, 20, 0.08);
+  --shadow-sos: 0 0 24px rgba(186, 26, 26, 0.4);
 
   /* ==========================================
      MOTION & ANIMATION TOKENS
@@ -175,36 +172,61 @@
    DARK THEME (CINEMATIC, MAP, & AI MODES)
    ========================================== */
 [data-theme="dark"] {
-  --color-primary: hsl(215, 95%, 62%);
-  --color-primary-hover: hsl(215, 95%, 70%);
-  --color-primary-light: hsl(215, 60%, 16%);
-  --color-primary-border: hsl(215, 50%, 28%);
+  --color-brand-primary: #FAF7F2;
+  --color-brand-primary-hover: #FFFFFF;
+  --color-brand-accent: #C88E44;
+  --color-brand-accent-hover: #D9A057;
+  --color-brand-accent-light: rgba(200, 142, 68, 0.2);
 
-  --color-secondary: hsl(28, 95%, 60%);
-  --color-secondary-hover: hsl(28, 95%, 68%);
-  --color-secondary-light: hsl(28, 50%, 16%);
-
-  --color-accent: hsl(164, 75%, 52%);
-  --color-accent-light: hsl(164, 50%, 15%);
-
-  --color-bg-canvas: #0b0f19;
-  --color-bg-surface: #131b2e;
-  --color-bg-surface-elevated: #1c2742;
-  --color-bg-surface-alt: #263353;
+  --color-bg-canvas: #131B2E;
+  --color-bg-surface: #1C2742;
+  --color-bg-surface-elevated: #263353;
+  --color-bg-surface-alt: #2D3D63;
+  --color-bg-subtle: #1C2742;
+  --color-glass-bg: rgba(19, 27, 46, 0.88);
+  --color-glass-border: rgba(200, 142, 68, 0.3);
   --color-bg-scrim: rgba(5, 8, 15, 0.88);
   --color-bg-scrim-light: rgba(5, 8, 15, 0.5);
-  --color-glass-bg: rgba(19, 27, 46, 0.85);
-  --color-glass-border: rgba(255, 255, 255, 0.1);
 
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #cbd5e1;
-  --color-text-muted: #94a3b8;
-  --color-text-light: #64748b;
-  --color-text-inverse: #0f172a;
+  --color-text-primary: #FAF7F2;
+  --color-text-secondary: #D3C9BD;
+  --color-text-muted: #9C8D7F;
+  --color-text-light: #78685C;
+  --color-text-inverse: #131B2E;
 
-  --color-border-subtle: #1e293b;
-  --color-border-medium: #334155;
-  --color-border-strong: #475569;
+  --color-border-subtle: rgba(200, 142, 68, 0.25);
+  --color-border-medium: rgba(200, 142, 68, 0.4);
+  --color-border-strong: #9C8D7F;
+
+  --color-btn-primary-bg: #C88E44;
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-primary-hover: #D9A057;
+
+  --color-primary: #FAF7F2;
+  --color-primary-hover: #FFFFFF;
+  --color-primary-light: rgba(200, 142, 68, 0.2);
+  --color-primary-border: rgba(200, 142, 68, 0.3);
+
+  --color-secondary: #C88E44;
+  --color-secondary-hover: #D9A057;
+  --color-secondary-light: rgba(200, 142, 68, 0.2);
+
+  --color-accent: #C88E44;
+  --color-accent-light: rgba(200, 142, 68, 0.2);
+
+  --stitch-primary: #FAF7F2;
+  --stitch-background: #131B2E;
+  --stitch-surface: #1C2742;
+  --stitch-surface-variant: #263353;
+  --stitch-on-surface-variant: #D3C9BD;
+
+  --color-verified-bg: rgba(200, 142, 68, 0.2);
+  --color-verified-border: #C88E44;
+  --color-verified-text: #FAF7F2;
+
+  --color-official-bg: rgba(200, 142, 68, 0.15);
+  --color-official-border: rgba(200, 142, 68, 0.35);
+  --color-official-text: #FAF7F2;
 
   --color-success: #34d399;
   --color-success-bg: rgba(52, 211, 153, 0.12);
@@ -217,19 +239,7 @@
   --color-danger: #f87171;
   --color-danger-bg: rgba(248, 113, 113, 0.14);
   --color-danger-text: #fecaca;
-  --color-emergency: #ef4444;
-
-  --color-info: #38bdf8;
-  --color-info-bg: rgba(56, 189, 248, 0.12);
-  --color-info-text: #bae6fd;
-
-  --color-verified-bg: rgba(16, 185, 129, 0.15);
-  --color-verified-border: rgba(16, 185, 129, 0.35);
-  --color-verified-text: #6ee7b7;
-
-  --color-official-bg: rgba(37, 99, 235, 0.18);
-  --color-official-border: rgba(37, 99, 235, 0.4);
-  --color-official-text: #93c5fd;
+  --color-emergency: #f87171;
 
   --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);

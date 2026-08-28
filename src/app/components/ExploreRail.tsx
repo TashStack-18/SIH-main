@@ -81,7 +81,7 @@ export function ExploreRail() {
     <section className="explore-rail-wrap">
       <div className="explore-rail-header">
         <div>
-          <span className="badge badge-verified" style={{ marginBottom: "6px", background: "rgba(200, 142, 68, 0.15)", color: "#2D1B14", borderColor: "#C88E44" }}>
+          <span className="badge badge-verified" style={{ marginBottom: "6px" }}>
             Signature Heritage Journeys
           </span>
           <h2 className="explore-rail-title">
@@ -93,7 +93,7 @@ export function ExploreRail() {
           style={{
             fontSize: "0.85rem",
             fontWeight: 700,
-            color: "#C88E44",
+            color: "var(--color-accent)",
             textDecoration: "none",
             textTransform: "uppercase",
             letterSpacing: "0.05em",
