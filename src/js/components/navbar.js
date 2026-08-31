@@ -22,10 +22,9 @@ export function renderNavbar() {
     <header class="navbar" role="banner">
       <div class="container navbar-container">
         
-        <!-- Brand Logo -->
+        <!-- Pure Text Brand Wordmark -->
         <a href="#/" class="brand-logo" aria-label="Bharat Safe Yatra Home">
-          <div class="brand-badge">🇮🇳</div>
-          <span>BHARAT SAFE YATRA</span>
+          <span class="brand-wordmark">Bharat Safe Yatra</span>
         </a>
 
         <!-- Desktop Navigation Links -->

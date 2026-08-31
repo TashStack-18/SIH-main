@@ -17,9 +17,8 @@ export function renderFooter() {
           
           <!-- Column 1: Brand & Mission -->
           <div>
-            <div class="brand-logo" style="margin-bottom: 12px;">
-              <div class="brand-badge">🇮🇳</div>
-              <span>BHARAT SAFE YATRA</span>
+            <div class="brand-logo" style="margin-bottom: 16px;">
+              <span class="brand-wordmark">Bharat Safe Yatra</span>
             </div>
             <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 16px;">
               India's intelligent tourism and life safety platform covering all 8 Union Territories. Built for Smart India Hackathon (SIH 2026) with verified government knowledge grounding, geospatial routing, and AI assistance.

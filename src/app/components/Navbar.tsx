@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { BrandLogo } from "./BrandLogo";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -65,31 +66,8 @@ export function Navbar() {
           margin: "0 auto",
         }}
       >
-        {/* Brand Logo - Stitch Heritage Soul Typography */}
-        <Link
-          href="/"
-          className="brand-logo"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            textDecoration: "none",
-          }}
-          aria-label="Bharat Safe Yatra Home"
-        >
-          <span style={{ fontSize: "1.4rem" }}>🇮🇳</span>
-          <span
-            className="font-serif"
-            style={{
-              fontWeight: 700,
-              fontSize: "1.25rem",
-              letterSpacing: "-0.01em",
-              color: "var(--color-text-primary)",
-            }}
-          >
-            Heritage Yatra
-          </span>
-        </Link>
+        {/* Minimal Editorial Brand Logo Lockup */}
+        <BrandLogo size="md" />
 
         {/* Desktop Navigation Links */}
         <nav className="nav-links" role="navigation" aria-label="Main Navigation" style={{ display: "flex", gap: "8px", alignItems: "center" }}>

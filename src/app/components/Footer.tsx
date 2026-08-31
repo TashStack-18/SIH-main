@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { VERIFIED_TERRITORIES } from "@/src/lib/fixtures";
+import { BrandLogo } from "./BrandLogo";
 
 export function Footer() {
   return (
@@ -27,19 +28,8 @@ export function Footer() {
       >
         {/* Col 1: Platform Mission */}
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
-            <span style={{ fontSize: "1.5rem" }}>🇮🇳</span>
-            <span
-              className="font-serif"
-              style={{
-                fontWeight: 700,
-                fontSize: "1.2rem",
-                letterSpacing: "-0.01em",
-                color: "var(--color-text-primary)",
-              }}
-            >
-              Heritage Yatra
-            </span>
+          <div style={{ marginBottom: "16px" }}>
+            <BrandLogo size="md" />
           </div>
           <p style={{ fontSize: "0.85rem", color: "inherit", lineHeight: 1.6, marginBottom: "16px", opacity: 0.9 }}>
             Preserving traditions and securing journeys across India&apos;s 8 Union Territories with verified government intelligence, geospatial routing, and Yatra AI.
@@ -172,7 +162,7 @@ export function Footer() {
           margin: "0 auto",
         }}
       >
-        <div>© 2026 Bharat Heritage Yatra • Bharat Safe Yatra. Preserving traditions and securing travelers.</div>
+        <div>© 2026 Bharat Safe Yatra. Preserving traditions and securing travelers.</div>
         <div style={{ display: "flex", gap: "16px" }}>
           <Link href="/privacy" style={{ textDecoration: "none", color: "inherit" }} className="hover:underline">Privacy Policy</Link>
           <Link href="/terms" style={{ textDecoration: "none", color: "inherit" }} className="hover:underline">Terms of Service</Link>

@@ -31,7 +31,7 @@ export function HeroCarousel() {
       className="hero-carousel-section"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      aria-label="Heritage Yatra Showcase Carousel"
+      aria-label="Bharat Safe Yatra Showcase Carousel"
     >
       {/* Background Slides */}
       {territories.map((ut, idx) => {

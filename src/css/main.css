@@ -430,16 +430,61 @@ h4 { font-size: 1.125rem; font-weight: 600; }
   gap: var(--space-md);
 }
 
+/* --- 🇮🇳 BHARAT SAFE YATRA PURE TEXT-ONLY BRAND IDENTITY --- */
+.brand-wordmark-lockup,
+.brand-lockup,
 .brand-logo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
+  text-decoration: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  user-select: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.brand-wordmark-lockup:hover,
+.brand-lockup:hover,
+.brand-logo:hover {
+  opacity: 0.88;
+}
+
+.brand-wordmark {
   font-family: var(--font-family-serif);
   font-weight: 700;
-  font-size: 1.25rem;
-  letter-spacing: -0.01em;
+  font-size: 1.82rem;
+  letter-spacing: -0.02em;
   color: var(--color-text-primary);
-  flex-shrink: 0;
+  line-height: 1;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* Size Variants */
+.brand-size-lg .brand-wordmark {
+  font-size: 2.15rem;
+}
+
+.brand-size-sm .brand-wordmark {
+  font-size: 1.45rem;
+}
+
+@media (max-width: 1200px) {
+  .brand-wordmark {
+    font-size: 1.62rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .brand-wordmark {
+    font-size: 1.48rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .brand-wordmark {
+    font-size: 1.3rem;
+  }
 }
 
 .brand-badge {

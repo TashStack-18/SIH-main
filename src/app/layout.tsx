@@ -34,6 +34,9 @@ export const metadata: Metadata = {
     images: [{ url: siteConfig.ogImage, width: 1200, height: 630 }],
     type: "website",
   },
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 import { Navbar } from "@/src/app/components/Navbar";
