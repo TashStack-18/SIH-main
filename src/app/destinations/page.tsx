@@ -22,9 +22,6 @@ export default function DestinationsPage() {
           <article key={dest.id} className="destination-card card-hoverable">
             <div className="destination-card-media">
               <img src={dest.image} alt={dest.name} className="destination-card-img" loading="lazy" />
-              <div className="destination-card-badges">
-                <span className="badge badge-neutral" style={{ background: "rgba(0,0,0,0.6)", color: "#ffffff" }}>{dest.type}</span>
-              </div>
             </div>
 
             <div className="destination-card-body">

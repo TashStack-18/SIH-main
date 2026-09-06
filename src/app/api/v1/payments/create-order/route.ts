@@ -44,6 +44,6 @@ export async function POST(req: NextRequest) {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[/api/v1/payments/create-order] Error:', msg);
-    return Errors.internal('Failed to initiate payment order');
+    return Errors.internalError('Failed to initiate payment order');
   }
 }

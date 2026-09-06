@@ -22,14 +22,6 @@ export default function TerritoriesPage() {
           <article key={ut.id} className="card card-hoverable" style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ position: "relative", height: "240px", overflow: "hidden" }}>
               <img src={ut.heroImage} alt={ut.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
-              <div style={{ position: "absolute", top: "12px", left: "12px" }}>
-                <span className="badge badge-verified">✓ UT {idx + 1} of 8</span>
-              </div>
-              <div style={{ position: "absolute", bottom: "12px", right: "12px" }}>
-                <span className="badge badge-neutral" style={{ background: "rgba(45, 27, 20, 0.75)", color: "#ffffff", backdropFilter: "blur(8px)" }}>
-                  Capital: {ut.capital}
-                </span>
-              </div>
             </div>
 
             <div style={{ padding: "var(--space-lg)", display: "flex", flexDirection: "column", flexGrow: 1 }}>

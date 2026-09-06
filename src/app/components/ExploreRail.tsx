@@ -81,9 +81,6 @@ export function ExploreRail() {
     <section className="explore-rail-wrap">
       <div className="explore-rail-header">
         <div>
-          <span className="badge badge-verified" style={{ marginBottom: "6px" }}>
-            Signature Heritage Journeys
-          </span>
           <h2 className="explore-rail-title">
             Explore Authentic India
           </h2>
@@ -123,9 +120,6 @@ export function ExploreRail() {
 
             {/* Text Overlay */}
             <div className="explore-rail-card-body">
-              <div className="explore-rail-card-tag">
-                {item.utTag}
-              </div>
               <h3 className="explore-rail-card-heading">
                 {item.title}
               </h3>

@@ -47,6 +47,10 @@ export interface ItineraryItem {
   estimatedCost?: number;
   location?: Coordinates;
   status?: StopStatus;
+  isMustVisit?: boolean;
+  isLocked?: boolean;
+  detourMinutes?: number;
+  detourDistanceKm?: number;
 }
 
 export interface ItineraryDay {
@@ -71,6 +75,27 @@ export interface PackingItem {
   isChecked: boolean;
 }
 
+export interface OptimizationProposal {
+  id: string;
+  currentSequence: string[];
+  suggestedSequence: string[];
+  savedDistanceKm: number;
+  savedDurationMinutes: number;
+  rationale: string;
+  itinerary: Itinerary;
+}
+
+export interface ItineraryPlanRequest {
+  destinationId: string;
+  additionalDestinationIds?: string[];
+  durationDays: number;
+  travelStyle: TravelStyle;
+  travellers?: number;
+  startDate?: string;
+  interests?: string[];
+  constraints?: string[];
+}
+
 export interface Itinerary {
   id: string;
   title: string;
@@ -83,4 +108,7 @@ export interface Itinerary {
   travelStyle: TravelStyle;
   estimatedBudget: number;
   days: ItineraryDay[];
+  primaryDestinationId?: string;
+  selectedDestinationIds?: string[];
+  version?: number;
 }

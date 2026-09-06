@@ -24,6 +24,7 @@ export interface PaginationMeta {
   totalPages: number;
   hasNext: boolean;
   hasPrev: boolean;
+  [key: string]: unknown;
 }
 
 export interface ApiSuccessResponse<T> {

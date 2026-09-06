@@ -98,10 +98,26 @@ export interface GeocodingFeature {
   category?: string;
 }
 
+export interface MatrixPair {
+  originIndex: number;
+  destinationIndex: number;
+  durationMinutes: number;
+  distanceKm: number;
+}
+
+export interface MatrixCalculationResult {
+  durations: number[][]; // [originIndex][destinationIndex] in minutes
+  distances: number[][]; // [originIndex][destinationIndex] in km
+  origins: RouteWaypoint[];
+  destinations: RouteWaypoint[];
+  metadata: FreshnessMetadata;
+}
+
 export interface IMapProvider {
   name: string;
   calculateRoute(waypoints: RouteWaypoint[], mode?: 'driving' | 'walking' | 'cycling'): Promise<RouteCalculationResult | null>;
   searchGeocoding(query: string, proximity?: [number, number]): Promise<GeocodingFeature[] | null>;
+  calculateMatrix?(origins: RouteWaypoint[], destinations: RouteWaypoint[], mode?: 'driving' | 'walking' | 'cycling'): Promise<MatrixCalculationResult | null>;
 }
 
 // -------------------------------------------------------------

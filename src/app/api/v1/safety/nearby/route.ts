@@ -62,6 +62,6 @@ export async function GET(req: NextRequest) {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[/api/v1/safety/nearby] Error:', msg);
-    return Errors.internal('Failed to locate nearby emergency facilities');
+    return Errors.internalError('Failed to locate nearby emergency facilities');
   }
 }

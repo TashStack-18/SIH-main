@@ -35,6 +35,6 @@ export async function GET(req: NextRequest) {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[/api/v1/currency] Error:', msg);
-    return Errors.internal('Failed to calculate currency exchange rate');
+    return Errors.internalError('Failed to calculate currency exchange rate');
   }
 }

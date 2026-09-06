@@ -10,7 +10,6 @@ export default function SafetyPage() {
   return (
     <main className="container section-spacing" role="main">
       <div className="section-header">
-        <span className="badge badge-danger" style={{ width: "fit-content" }}>Life Safety Architecture</span>
         <h1>Safety Center & Emergency Hub</h1>
         <p className="lead-text">
           Instant access to verified 24x7 trauma centers, national emergency helplines, maritime rescue, and official travel advisories across India's 8 Union Territories.

@@ -62,6 +62,6 @@ export async function GET(req: NextRequest) {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[/api/v1/weather] Error:', msg);
-    return Errors.internal('Failed to retrieve weather intelligence');
+    return Errors.internalError('Failed to retrieve weather intelligence');
   }
 }

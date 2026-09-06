@@ -84,7 +84,7 @@ export class KnowledgeIngestionPipeline {
     // 2. Ingest Verified Union Territories
     for (const ut of VERIFIED_TERRITORIES) {
       const advText = (ut.advisories || []).join('. ');
-      const expText = (ut.signatureExperiences || ut.highlights || []).join(', ');
+      const expText = (ut.signatureExperiences || (ut as unknown as { highlights?: string[] }).highlights || []).join(', ');
       const popText = (ut.popularDestinations || []).join(', ');
       const sourceUrl = ut.slug === 'lakshadweep' ? 'https://epermit.utl.gov.in' : ut.officialPortal || 'https://tourism.gov.in';
 

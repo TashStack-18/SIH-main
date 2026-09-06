@@ -38,3 +38,19 @@ export const VERIFIED_NATIONAL_CONTACTS: EmergencyNationalContact[] = (safetyDat
 export const VERIFIED_ADVISORIES: ActiveTravelAdvisory[] = (safetyData.ACTIVE_TRAVEL_ADVISORIES ?? []) as ActiveTravelAdvisory[];
 export const VERIFIED_BOOKABLE_EXPERIENCES: BookableExperience[] = (bookingData.BOOKABLE_EXPERIENCES ?? []) as BookableExperience[];
 export const VERIFIED_BOOKING_PROVIDERS: BookingProvider[] = (bookingData.BOOKING_PROVIDERS ?? []) as BookingProvider[];
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+export const STATES_AND_UTS_DATASET = require('../data/states_and_ut.json') as Array<{
+  name: string;
+  type: 'State' | 'Union Territory';
+  isoCode: string;
+  vehicleCode: string;
+  zone: string;
+  capital: string;
+  largestCity: string;
+  statehood: string;
+  population2011: number | null;
+  areaKm2: number | null;
+  officialLanguages: string[];
+  additionalOfficialLanguages: string[];
+}>;

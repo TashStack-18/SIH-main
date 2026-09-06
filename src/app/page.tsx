@@ -50,11 +50,6 @@ export default function HomePage() {
             <article key={dest.id} className="destination-card card-hoverable" style={{ borderRadius: "var(--radius-xl)", overflow: "hidden", border: "1px solid var(--color-border-subtle)" }}>
               <div className="destination-card-media" style={{ height: "220px", position: "relative" }}>
                 <img src={dest.image} alt={dest.name} className="destination-card-img" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
-                <div className="destination-card-badges">
-                  <span className="badge badge-neutral" style={{ background: "rgba(45, 27, 20, 0.75)", color: "#ffffff", backdropFilter: "blur(6px)" }}>
-                    {dest.type}
-                  </span>
-                </div>
               </div>
 
               <div className="destination-card-body" style={{ padding: "var(--space-lg)", background: "var(--color-bg-surface)" }}>
@@ -115,9 +110,6 @@ export default function HomePage() {
                 }}
               >
                 <div className="ut-card-content" style={{ background: "linear-gradient(to top, rgba(45, 27, 20, 0.95) 0%, rgba(45, 27, 20, 0.4) 50%, transparent 100%)" }}>
-                  <span className="badge badge-neutral" style={{ background: "rgba(255,255,255,0.2)", color: "#ffffff", marginBottom: "6px", fontSize: "0.7rem", backdropFilter: "blur(6px)" }}>
-                    Capital: {ut.capital}
-                  </span>
                   <h3 className="ut-card-name font-serif">{ut.name}</h3>
                   <p className="ut-card-tagline" style={{ opacity: 0.9 }}>{ut.tagline}</p>
                   <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--color-accent)" }}>

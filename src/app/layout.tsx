@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "@/src/css/main.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 import { siteConfig } from "@/src/config/site";
 
 const cormorant = Cormorant_Garamond({

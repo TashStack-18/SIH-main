@@ -34,7 +34,6 @@ export default async function TerritoryDetailPage({
             <Link href="/territories" style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>← All Territories</Link>
             <span>•</span>
             <span className="badge badge-verified">100% Verified Scope</span>
-            <span className="badge badge-neutral" style={{ background: "rgba(255,255,255,0.2)", color: "#ffffff" }}>Capital: {territory.capital}</span>
           </div>
 
           <h1 style={{ color: "#ffffff", fontSize: "clamp(2.2rem, 5vw, 3.5rem)", marginBottom: "8px" }}>{territory.name}</h1>
@@ -78,9 +77,6 @@ export default async function TerritoryDetailPage({
                 <div key={d.id} className="destination-card card-hoverable">
                   <div className="destination-card-media">
                     <img src={d.image} alt={d.name} className="destination-card-img" loading="lazy" />
-                    <div className="destination-card-badges">
-                      <span className="badge badge-neutral" style={{ background: "rgba(0,0,0,0.6)", color: "#ffffff" }}>{d.type}</span>
-                    </div>
                   </div>
                   <div className="destination-card-body">
                     <h3 className="destination-card-title">{d.name}</h3>

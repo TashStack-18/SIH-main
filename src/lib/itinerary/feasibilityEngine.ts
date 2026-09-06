@@ -233,29 +233,30 @@ export class FeasibilityEngine {
       // Destination-specific validation checks
       if (destData) {
         // Permit check
-        if (destData.permitRequired) {
+        if (destData.permits?.required) {
           warnings.push({
             id: `warn-permit-${stop.id}`,
             type: 'PERMIT_REQUIRED',
             severity: 'INFO',
             title: `Permit Required: ${destData.name}`,
-            description: `${destData.name} requires an official permit (${destData.permitDetails || 'Online registration'}).`,
+            description: `${destData.name} requires an official entry permit (${destData.permits.name || 'Online registration'}).`,
             dayNumber: day.dayNumber,
             stopId: stop.id,
             destinationName: destData.name,
-            actionSuggestion: 'Apply online via the official administration portal before departure.',
+            actionSuggestion: `Apply online via ${destData.permits.portal || 'the official UT administration portal'} before departure.`,
             source: 'Ministry of Home Affairs & UT Administration Guidelines',
           });
         }
 
-        // Opening hours vs arrival check
-        if (destData.timing && destData.timing.includes('5:00 PM') && currentMinuteOfDay > 17 * 60) {
+        // Opening hours vs arrival check (monuments & museums typically close at 17:00 / 5:00 PM)
+        const isHeritageOrMuseum = ['HERITAGE', 'MONUMENT', 'PARK'].includes(destData.type) || destData.name.toLowerCase().includes('jail') || destData.name.toLowerCase().includes('fort');
+        if (isHeritageOrMuseum && currentMinuteOfDay > 17 * 60) {
           warnings.push({
             id: `warn-hours-${stop.id}`,
             type: 'OPENING_HOURS',
             severity: 'WARNING',
             title: `Late Arrival Warning: ${destData.name}`,
-            description: `Estimated arrival is ${arrivalTimeStr}, but ${destData.name} standard visiting hours close at 5:00 PM.`,
+            description: `Estimated arrival is ${arrivalTimeStr}, but ${destData.name} public admission typically closes by 5:00 PM.`,
             dayNumber: day.dayNumber,
             stopId: stop.id,
             destinationName: destData.name,

@@ -6,7 +6,7 @@
 import { NextRequest } from 'next/server';
 import { ok, Errors } from '@/src/lib/api/utils';
 import { checkRateLimit, getRateLimitKey, RATE_LIMITS } from '@/src/lib/api/rateLimit';
-import type { Itinerary } from '@/src/types/itinerary';
+import type { Itinerary, StopStatus } from '@/src/types/itinerary';
 
 interface RouteParams {
   params: Promise<{ id: string }> | { id: string };
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       ...d,
       items: d.items.map((item, iIdx) => ({
         ...item,
-        status: dIdx === 0 && iIdx === 0 ? 'ACTIVE' : 'PLANNED',
+        status: (dIdx === 0 && iIdx === 0 ? 'ACTIVE' : 'PLANNED') as StopStatus,
       })),
     }));
 
