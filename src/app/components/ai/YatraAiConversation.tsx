@@ -283,7 +283,7 @@ export function YatraAiConversation({
                   </div>
 
                   <Link
-                    href={msg.actionProposal.territorySlug ? `/territories/${msg.actionProposal.territorySlug}` : '/itinerary'}
+                    href={msg.actionProposal.territorySlug ? `/destinations?ut=${msg.actionProposal.territorySlug}` : '/itinerary'}
                     className="btn btn-sm btn-primary"
                     style={{ whiteSpace: 'nowrap', textDecoration: 'none' }}
                   >

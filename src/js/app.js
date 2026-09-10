@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Subscribe to store updates for reactive UI components
   store.subscribe((state) => {
     updateNavbar();
+    updateFooter();
     updateMobileNav();
     updateAICompanion();
     updateSOSModal();
@@ -65,7 +66,12 @@ function updateNavbar() {
 function updateFooter() {
   const container = document.getElementById('footer-root');
   if (container) {
-    container.innerHTML = renderFooter();
+    const route = store.getState().currentRoute || window.location.hash || '#/';
+    if (route === '#/' || route === '#' || route === '') {
+      container.innerHTML = renderFooter();
+    } else {
+      container.innerHTML = '';
+    }
   }
 }
 

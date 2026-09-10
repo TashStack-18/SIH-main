@@ -221,26 +221,18 @@ export function renderDestinationsView() {
       ` : `
         <!-- VIEW 2: PLACES IN SELECTED UT -->
         <section>
-          <!-- Hero Banner for Territory - Expanded by 35%+ -->
-          <div style="position: relative; border-radius: var(--radius-xl); overflow: hidden; margin-bottom: var(--space-2xl); min-height: 340px; display: flex; align-items: flex-end; padding: 48px 36px; color: #ffffff; background-image: url('${selectedUT.heroImage || selectedUT.thumbnailImage}'); background-size: cover; background-position: center; box-shadow: var(--shadow-elevated);">
-            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.2) 0%, rgba(15,23,42,0.85) 100%);"></div>
+          <!-- Hero Banner for Territory - Expanded & Cleaned -->
+          <div style="position: relative; border-radius: var(--radius-xl); overflow: hidden; margin-bottom: var(--space-2xl); min-height: 480px; display: flex; align-items: flex-end; padding: 56px 40px; color: #ffffff; background-image: url('${selectedUT.heroImage || selectedUT.thumbnailImage}'); background-size: cover; background-position: center; box-shadow: var(--shadow-elevated);">
+            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.85) 100%);"></div>
             <div style="position: relative; z-index: 2; max-width: 880px;">
-              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
-                <span class="badge badge-neutral" style="background: rgba(255,255,255,0.2); color: #ffffff; backdrop-filter: blur(6px);">
-                  🏛️ Capital: ${selectedUT.capital}
-                </span>
-                <span class="badge badge-neutral" style="background: rgba(255,255,255,0.2); color: #ffffff; backdrop-filter: blur(6px);">
-                  🌡️ ${selectedUT.weatherSnapshot.temp}°C • ${selectedUT.weatherSnapshot.condition}
-                </span>
-                <span class="badge badge-neutral" style="background: rgba(255,255,255,0.2); color: #ffffff; backdrop-filter: blur(6px);">
-                  Best time to visit: ${selectedUT.weatherSnapshot.bestMonths}
-                </span>
-              </div>
-              <h2 style="color: #ffffff; font-size: clamp(1.9rem, 4vw, 2.75rem); font-weight: 800; margin-bottom: 10px; line-height: 1.2;">
+              <h2 style="color: #ffffff; font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 800; margin-bottom: 12px; line-height: 1.2;">
                 All Places in ${selectedUT.name}
               </h2>
-              <p style="color: rgba(255,255,255,0.92); font-size: 1.05rem; line-height: 1.6; max-width: 800px;">
+              <p style="color: rgba(255,255,255,0.92); font-size: 1.05rem; line-height: 1.6; max-width: 840px; margin-bottom: 8px;">
                 ${selectedUT.description}
+              </p>
+              <p style="color: rgba(255,255,255,0.95); font-size: 1rem; font-weight: 600;">
+                Best time to visit: ${selectedUT.weatherSnapshot.bestMonths}
               </p>
             </div>
           </div>
@@ -335,13 +327,37 @@ export function renderDestinationsView() {
           </div>
 
           ${filteredPlaces.length === 0 ? `
-            <div class="card" style="padding: 48px; text-align: center; color: var(--color-text-muted);">
+            <div class="card" style="padding: 48px; text-align: center; color: var(--color-text-muted); margin-bottom: var(--space-2xl);">
               <div style="font-size: 3rem; margin-bottom: 12px;">📍</div>
               <h3>No destinations match your filter criteria in ${selectedUT.name}.</h3>
               <p style="margin-top: 6px;">Try adjusting your search terms or clearing the active filters.</p>
               <button id="dest-reset-filters" class="btn btn-sm btn-outline" style="margin-top: 16px;">Clear Filters</button>
             </div>
           ` : ''}
+
+          <!-- Verified Emergency Support for Selected Territory (Positioned at bottom) -->
+          <div style="background: var(--color-bg-surface-elevated, #F0EADE); border-radius: var(--radius-xl, 20px); padding: 28px 32px; margin-top: var(--space-2xl); border-left: 5px solid var(--color-danger, #BA1A1A); box-shadow: var(--shadow-subtle);">
+            <h3 style="font-family: var(--font-family-serif); font-size: 1.45rem; font-weight: 700; color: var(--color-danger, #BA1A1A); margin-bottom: 20px; line-height: 1.25;">
+              Verified Emergency Support for ${selectedUT.name}
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px;">
+              ${(selectedUT.emergencyContacts || []).map(contact => `
+                <a href="tel:${contact.number.replace(/[^0-9]/g, '')}" style="background: var(--color-bg-surface, #FFFFFF); border-radius: var(--radius-lg, 14px); padding: 16px 20px; border: 1px solid var(--color-border-subtle); text-decoration: none; display: block; box-shadow: var(--shadow-subtle);">
+                  <div style="font-size: 0.78rem; font-weight: 600; color: var(--color-text-secondary); margin-bottom: 6px;">
+                    ${contact.name}
+                  </div>
+                  <div style="font-size: 1.45rem; font-weight: 800; color: var(--color-danger, #BA1A1A); line-height: 1.1;">
+                    ${contact.number}
+                  </div>
+                </a>
+              `).join('')}
+            </div>
+            ${selectedUT.officialPortal ? `
+              <div style="font-size: 0.825rem; color: var(--color-text-muted); margin-top: 12px;">
+                Official Portal: <a href="${selectedUT.officialPortal}" target="_blank" rel="noopener noreferrer" style="color: var(--color-text-secondary); text-decoration: underline; font-weight: 600;">${selectedUT.officialPortal} ↗</a>
+              </div>
+            ` : ''}
+          </div>
         </section>
       `}
 

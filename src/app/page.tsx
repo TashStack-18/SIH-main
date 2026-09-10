@@ -1,20 +1,85 @@
 import Link from "next/link";
 import { VERIFIED_TERRITORIES, VERIFIED_DESTINATIONS, VERIFIED_FESTIVALS } from "@/src/lib/fixtures";
 import { HeroCarousel } from "@/src/app/components/HeroCarousel";
-import { QuickSearchBar } from "@/src/app/components/QuickSearchBar";
 import { ExploreRail } from "@/src/app/components/ExploreRail";
+import { Footer } from "@/src/app/components/Footer";
 
 export default function HomePage() {
   const popularDestinations = VERIFIED_DESTINATIONS.slice(0, 6);
   const featuredFestivals = VERIFIED_FESTIVALS.slice(0, 4);
 
   const experienceCategories = [
-    { title: "Adventure & High Treks", icon: "🏔️", count: "48 Trails", desc: "Trans-Himalayan passes, frozen river walks, and coral diving" },
-    { title: "Heritage & Living History", icon: "🏛️", count: "120+ Citadels", desc: "UNESCO monuments, Mughal forts, and ancient Buddhist Gompas" },
-    { title: "Coastal & Coral Lagoons", icon: "🌊", count: "14 Blue Flag Beaches", desc: "Bioluminescent atolls, scuba safaris, and pristine shores" },
-    { title: "Spiritual & Sacred Retreats", icon: "🕊️", count: "35 Sanctuaries", desc: "Monastic prayer ceremonies, Sufi dargahs, and ashrams" },
-    { title: "Authentic Gastronomy", icon: "🍲", count: "8 Distinct Cuisines", desc: "Wazwan feasts, Franco-Tamil bistros, and coastal curries" },
-    { title: "Dark Sky & Astro-Tourism", icon: "🌌", count: "Bortle-1 Reserves", desc: "Pristine stargazing in Hanle and high-altitude Changthang" }
+    {
+      title: "High-Altitude Expeditions",
+      tag: "Trails & Alpine Treks",
+      desc: "Chadar frozen river traverses, high Himalayan passes, and scenic trans-territory trails.",
+      svg: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
+        </svg>
+      ),
+    },
+    {
+      title: "Living Heritage & Forts",
+      tag: "Monuments & Citadels",
+      desc: "Centuries of architectural marvels, ancient Buddhist gompas, and royal Mughal fortresses.",
+      svg: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="3" y1="21" x2="21" y2="21" />
+          <line x1="6" y1="21" x2="6" y2="10" />
+          <line x1="18" y1="21" x2="18" y2="10" />
+          <path d="M12 21V10" />
+          <path d="M3 10h18l-9-7-9 7z" />
+        </svg>
+      ),
+    },
+    {
+      title: "Coastal & Coral Escapes",
+      tag: "Islands & Marine Life",
+      desc: "Turquoise atolls, bioluminescent night shores, and premier scuba diving expeditions.",
+      svg: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 12h20" />
+          <path d="M20 12c0-4.4-3.6-8-8-8s-8 3.6-8 8" />
+          <path d="M6 12v3a6 6 0 0 0 12 0v-3" />
+        </svg>
+      ),
+    },
+    {
+      title: "Spiritual & Sacred Sanctuaries",
+      tag: "Peace & Pilgrimage",
+      desc: "Tranquil monastery retreats, historic Sufi shrines, and reflective coastal ashrams.",
+      svg: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2v20" />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+      ),
+    },
+    {
+      title: "Regional Culinary Journeys",
+      tag: "Authentic Gastronomy",
+      desc: "Multi-course Kashmiri wazwan feasts, Franco-Tamil bistros, and fresh coastal delicacies.",
+      svg: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+          <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+          <line x1="6" y1="1" x2="6" y2="4" />
+          <line x1="10" y1="1" x2="10" y2="4" />
+          <line x1="14" y1="1" x2="14" y2="4" />
+        </svg>
+      ),
+    },
+    {
+      title: "Dark Sky & Astro-Tourism",
+      tag: "Stargazing & Reserves",
+      desc: "Unrivaled stargazing under pristine Bortle-1 dark skies across the Hanle plateau.",
+      svg: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+      ),
+    },
   ];
 
   return (
@@ -23,10 +88,7 @@ export default function HomePage() {
       {/* 1. Cinematic Hero Carousel (Stitch Heritage Soul - 8 UTs) */}
       <HeroCarousel />
 
-      {/* 2. Floating Glass Search Engine with 8 UT Dropdown */}
-      <QuickSearchBar />
-
-      {/* 3. Explore Authentic India (Stitch Horizontal Snap-Scroll Rail) */}
+      {/* 2. Explore Authentic India (Stitch Horizontal Snap-Scroll Rail) */}
       <ExploreRail />
 
       {/* 4. Popular Across Bharat's 8 UTs (Destinations Spotlight) */}
@@ -93,36 +155,101 @@ export default function HomePage() {
       {/* 5. 8 Union Territories Explorer Grid */}
       <section className="section-spacing" style={{ backgroundColor: "var(--color-bg-surface-elevated)" }} aria-label="8 Union Territories Explorer">
         <div className="container">
-          <div className="section-header">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
-              Explore the 8 Union Territories
-            </h2>
-            <p className="sub-text" style={{ color: "var(--color-text-secondary)" }}>
-              From the trans-Himalayan summits of Ladakh to the tropical coral lagoons of Lakshadweep.
-            </p>
+          <div className="section-header-row" style={{ marginBottom: "var(--space-2xl)" }}>
+            <div>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
+                Explore the 8 Union Territories
+              </h2>
+              <p className="sub-text" style={{ color: "var(--color-text-secondary)" }}>
+                From the trans-Himalayan summits of Ladakh to the tropical coral lagoons of Lakshadweep.
+              </p>
+            </div>
+            <Link href="/destinations" className="btn btn-outline" style={{ borderRadius: "var(--radius-pill)", padding: "10px 22px", fontWeight: 600 }}>
+              All Destinations →
+            </Link>
           </div>
 
-          <div className="ut-grid">
-            {VERIFIED_TERRITORIES.map(ut => (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gap: "var(--space-xl)",
+            }}
+          >
+            {VERIFIED_TERRITORIES.map((ut) => (
               <Link
                 key={ut.id}
-                href={`/territories/${ut.slug}`}
-                className="ut-card card-hoverable"
+                href={`/destinations?ut=${ut.slug}`}
+                className="card card-hoverable"
                 style={{
-                  backgroundImage: `url('${ut.thumbnailImage}')`,
-                  borderRadius: "var(--radius-xl)",
+                  position: "relative",
+                  height: "360px",
+                  borderRadius: "var(--radius-xl, 20px)",
                   overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  padding: "24px",
+                  textDecoration: "none",
+                  boxShadow: "var(--shadow-card)",
+                  border: "1px solid var(--color-border-subtle)",
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 }}
               >
-                <div className="ut-card-content" style={{ background: "linear-gradient(to top, rgba(45, 27, 20, 0.95) 0%, rgba(45, 27, 20, 0.4) 50%, transparent 100%)" }}>
-                  <span className="badge badge-neutral" style={{ background: "rgba(255,255,255,0.2)", color: "#ffffff", marginBottom: "6px", fontSize: "0.7rem", backdropFilter: "blur(6px)" }}>
-                    Capital: {ut.capital}
-                  </span>
-                  <h3 className="ut-card-name font-serif">{ut.name}</h3>
-                  <p className="ut-card-tagline" style={{ opacity: 0.9 }}>{ut.tagline}</p>
-                  <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--color-accent)" }}>
-                    Explore Territory →
-                  </span>
+                {/* Full-bleed background image */}
+                <img
+                  src={ut.heroImage || ut.thumbnailImage}
+                  alt={ut.name}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    transition: "transform 0.5s ease",
+                  }}
+                  loading="lazy"
+                />
+
+                {/* Dark gradient overlay for crystal clear contrast */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.85) 100%)",
+                  }}
+                />
+
+                {/* Text Content Overlay: Name and Explore */}
+                <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <h3
+                    className="font-serif"
+                    style={{
+                      fontSize: "1.45rem",
+                      fontWeight: 700,
+                      color: "#FFFFFF",
+                      margin: 0,
+                      lineHeight: 1.25,
+                      textShadow: "0 2px 8px rgba(0,0,0,0.5)",
+                    }}
+                  >
+                    {ut.name}
+                  </h3>
+                  <div>
+                    <span
+                      style={{
+                        fontSize: "0.85rem",
+                        fontWeight: 700,
+                        color: "var(--color-brand-accent, #C88E44)",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        textShadow: "0 1px 4px rgba(0,0,0,0.5)",
+                      }}
+                    >
+                      Explore →
+                    </span>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -132,40 +259,101 @@ export default function HomePage() {
 
       {/* 6. Travel by Experience */}
       <section className="section-spacing container" aria-label="Signature Experience Categories">
-        <div className="section-header">
+        <div className="section-header" style={{ marginBottom: "var(--space-2xl)" }}>
           <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
             Travel by Experience
           </h2>
           <p className="sub-text">
-            Filter across curated journeys tailored for adventure seekers, heritage lovers, and culinary explorers.
+            Curated journeys designed for high-altitude explorers, heritage seekers, and cultural connoisseurs.
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "var(--space-lg)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "var(--space-lg)" }}>
           {experienceCategories.map((exp, idx) => (
             <Link
               key={idx}
               href="/destinations"
               className="card card-hoverable"
               style={{
-                padding: "var(--space-lg)",
-                display: "block",
+                padding: "24px",
+                display: "flex",
+                flexDirection: "column",
                 textDecoration: "none",
                 background: "var(--color-bg-surface)",
-                borderRadius: "var(--radius-lg)",
+                borderRadius: "var(--radius-xl, 20px)",
                 border: "1px solid var(--color-border-subtle)",
+                boxShadow: "var(--shadow-subtle)",
+                transition: "all 0.25s ease",
               }}
             >
-              <div style={{ fontSize: "2.2rem", marginBottom: "12px" }}>{exp.icon}</div>
-              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-accent)", textTransform: "uppercase" }}>
-                {exp.count}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+                <div
+                  style={{
+                    width: "44px",
+                    height: "44px",
+                    borderRadius: "12px",
+                    background: "rgba(200, 142, 68, 0.12)",
+                    color: "var(--color-brand-accent)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {exp.svg}
+                </div>
+                <span
+                  style={{
+                    fontSize: "0.725rem",
+                    fontWeight: 700,
+                    color: "var(--color-brand-accent)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                    background: "var(--color-bg-canvas)",
+                    padding: "4px 10px",
+                    borderRadius: "var(--radius-pill, 9999px)",
+                    border: "1px solid var(--color-border-subtle)",
+                  }}
+                >
+                  {exp.tag}
+                </span>
               </div>
-              <h3 className="font-serif" style={{ fontSize: "1.2rem", margin: "4px 0 8px", color: "var(--color-text-primary)" }}>
+
+              <h3
+                className="font-serif"
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: 700,
+                  margin: "0 0 8px",
+                  color: "var(--color-text-primary)",
+                  lineHeight: 1.3,
+                }}
+              >
                 {exp.title}
               </h3>
-              <p style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", lineHeight: 1.45 }}>
+              <p
+                style={{
+                  fontSize: "0.875rem",
+                  color: "var(--color-text-secondary)",
+                  lineHeight: 1.55,
+                  margin: "0 0 16px",
+                  flexGrow: 1,
+                }}
+              >
                 {exp.desc}
               </p>
+
+              <div
+                style={{
+                  fontSize: "0.825rem",
+                  fontWeight: 600,
+                  color: "var(--color-brand-accent)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                }}
+              >
+                Explore Journeys →
+              </div>
             </Link>
           ))}
         </div>
@@ -274,6 +462,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Footer displayed on Home Page */}
+      <Footer />
     </main>
   );
 }

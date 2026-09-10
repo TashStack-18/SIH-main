@@ -31,11 +31,9 @@ export function initRouter(appRoot) {
     if (pathPart === '#/' || pathPart === '#' || pathPart === '') {
       appRoot.innerHTML = renderHomeView();
       attachHomeEvents();
-    } else if (pathPart === '#/territories') {
-      appRoot.innerHTML = renderTerritoriesView();
-    } else if (pathPart.startsWith('#/territories/')) {
-      const slug = pathPart.replace('#/territories/', '');
-      appRoot.innerHTML = renderTerritoryDetailView(slug);
+    } else if (pathPart === '#/territories' || pathPart.startsWith('#/territories/')) {
+      window.location.hash = '#/destinations';
+      return;
     } else if (pathPart === '#/destinations') {
       appRoot.innerHTML = renderDestinationsView();
       attachDestinationsEvents();
