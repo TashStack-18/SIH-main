@@ -43,7 +43,6 @@ export const metadata: Metadata = {
 
 import { Navbar } from "@/src/app/components/Navbar";
 import { Footer } from "@/src/app/components/Footer";
-import { FloatingYatraAI } from "@/src/app/components/FloatingYatraAI";
 
 export default function RootLayout({
   children,
@@ -78,7 +77,6 @@ export default function RootLayout({
           <div style={{ flexGrow: 1 }}>
             {children}
           </div>
-          <FloatingYatraAI />
           <Footer />
         </div>
       </body>

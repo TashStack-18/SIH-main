@@ -68,6 +68,7 @@ export const TERRITORIES = [
     emergencyContacts: [
       { name: "Chandigarh Police", number: "112" },
       { name: "Ambulance", number: "108" },
+      { name: "Tourist Helpline", number: "1363" },
       { name: "Tourist Information Centre", number: "1800-180-2116" }
     ],
     advisories: ["Capitol Complex requires scheduled guided entry at 10:00 AM, 12:00 PM, or 3:00 PM with government ID."],
@@ -103,8 +104,9 @@ export const TERRITORIES = [
     verifiedBy: "UT Administration of DNH & DD",
     emergencyContacts: [
       { name: "Emergency Response", number: "112" },
-      { name: "Police", number: "100" },
-      { name: "Ambulance", number: "108" }
+      { name: "Police Control Room", number: "100" },
+      { name: "Ambulance", number: "108" },
+      { name: "Tourist Helpline", number: "1363" }
     ],
     advisories: ["Swimming at designated beaches only; follow coastal warning flags during monsoon."],
     isoCode: "IN-DH",
@@ -140,7 +142,8 @@ export const TERRITORIES = [
     emergencyContacts: [
       { name: "Delhi Police Emergency", number: "112" },
       { name: "Tourist Police Helpline", number: "1095" },
-      { name: "Ambulance", number: "102" }
+      { name: "Ambulance", number: "102" },
+      { name: "Tourist Helpline", number: "1363" }
     ],
     advisories: ["Advance ASI digital ticket booking recommended for Red Fort and Qutub Minar to avoid queues."],
     isoCode: "IN-DL",
@@ -176,7 +179,8 @@ export const TERRITORIES = [
     emergencyContacts: [
       { name: "J&K Police Control", number: "112" },
       { name: "Tourist Police Srinagar", number: "0194-2452670" },
-      { name: "Ambulance", number: "108" }
+      { name: "Ambulance", number: "108" },
+      { name: "Tourist Helpline", number: "1363" }
     ],
     advisories: ["Gulmarg Gondola tickets sell out rapidly; book exclusively via the official J&K Cable Car portal."],
     isoCode: "IN-JK",
@@ -212,7 +216,8 @@ export const TERRITORIES = [
     emergencyContacts: [
       { name: "Ladakh Emergency Operations", number: "112" },
       { name: "SNM Hospital Leh", number: "01982-252014" },
-      { name: "Tourist Information Centre Leh", number: "01982-252297" }
+      { name: "Tourist Information Centre Leh", number: "01982-252297" },
+      { name: "Tourist Helpline", number: "1363" }
     ],
     advisories: ["MANDATORY: Minimum 48-hour resting acclimatization in Leh before ascending above 3,500m."],
     isoCode: "IN-LA",
@@ -248,7 +253,8 @@ export const TERRITORIES = [
     emergencyContacts: [
       { name: "Lakshadweep Police", number: "100" },
       { name: "Indira Gandhi Hospital Kavaratti", number: "04896-262243" },
-      { name: "Coast Guard Kochi Maritime Rescue", number: "1554" }
+      { name: "Coast Guard Search & Rescue", number: "1554" },
+      { name: "Tourist Helpline", number: "1363" }
     ],
     advisories: ["Mandatory ePermit required for all non-native visitors prior to arrival via epermit.utl.gov.in."],
     isoCode: "IN-LD",
@@ -284,6 +290,7 @@ export const TERRITORIES = [
     emergencyContacts: [
       { name: "Puducherry Police", number: "112" },
       { name: "Government General Hospital", number: "0413-2336050" },
+      { name: "Tourist Helpline", number: "1363" },
       { name: "Tourist Assistance Bureau", number: "0413-2339497" }
     ],
     advisories: ["Auroville is an autonomous international township in adjacent Tamil Nadu; check entry rules for Matrimandir viewing."],

@@ -8,6 +8,7 @@ export interface BrandLogoProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   href?: string;
+  textColor?: string;
 }
 
 /**
@@ -24,15 +25,17 @@ export function BrandLogo({
   size = 'md',
   className = '',
   href = '/',
+  textColor: customTextColor,
 }: BrandLogoProps) {
   const isDark = theme === 'dark';
 
   const textColor =
-    isDark
+    customTextColor ||
+    (isDark
       ? '#FAF7F2'
       : theme === 'light'
       ? '#2D1B14'
-      : 'var(--color-text-primary, #2D1B14)';
+      : 'var(--color-text-primary, #2D1B14)');
 
   const content = (
     <span
@@ -54,6 +57,7 @@ export function BrandLogo({
           lineHeight: 1,
           whiteSpace: 'nowrap',
           transition: 'color 0.2s ease, opacity 0.15s ease',
+          fontSize: '1.5rem',
         }}
       >
         Dishaara

@@ -18,12 +18,12 @@ export function renderHomeView() {
   const savedPlaces = new Set(store.getState().savedPlaces);
 
   const experienceCategories = [
-    { title: "Adventure & Trekking", icon: "🏔️", count: "48 Trails", desc: "High passes, glacial treks, and diving atoll reefs", category: "Adventure" },
-    { title: "Heritage & Architecture", icon: "🏛️", count: "120+ Monuments", desc: "UNESCO modernism, Mughal citadels, and Portuguese forts", category: "Heritage" },
-    { title: "Coastal & Island Waters", icon: "🌊", count: "14 Blue Flag & Coral Beaches", desc: "Bioluminescent lagoons, scuba diving, and surfing", category: "Nature" },
-    { title: "Spiritual & Meditation", icon: "🕊️", count: "35 Sacred Sanctuaries", desc: "Ancient Buddhist Gompas, Sufi shrines, and ashrams", category: "Spiritual" },
-    { title: "Cuisine & Culture", icon: "🍲", count: "8 Distinct Gastronomies", desc: "Wazwan feasts, Franco-Tamil bistros, and coastal curries", category: "Culture" },
-    { title: "Dark Sky & Astro-Tourism", icon: "🌌", count: "Bortle-1 Reserves", desc: "Pristine stargazing in Hanle and high-altitude Changthang", category: "Photography" }
+    { title: "High-Altitude Expeditions", tag: "Trails & Alpine Treks", desc: "Chadar frozen river traverses, high Himalayan passes, and scenic trans-territory trails.", category: "Adventure" },
+    { title: "Living Heritage & Forts", tag: "Monuments & Citadels", desc: "Centuries of architectural marvels, ancient Buddhist gompas, and royal Mughal fortresses.", category: "Heritage" },
+    { title: "Coastal & Coral Escapes", tag: "Islands & Marine Life", desc: "Turquoise atolls, bioluminescent night shores, and premier scuba diving expeditions.", category: "Nature" },
+    { title: "Spiritual & Sacred Sanctuaries", tag: "Peace & Pilgrimage", desc: "Tranquil monastery retreats, historic Sufi shrines, and reflective coastal ashrams.", category: "Spiritual" },
+    { title: "Regional Culinary Journeys", tag: "Authentic Gastronomy", desc: "Multi-course Kashmiri wazwan feasts, Franco-Tamil bistros, and fresh coastal delicacies.", category: "Culture" },
+    { title: "Dark Sky & Astro-Tourism", tag: "Stargazing & Reserves", desc: "Unrivaled stargazing under pristine Bortle-1 dark skies across the Hanle plateau.", category: "Photography" }
   ];
 
   return `
@@ -40,24 +40,19 @@ export function renderHomeView() {
             <div class="hero-scrim"></div>
             
             <div class="container hero-content">
-              <div class="hero-ut-tag">
-                <span>🏛️ ${ut.heroLabel || ut.name}</span>
+              <div class="hero-text-block">
+                <h1 class="hero-title">${ut.heroLabel || ut.name}</h1>
+                <p class="hero-description">${ut.heroDescription || ut.tagline}</p>
               </div>
               
-              <h1 class="hero-title">${ut.heroHeading || ut.name.toUpperCase()}</h1>
-              
-              <p class="hero-description">${ut.heroDescription || ut.tagline}</p>
-              
-              <div class="hero-actions">
-                <a href="#/territories/${ut.slug}" class="btn btn-lg btn-secondary">
-                  Discover ${ut.shortName}
-                </a>
-                <a href="#/itinerary" class="btn btn-lg btn-outline" style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border-color: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px);">
-                  Plan This Trip ↗
-                </a>
-                <div style="display: flex; align-items: center; gap: 6px; margin-left: 8px;">
-                  <span class="status-dot status-dot-live"></span>
-                  <span style="font-size: 0.85rem; font-weight: 600; color: #ffffff;">${ut.weatherSnapshot.temp}°C • ${ut.weatherSnapshot.condition}</span>
+              <div class="hero-bottom-block">
+                <div class="hero-actions">
+                  <a href="#/destinations?ut=${ut.slug}" class="btn btn-lg btn-secondary">
+                    Discover ${ut.shortName}
+                  </a>
+                  <a href="#/itinerary" class="btn btn-lg btn-outline" style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border-color: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px);">
+                    Plan This Trip ↗
+                  </a>
                 </div>
               </div>
             </div>
@@ -81,53 +76,6 @@ export function renderHomeView() {
           </button>
         </div>
 
-      </section>
-
-      <!-- =========================================================================
-           2. QUICK SEARCH BAR (BELOW HERO)
-           ========================================================================= -->
-      <section class="container quick-search-wrapper" aria-label="Quick Search Engine">
-        <form class="quick-search-card" id="home-quick-search-form">
-          
-          <!-- Destination Field -->
-          <div class="search-input-group">
-            <label class="search-label" for="qs-destination">Where to?</label>
-            <input type="text" id="qs-destination" class="search-input" placeholder="Search 8 UTs (Ladakh, Andaman, Delhi...)" />
-          </div>
-
-          <!-- Travel Dates Field -->
-          <div class="search-input-group">
-            <label class="search-label" for="qs-dates">Travel Season / Month</label>
-            <select id="qs-dates" class="search-input">
-              <option value="ALL">All Seasons (Verified)</option>
-              <option value="MAY_SEP">Summer Peak (May – Sep)</option>
-              <option value="OCT_MAR">Winter / Autumn (Oct – Mar)</option>
-              <option value="MONSOON">Monsoon Wonders (Jul – Aug)</option>
-            </select>
-          </div>
-
-          <!-- Travel Style Field -->
-          <div class="search-input-group">
-            <label class="search-label" for="qs-interest">Travel Style</label>
-            <select id="qs-interest" class="search-input">
-              <option value="ALL">All Travel Styles</option>
-              <option value="Adventure">Adventure & Trekking</option>
-              <option value="Heritage">Heritage & Architecture</option>
-              <option value="Nature">Pristine Nature & Lakes</option>
-              <option value="Photography">Photography & Stargazing</option>
-            </select>
-          </div>
-
-          <!-- Search CTA -->
-          <button type="submit" class="btn btn-lg btn-primary" style="align-self: center;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <span>Search</span>
-          </button>
-
-        </form>
       </section>
 
       <!-- =========================================================================
@@ -185,23 +133,33 @@ export function renderHomeView() {
            ========================================================================= -->
       <section class="section-spacing" style="background-color: var(--color-bg-surface-elevated);" aria-label="8 Union Territories Explorer">
         <div class="container">
-          <div class="section-header">
-            <h2>Explore the 8 Union Territories</h2>
-            <p class="sub-text">From the trans-Himalayan summits of Ladakh to the tropical coral lagoons of Lakshadweep.</p>
+          <div class="section-header-row" style="margin-bottom: var(--space-2xl);">
+            <div>
+              <h2>Explore the 8 Union Territories</h2>
+              <p class="sub-text">From the trans-Himalayan summits of Ladakh to the tropical coral lagoons of Lakshadweep.</p>
+            </div>
+            <a href="#/destinations" class="btn btn-outline" style="border-radius: var(--radius-pill); padding: 10px 22px; font-weight: 600;">All Destinations →</a>
           </div>
 
-          <div class="ut-grid">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-xl);">
             ${TERRITORIES.map(ut => `
-              <a href="#/territories/${ut.slug}" class="ut-card card-hoverable" style="background-image: url('${ut.thumbnailImage}');">
-                <div class="ut-card-content">
-                  <span class="badge badge-neutral" style="background: rgba(255,255,255,0.2); color: #ffffff; margin-bottom: 6px; font-size: 0.7rem;">
-                    Capital: ${ut.capital}
-                  </span>
-                  <h3 class="ut-card-name">${ut.name}</h3>
-                  <p class="ut-card-tagline">${ut.tagline}</p>
-                  <span style="font-size: 0.85rem; font-weight: 700; color: var(--brand-terracotta-500);">
-                    Explore Territory →
-                  </span>
+              <a href="#/destinations?ut=${ut.slug}" class="card card-hoverable" style="position: relative; height: 360px; border-radius: var(--radius-xl, 20px); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; text-decoration: none; box-shadow: var(--shadow-card); border: 1px solid var(--color-border-subtle); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                <!-- Full-bleed background image -->
+                <img src="${ut.heroImage || ut.thumbnailImage}" alt="${ut.name}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" loading="lazy" />
+                
+                <!-- Dark gradient overlay -->
+                <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.85) 100%);"></div>
+
+                <!-- Text Content Overlay -->
+                <div style="position: relative; z-index: 2; display: flex; flex-direction: column; gap: 10px;">
+                  <h3 style="font-family: var(--font-family-serif); font-size: 1.45rem; font-weight: 700; color: #FFFFFF; margin: 0; line-height: 1.25; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">
+                    ${ut.name}
+                  </h3>
+                  <div>
+                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--color-brand-accent, #C88E44); display: inline-flex; align-items: center; gap: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+                      Explore →
+                    </span>
+                  </div>
                 </div>
               </a>
             `).join('')}
@@ -213,18 +171,25 @@ export function renderHomeView() {
            5. SIGNATURE EXPERIENCES
            ========================================================================= -->
       <section class="section-spacing container" aria-label="Signature Experience Categories">
-        <div class="section-header">
+        <div class="section-header" style="margin-bottom: var(--space-2xl);">
           <h2>Travel by Experience</h2>
-          <p class="sub-text">Filter across curated journeys tailored for adventure seekers, heritage lovers, and culinary explorers.</p>
+          <p class="sub-text">Curated journeys designed for high-altitude explorers, heritage seekers, and cultural connoisseurs.</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-lg);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-lg);">
           ${experienceCategories.map(exp => `
-            <div class="card card-hoverable" style="padding: var(--space-lg); cursor: pointer;" onclick="window.location.hash='#/destinations'">
-              <div style="font-size: 2.2rem; margin-bottom: 12px;">${exp.icon}</div>
-              <div style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase;">${exp.count}</div>
-              <h3 style="font-size: 1.15rem; margin: 4px 0 8px;">${exp.title}</h3>
-              <p style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.45;">${exp.desc}</p>
+            <div class="card card-hoverable" style="padding: 24px; cursor: pointer; display: flex; flex-direction: column; background: var(--color-bg-surface); border-radius: var(--radius-xl, 20px); border: 1px solid var(--color-border-subtle); box-shadow: var(--shadow-subtle);" onclick="window.location.hash='#/destinations'">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(200, 142, 68, 0.12); color: var(--color-brand-accent); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700;">
+                  ✦
+                </div>
+                <span style="font-size: 0.725rem; font-weight: 700; color: var(--color-brand-accent); text-transform: uppercase; letter-spacing: 0.06em; background: var(--color-bg-canvas); padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--color-border-subtle);">
+                  ${exp.tag}
+                </span>
+              </div>
+              <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0 0 8px; color: var(--color-text-primary);">${exp.title}</h3>
+              <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.55; margin: 0 0 16px; flex-grow: 1;">${exp.desc}</p>
+              <div style="font-size: 0.825rem; font-weight: 600; color: var(--color-brand-accent); display: inline-flex; align-items: center; gap: 4px;">Explore Journeys →</div>
             </div>
           `).join('')}
         </div>
