@@ -386,7 +386,6 @@ export function Navbar() {
           })}
         </nav>
 
-<<<<<<< HEAD
         {/* Right Corner: Universal Search Bar with Live Suggestions */}
         <div
           ref={searchContainerRef}
@@ -410,7 +409,8 @@ export function Navbar() {
                 ? "rgba(255, 255, 255, 0.18)"
                 : isDark
                 ? "rgba(255, 255, 255, 0.08)"
-                : "rgba(45, 27, 2              border: isTransparent
+                : "rgba(45, 27, 20, 0.05)",
+              border: isTransparent
                 ? "1px solid rgba(255, 255, 255, 0.32)"
                 : "1px solid var(--color-border-subtle)",
               backdropFilter: isTransparent ? "blur(12px)" : "none",

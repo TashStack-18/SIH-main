@@ -57,6 +57,7 @@ export function HeroCarousel() {
       })}
 
       {/* Main Hero Content */}
+      <div className="hero-carousel-content">
         <div className="hero-text-block">
           {/* City / Territory Name */}
           <h1 className="hero-title">
