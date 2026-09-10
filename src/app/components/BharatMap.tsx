@@ -587,10 +587,12 @@ export function BharatMap({
       for (let ty = minY; ty <= maxY; ty++) {
         if (ty < 0 || ty >= maxTiles) continue;
         const wrappedTx = ((tx % maxTiles) + maxTiles) % maxTiles;
+        const sub = ['a', 'b', 'c', 'd'][Math.abs(tx + ty) % 4];
+        const cartoKey = process.env.NEXT_PUBLIC_CARTO_KEY || 'cb1_3g9y_1_f90ee3f23d37ea6083cf7b9f';
         const url =
           mapMode === 'SATELLITE'
             ? `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${slippyZoom}/${ty}/${wrappedTx}`
-            : `https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/${slippyZoom}/${ty}/${wrappedTx}`;
+            : `https://${sub}.basemaps.cartocdn.com/rastertiles/voyager/${slippyZoom}/${wrappedTx}/${ty}@2x.png?key=${cartoKey}`;
 
         list.push({
           key: `${mapMode}-${slippyZoom}-${tx}-${ty}`,
