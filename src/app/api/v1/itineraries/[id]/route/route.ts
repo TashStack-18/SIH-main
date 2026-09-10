@@ -75,7 +75,6 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
             lat,
             lng,
             name: `${item.title} (Day ${day.dayNumber})`,
-            id: item.id || `stop-${dayIdx}-${itemIdx}`,
           });
         }
       });

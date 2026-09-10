@@ -38,6 +38,6 @@ export async function GET(req: NextRequest) {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[/api/v1/hotels] Error:', msg);
-    return Errors.internal('Failed to search accommodation');
+    return Errors.internalError('Failed to search accommodation');
   }
 }

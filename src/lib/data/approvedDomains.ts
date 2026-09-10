@@ -68,7 +68,7 @@ export function validateBookingRedirect(url: string): { isValid: boolean; domain
     }
 
     // Check if it's a subdomain of an approved domain
-    for (const approved of APPROVED_DOMAINS) {
+    for (const approved of Array.from(APPROVED_DOMAINS)) {
       if (domain.endsWith(`.${approved}`)) {
         return { isValid: true, domain };
       }

@@ -289,6 +289,7 @@ export function Navbar() {
     { label: "Itinerary", href: "/itinerary" },
     { label: "Map", href: "/map" },
     { label: "Safety", href: "/safety" },
+    { label: "Booking", href: "/bookings" },
   ];
 
   const isHome = pathname === "/";
@@ -363,8 +364,8 @@ export function Navbar() {
                     : "var(--color-text-secondary)",
                   background: isTransparent
                     ? isActive
-                      ? "rgba(255, 255, 255, 0.22)"
-                      : "transparent"
+                    ? "rgba(255, 255, 255, 0.22)"
+                    : "transparent"
                     : isActive
                     ? "rgba(200, 142, 68, 0.12)"
                     : "transparent",
@@ -377,11 +378,15 @@ export function Navbar() {
                 }}
               >
                 {link.label}
+                {isActive && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--color-accent)]" />
+                )}
               </Link>
             );
           })}
         </nav>
 
+<<<<<<< HEAD
         {/* Right Corner: Universal Search Bar with Live Suggestions */}
         <div
           ref={searchContainerRef}
@@ -405,8 +410,7 @@ export function Navbar() {
                 ? "rgba(255, 255, 255, 0.18)"
                 : isDark
                 ? "rgba(255, 255, 255, 0.08)"
-                : "rgba(45, 27, 20, 0.05)",
-              border: isTransparent
+                : "rgba(45, 27, 2              border: isTransparent
                 ? "1px solid rgba(255, 255, 255, 0.32)"
                 : "1px solid var(--color-border-subtle)",
               backdropFilter: isTransparent ? "blur(12px)" : "none",
@@ -643,7 +647,7 @@ export function Navbar() {
           {/* User Profile */}
           <Link
             href="/profile"
-            className="btn btn-sm btn-ghost btn-icon-only"
+            className="btn btn-sm btn-ghost btn-icon-only rounded-full w-10 h-10 flex items-center justify-center text-[var(--color-text-primary)]"
             aria-label="User Profile"
             style={{
               color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
@@ -669,7 +673,7 @@ export function Navbar() {
           {/* Dark/Light Theme Switcher */}
           <button
             type="button"
-            className="btn btn-sm btn-ghost btn-icon-only"
+            className="btn btn-sm btn-ghost btn-icon-only rounded-full w-10 h-10 flex items-center justify-center text-[var(--color-text-primary)]"
             onClick={toggleTheme}
             aria-label={`Toggle ${isDark ? "Light" : "Dark"} Mode`}
             style={{
@@ -688,7 +692,7 @@ export function Navbar() {
             }}
           >
             {isDark ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
                 <circle cx="12" cy="12" r="5"></circle>
                 <line x1="12" y1="1" x2="12" y2="3"></line>
                 <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -700,7 +704,7 @@ export function Navbar() {
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
               </svg>
             ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
               </svg>
             )}

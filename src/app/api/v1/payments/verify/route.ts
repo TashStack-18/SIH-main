@@ -50,6 +50,6 @@ export async function POST(req: NextRequest) {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[/api/v1/payments/verify] Error:', msg);
-    return Errors.internal('Failed to verify payment');
+    return Errors.internalError('Failed to verify payment');
   }
 }

@@ -16,32 +16,43 @@ export const createItineraryProposalTool: ToolExecutor = {
     parameters: {
       type: 'object',
       properties: {
+        destinationId: { type: 'string', description: 'Verified destination ID or slug (e.g. pangong-tso, sukhna-lake, kavaratti, red-fort-delhi)' },
         territorySlug: { type: 'string', description: 'Territory slug (e.g. ladakh, andaman-nicobar, delhi)' },
         durationDays: { type: 'number', description: 'Duration in days (1 to 14)' },
         travelStyle: { type: 'string', enum: ['ADVENTURE', 'HERITAGE', 'NATURE', 'PHOTOGRAPHY', 'RELAXED', 'FAMILY', 'CULTURAL'], description: 'Travel preference' },
         travellers: { type: 'number', description: 'Number of travellers' },
       },
-      required: ['territorySlug', 'durationDays'],
+      required: ['durationDays'],
     },
   },
   async execute(args: Record<string, unknown>, toolCallId: string): Promise<ToolResult> {
-    const slug = typeof args.territorySlug === 'string' ? args.territorySlug.toLowerCase() : 'ladakh';
-    const duration = typeof args.durationDays === 'number' ? Math.min(14, Math.max(1, args.durationDays)) : 5;
-    const style = typeof args.travelStyle === 'string' ? args.travelStyle : 'HERITAGE';
+    const destId = typeof args.destinationId === 'string' ? args.destinationId.toLowerCase() : null;
+    const directDest = destId ? VERIFIED_DESTINATIONS.find((d) => d.id.toLowerCase() === destId || d.slug.toLowerCase() === destId) : null;
+    const slug = typeof args.territorySlug === 'string' 
+      ? args.territorySlug.toLowerCase() 
+      : directDest 
+      ? directDest.territoryId.toLowerCase().replace(/_/g, '-')
+      : 'delhi';
+    const duration = typeof args.durationDays === 'number' ? Math.min(14, Math.max(1, args.durationDays)) : 3;
+    const style = typeof args.travelStyle === 'string' ? args.travelStyle : 'BALANCED';
     const travellers = typeof args.travellers === 'number' ? args.travellers : 2;
 
-    const ut = VERIFIED_TERRITORIES.find((t) => t.slug === slug || t.id.toLowerCase() === slug);
-    const dests = VERIFIED_DESTINATIONS.filter((d) => d.territoryId.toLowerCase().includes(slug.replace(/-/g, '_')));
+    const ut = directDest 
+      ? VERIFIED_TERRITORIES.find((t) => t.id === directDest.territoryId) 
+      : VERIFIED_TERRITORIES.find((t) => t.slug === slug || t.id.toLowerCase() === slug.replace(/-/g, '_'));
+    const dests = directDest 
+      ? [directDest, ...VERIFIED_DESTINATIONS.filter((d) => d.territoryId === directDest.territoryId && d.id !== directDest.id)]
+      : VERIFIED_DESTINATIONS.filter((d) => d.territoryId.toLowerCase().includes(slug.replace(/-/g, '_')));
 
     const days = [];
     for (let day = 1; day <= duration; day++) {
       const dest = dests[(day - 1) % (dests.length || 1)] || {
-        name: `${ut?.name || 'Union Territory'} Heritage Hub`,
+        name: `${ut?.name || 'Union Territory'} Hub`,
         shortDescription: 'Historic walking trails and cultural exploration.',
-        coordinates: { lat: 34.1526, lng: 77.5771 },
+        coordinates: { lat: 28.6129, lng: 77.2295 },
       };
 
-      const isHighAltitude = slug === 'ladakh';
+      const isHighAltitude = slug === 'ladakh' || slug.includes('ladakh');
       const safetyNote = isHighAltitude && day <= 2
         ? 'Mandatory 48-hour acclimatization rest period. Hydrate and avoid strenuous climbs.'
         : 'Follow local heritage preservation guidelines and keep photo ID accessible.';

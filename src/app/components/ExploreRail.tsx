@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PremiumDepthImage } from "@/src/app/components/PremiumDepthImage";
 
 interface ExploreRailItem {
   id: string;
@@ -108,31 +109,27 @@ export function ExploreRail() {
           <Link
             key={item.id}
             href={item.href}
-            className="explore-rail-card"
+            className="explore-rail-card block relative"
           >
-            {/* Background Image */}
-            <img
+            <PremiumDepthImage
               src={item.image}
               alt={item.title}
               className="explore-rail-card-img"
               loading="lazy"
-            />
-
-            {/* Gradient Overlay */}
-            <div className="explore-rail-card-overlay" />
-
-            {/* Text Overlay */}
-            <div className="explore-rail-card-body">
-              <div className="explore-rail-card-tag">
-                {item.utTag}
+            >
+              <div className="explore-rail-card-overlay" />
+              <div className="explore-rail-card-body">
+                <div className="explore-rail-card-tag">
+                  {item.utTag}
+                </div>
+                <h3 className="explore-rail-card-heading">
+                  {item.title}
+                </h3>
+                <p className="explore-rail-card-desc">
+                  {item.description}
+                </p>
               </div>
-              <h3 className="explore-rail-card-heading">
-                {item.title}
-              </h3>
-              <p className="explore-rail-card-desc">
-                {item.description}
-              </p>
-            </div>
+            </PremiumDepthImage>
           </Link>
         ))}
       </div>

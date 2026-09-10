@@ -31,13 +31,14 @@ export async function POST(req: NextRequest) {
     }
 
     const b = body as Record<string, unknown>;
-    const rawTerritory = typeof b.territoryId === 'string' ? b.territoryId : 'ladakh';
-    const territorySlug = rawTerritory.toLowerCase().replace(/_/g, '-');
-    const durationDays = typeof b.durationDays === 'number' ? b.durationDays : 5;
+    const destinationId = typeof b.destinationId === 'string' ? b.destinationId : undefined;
+    const rawTerritory = typeof b.territoryId === 'string' ? b.territoryId : undefined;
+    const territorySlug = rawTerritory ? rawTerritory.toLowerCase().replace(/_/g, '-') : undefined;
+    const durationDays = typeof b.durationDays === 'number' ? b.durationDays : 3;
     const travellers = typeof b.travellers === 'number' ? b.travellers : 2;
-    const travelStyle = typeof b.travelStyle === 'string' ? b.travelStyle.toUpperCase() : 'HERITAGE';
+    const travelStyle = typeof b.travelStyle === 'string' ? b.travelStyle.toUpperCase() : 'BALANCED';
 
-    if (!VALID_TERRITORY_CODES.has(rawTerritory) && !VALID_TERRITORY_CODES.has(territorySlug)) {
+    if (rawTerritory && !VALID_TERRITORY_CODES.has(rawTerritory) && !VALID_TERRITORY_CODES.has(territorySlug!)) {
       return Errors.badRequest(`Invalid territoryId. Must be one of the 8 Union Territories.`);
     }
     if (durationDays < 1 || durationDays > 14) {
@@ -46,6 +47,7 @@ export async function POST(req: NextRequest) {
 
     const toolResult = await createItineraryProposalTool.execute(
       {
+        destinationId,
         territorySlug,
         durationDays,
         travelStyle,

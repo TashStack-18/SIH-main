@@ -59,6 +59,6 @@ export async function POST(req: NextRequest) {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[/api/v1/maps/route] Error:', msg);
-    return Errors.internal('Failed to calculate route');
+    return Errors.internalError('Failed to calculate route');
   }
 }

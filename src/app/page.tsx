@@ -2,7 +2,12 @@ import Link from "next/link";
 import { VERIFIED_TERRITORIES, VERIFIED_DESTINATIONS, VERIFIED_FESTIVALS } from "@/src/lib/fixtures";
 import { HeroCarousel } from "@/src/app/components/HeroCarousel";
 import { ExploreRail } from "@/src/app/components/ExploreRail";
-import { Footer } from "@/src/app/components/Footer";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dishaara — India's Intelligent Union Territory Tourism & Safety Platform",
+  description: "Welcome to Dishaara, India's Intelligent Union Territory Tourism & Safety Platform.",
+};
 
 export default function HomePage() {
   const popularDestinations = VERIFIED_DESTINATIONS.slice(0, 6);
@@ -95,7 +100,7 @@ export default function HomePage() {
       <section className="section-spacing container" aria-label="Popular Verified Destinations">
         <div className="section-header-row">
           <div>
-            <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight" style={{ color: "var(--color-text-primary)" }}>
               Popular Across Bharat
             </h2>
             <p className="sub-text">
@@ -111,7 +116,7 @@ export default function HomePage() {
           {popularDestinations.map(dest => (
             <article key={dest.id} className="destination-card card-hoverable" style={{ borderRadius: "var(--radius-xl)", overflow: "hidden", border: "1px solid var(--color-border-subtle)" }}>
               <div className="destination-card-media" style={{ height: "220px", position: "relative" }}>
-                <img src={dest.image} alt={dest.name} className="destination-card-img" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+                <PremiumDepthImage src={dest.image} alt={dest.name} className="destination-card-img" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
                 <div className="destination-card-badges">
                   <span className="badge badge-neutral" style={{ background: "rgba(45, 27, 20, 0.75)", color: "#ffffff", backdropFilter: "blur(6px)" }}>
                     {dest.type}
@@ -364,7 +369,7 @@ export default function HomePage() {
         <div className="container">
           <div className="section-header-row">
             <div>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
+              <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight" style={{ color: "var(--color-text-primary)" }}>
                 Cultural Festivals & Events
               </h2>
               <p className="sub-text" style={{ color: "var(--color-text-secondary)" }}>
@@ -380,12 +385,11 @@ export default function HomePage() {
             {featuredFestivals.map(fest => (
               <div
                 key={fest.id}
-                className="festival-card card-hoverable"
+                className="festival-card card-hoverable card"
                 style={{
-                  background: "var(--color-bg-surface)",
-                  borderRadius: "var(--radius-lg)",
-                  border: "1px solid var(--color-border-subtle)",
-                  boxShadow: "var(--shadow-card)",
+                  padding: "var(--space-lg)",
+                  display: "flex",
+                  flexDirection: "column"
                 }}
               >
                 <div className="festival-date-badge" style={{ background: "var(--color-primary)", color: "var(--color-text-inverse)" }}>
@@ -402,7 +406,7 @@ export default function HomePage() {
                 </p>
                 <div style={{ paddingTop: "12px", borderTop: "1px solid var(--color-border-subtle)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ fontSize: "0.775rem", color: "var(--color-text-muted)", fontWeight: 600 }}>{fest.category}</span>
-                  <Link href="/festivals" style={{ fontSize: "0.825rem", fontWeight: 700, color: "var(--color-text-primary)" }} className="hover:text-[#C88E44]">
+                  <Link href="/festivals" style={{ fontSize: "0.825rem", fontWeight: 700, color: "var(--color-accent)" }} className="hover-accent">
                     View Details →
                   </Link>
                 </div>
@@ -416,8 +420,8 @@ export default function HomePage() {
       <section className="container" style={{ margin: "var(--space-3xl) auto" }} aria-label="Life Safety & SOS Emergency">
         <div
           style={{
-            background: "linear-gradient(135deg, #FFF8EE 0%, #F0EADE 100%)",
-            border: "1px solid rgba(200, 142, 68, 0.35)",
+            background: "var(--color-bg-surface-elevated)",
+            border: "1px solid var(--color-border-subtle)",
             borderRadius: "var(--radius-xl)",
             padding: "var(--space-2xl)",
             display: "flex",
@@ -425,13 +429,12 @@ export default function HomePage() {
             justifyContent: "space-between",
             alignItems: "center",
             gap: "var(--space-lg)",
-            boxShadow: "var(--shadow-card)",
           }}
         >
           <div style={{ maxWidth: "680px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
               <span className="badge badge-danger">
-                🚨 Life Safety Protocol
+                Life Safety Protocol
               </span>
               <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-danger)" }}>
                 National Helpline: 112 • Tourist Support: 1363
@@ -441,7 +444,7 @@ export default function HomePage() {
               Travel Safely with Real-Time Emergency Grounding
             </h3>
             <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", lineHeight: 1.55 }}>
-              Bharat Safe Yatra maintains verified trauma centers, high-altitude oxygen facilities, coast guard stations, and real-time travel advisories across every Union Territory.
+              Dishaara maintains verified trauma centers, high-altitude oxygen facilities, coast guard stations, and real-time travel advisories across every Union Territory.
             </p>
           </div>
 
@@ -456,7 +459,7 @@ export default function HomePage() {
                 padding: "12px 28px",
               }}
             >
-              🚨 Open Emergency SOS Center
+              Open Emergency SOS Center
             </Link>
           </div>
         </div>

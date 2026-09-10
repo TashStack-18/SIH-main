@@ -31,6 +31,6 @@ export async function GET(req: NextRequest) {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[/api/v1/maps/geocoding] Error:', msg);
-    return Errors.internal('Geocoding search failed');
+    return Errors.internalError('Geocoding search failed');
   }
 }

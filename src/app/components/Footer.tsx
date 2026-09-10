@@ -243,10 +243,72 @@ export function Footer() {
                     e.currentTarget.style.color = 'var(--color-text-secondary)';
                     e.currentTarget.style.transform = 'translateX(0)';
                   }}
+<<<<<<< HEAD
                 >
                   {ut.name}
                 </Link>
               ))}
+=======
+                  className="hover-accent"
+                >
+                  {ut.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Col 3: Quick Navigation */}
+        <div>
+          <h4
+            style={{
+              fontSize: "0.9rem",
+              fontWeight: 700,
+              marginBottom: "14px",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              color: "var(--color-text-primary)",
+            }}
+          >
+            Quick Navigation
+          </h4>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+            <li><Link href="/destinations" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover-accent">All Verified Destinations</Link></li>
+            <li><Link href="/itinerary" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover-accent">Smart Itinerary Builder</Link></li>
+            <li><Link href="/map" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover-accent">Geospatial 3D Map</Link></li>
+            <li><Link href="/ai" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover-accent">Yatra AI Travel Studio</Link></li>
+            <li><Link href="/safety" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover-accent">Safety & Emergency Protocol</Link></li>
+          </ul>
+        </div>
+
+        {/* Col 4: Safety & Helplines */}
+        <div>
+          <h4
+            style={{
+              fontSize: "0.9rem",
+              fontWeight: 700,
+              marginBottom: "14px",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              color: "var(--color-danger)",
+            }}
+          >
+            Emergency Helplines
+          </h4>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div
+              style={{
+                background: "var(--color-bg-surface)",
+                padding: "10px 14px",
+                borderRadius: "var(--radius-md)",
+                border: "1px solid var(--color-border-subtle)",
+              }}
+            >
+              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-text-muted)" }}>
+                National Emergency Service
+              </div>
+              <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "var(--color-danger)" }}>112</div>
+>>>>>>> origin/tashvi-development
             </div>
           </div>
 
@@ -476,6 +538,7 @@ export function Footer() {
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* ============================================================
             3. COPYRIGHT, TRUST SIGNALS & LEGAL LINKS
             ============================================================ */}
@@ -522,6 +585,50 @@ export function Footer() {
               Safety Protocols
             </Link>
           </div>
+=======
+      {/* Disclosures */}
+      <div className="container" style={{
+        maxWidth: "var(--container-max-width)",
+        margin: "0 auto var(--space-xl)",
+        padding: "var(--space-md) 0",
+        borderTop: "1px dashed var(--color-border-subtle)",
+        fontSize: "0.75rem",
+        color: "var(--color-text-muted)",
+        lineHeight: 1.5,
+        opacity: 0.8
+      }}>
+        <p style={{ marginBottom: "8px" }}>
+          <strong>Transparency & Privacy Disclosure:</strong> Dishaara utilizes third-party providers including Google Maps APIs for geospatial visualization and Unsplash for imagery. 
+          Your interactions with Yatra AI are processed by external Language Models to provide intelligent travel assistance. 
+          We do not permanently store sensitive personal data or PII in our AI models.
+        </p>
+        <p>
+          By using this platform, you agree to our <Link href="/privacy" className="hover:underline" style={{ color: "inherit" }}>Privacy Policy</Link> regarding LocalStorage and analytics.
+        </p>
+      </div>
+
+      {/* Copyright Bar */}
+      <div
+        className="container"
+        style={{
+          borderTop: "1px solid var(--color-border-subtle)",
+          paddingTop: "var(--space-lg)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "12px",
+          fontSize: "0.8rem",
+          maxWidth: "var(--container-max-width)",
+          margin: "0 auto",
+        }}
+      >
+        <div>© 2026 Dishaara. Preserving traditions and securing travelers.</div>
+        <div style={{ display: "flex", gap: "16px" }}>
+          <Link href="/privacy" style={{ textDecoration: "none", color: "inherit" }} className="hover:underline">Privacy Policy</Link>
+          <Link href="/terms" style={{ textDecoration: "none", color: "inherit" }} className="hover:underline">Terms of Service</Link>
+          <Link href="/safety" style={{ textDecoration: "none", color: "inherit" }} className="hover:underline">Travel Safely</Link>
+>>>>>>> origin/tashvi-development
         </div>
 
       </div>

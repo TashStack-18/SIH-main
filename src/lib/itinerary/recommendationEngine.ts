@@ -12,7 +12,7 @@
 import { SpatialEngine, DetourCalculationResult } from '@/src/lib/geospatial/spatialEngine';
 import { FeasibilityEngine, FeasibilityInputDay, ItineraryFeasibilityReport } from './feasibilityEngine';
 import { VERIFIED_DESTINATIONS, VERIFIED_TERRITORIES } from '@/src/lib/fixtures';
-import type { Itinerary, ItineraryDay, ItineraryItem, TravelStyle } from '@/src/types/itinerary';
+import type { Itinerary, ItineraryDay, ItineraryItem, TravelStyle, OptimizationProposal } from '@/src/types/itinerary';
 
 export interface OptimizationChange {
   type: 'STOP_REORDERED' | 'DAY_SPLIT' | 'STOP_ADDED' | 'STOP_REMOVED' | 'REST_ADDED' | 'TIME_ADJUSTED';
@@ -26,6 +26,7 @@ export interface OptimizationResult {
   feasibility: ItineraryFeasibilityReport;
   detourRecommendations: DetourCalculationResult[];
   summary: string;
+  proposal?: OptimizationProposal | null;
 }
 
 export class RecommendationEngine {
@@ -138,15 +139,31 @@ export class RecommendationEngine {
     let adjustedItems = [...allItems];
 
     if (newDurationDays < oldDays) {
-      // Scale down: Prioritize marquee and high-importance stops, drop lowest density items
-      const maxStopsToKeep = newDurationDays * 2; // ~2 stops per day
-      if (adjustedItems.length > maxStopsToKeep) {
-        const removed = adjustedItems.length - maxStopsToKeep;
-        adjustedItems = adjustedItems.slice(0, maxStopsToKeep);
+      // Scale down: strictly protect must-visit, locked, and user-selected destinations
+      const mustKeepIds = new Set([
+        ...(itinerary.selectedDestinationIds || []),
+        ...(itinerary.primaryDestinationId ? [itinerary.primaryDestinationId] : []),
+      ]);
+
+      const isProtected = (item: ItineraryItem) =>
+        item.isMustVisit || item.isLocked || (item.destinationId && mustKeepIds.has(item.destinationId));
+
+      const protectedItems = adjustedItems.filter(isProtected);
+      const optionalItems = adjustedItems.filter((i) => !isProtected(i));
+
+      const maxStopsToKeep = Math.max(protectedItems.length, newDurationDays * 2);
+      const slotsRemainingForOptional = Math.max(0, maxStopsToKeep - protectedItems.length);
+      const keptOptional = optionalItems.slice(0, slotsRemainingForOptional);
+
+      const combined = [...protectedItems, ...keptOptional];
+      const removedCount = adjustedItems.length - combined.length;
+
+      adjustedItems = combined;
+      if (removedCount > 0) {
         changes.push({
           type: 'STOP_REMOVED',
-          description: `Consolidated itinerary from ${oldDays} to ${newDurationDays} days, preserving marquee heritage locations.`,
-          impact: `Dropped ${removed} minor stops to avoid dangerous driving fatigue.`,
+          description: `Consolidated itinerary from ${oldDays} to ${newDurationDays} days while safeguarding all user-selected must-visit destinations.`,
+          impact: `Trimmed ${removedCount} optional stops to reduce driving fatigue.`,
         });
       }
     } else if (newDurationDays > oldDays) {
@@ -175,6 +192,8 @@ export class RecommendationEngine {
           notes: extraDest.tagline || extraDest.shortDescription,
           durationMinutes: 120,
           location: extraDest.coordinates,
+          isMustVisit: false,
+          isLocked: false,
         });
       }
     }
@@ -188,6 +207,92 @@ export class RecommendationEngine {
     };
 
     return this.optimizeItinerary(updatedItinerary, itinerary.travelStyle);
+  }
+
+  /**
+   * Generates an explicit optimization proposal without silently mutating the user's plan.
+   * Compares current sequence against an optimized sequence that eliminates backtracking loops.
+   */
+  public static generateOptimizationProposal(itinerary: Itinerary): OptimizationProposal | null {
+    const allStops = itinerary.days.flatMap((d) => d.items.filter((i) => i.location));
+    if (allStops.length < 3) return null;
+
+    const stopCoords = allStops.map((s) => ({
+      lat: s.location!.lat,
+      lng: s.location!.lng,
+      name: s.title,
+    }));
+
+    // Calculate current total distance
+    let currentDistance = 0;
+    for (let i = 0; i < stopCoords.length - 1; i++) {
+      currentDistance += SpatialEngine.estimateRoadDistanceKm(
+        stopCoords[i].lat,
+        stopCoords[i].lng,
+        stopCoords[i + 1].lat,
+        stopCoords[i + 1].lng
+      );
+    }
+
+    // Try 2-opt swaps for unlocked intermediate stops
+    let bestDistance = currentDistance;
+    let bestIndices = allStops.map((_, idx) => idx);
+
+    for (let i = 1; i < allStops.length - 1; i++) {
+      for (let j = i + 1; j < allStops.length; j++) {
+        // Do not move locked stops
+        if (allStops[i].isLocked || allStops[j].isLocked) continue;
+
+        // Test reversed subsegment [i..j]
+        const testIndices = [...bestIndices];
+        const sub = testIndices.slice(i, j + 1).reverse();
+        testIndices.splice(i, sub.length, ...sub);
+
+        let testDist = 0;
+        for (let k = 0; k < testIndices.length - 1; k++) {
+          const a = stopCoords[testIndices[k]];
+          const b = stopCoords[testIndices[k + 1]];
+          testDist += SpatialEngine.estimateRoadDistanceKm(a.lat, a.lng, b.lat, b.lng);
+        }
+
+        if (testDist < bestDistance) {
+          bestDistance = testDist;
+          bestIndices = testIndices;
+        }
+      }
+    }
+
+    const savedDistanceKm = Math.round((currentDistance - bestDistance) * 10) / 10;
+    const savedDurationMinutes = SpatialEngine.estimateDriveTimeMinutes(savedDistanceKm);
+
+    // Only propose if there is meaningful improvement (>= 3 km and >= 5 mins)
+    if (savedDistanceKm < 3 || savedDurationMinutes < 5) {
+      return null;
+    }
+
+    const reorderedStops = bestIndices.map((idx) => allStops[idx]);
+    const currentSequence = allStops.map((s) => s.title);
+    const suggestedSequence = reorderedStops.map((s) => s.title);
+
+    // Reconstruct days with suggested stops
+    const daysCount = itinerary.days.length;
+    const newDays = this.distributeStopsAcrossDays(reorderedStops, daysCount, itinerary.territoryName);
+
+    const proposedItinerary: Itinerary = {
+      ...itinerary,
+      days: newDays,
+      version: (itinerary.version || 1) + 1,
+    };
+
+    return {
+      id: `opt-${Date.now()}`,
+      currentSequence,
+      suggestedSequence,
+      savedDistanceKm,
+      savedDurationMinutes,
+      rationale: `We found a more efficient route that saves ~${savedDistanceKm} km (~${savedDurationMinutes} mins) of driving by re-sequencing waypoints.`,
+      itinerary: proposedItinerary,
+    };
   }
 
   /**

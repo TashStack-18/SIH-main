@@ -34,7 +34,14 @@ export const TERRITORIES = [
       { name: "Tourist Helpline", number: "1363" },
       { name: "Coast Guard Search & Rescue", number: "1554" }
     ],
-    advisories: ["Strict tribal reserve protection: Photography of indigenous tribes is strictly prohibited by law."]
+    advisories: ["Strict tribal reserve protection: Photography of indigenous tribes is strictly prohibited by law."],
+    isoCode: "IN-AN",
+    vehicleCode: "AN",
+    zone: "Southern",
+    areaKm2: 8249.0,
+    population2011: 380581,
+    officialLanguages: ["Hindi", "English"],
+    largestCity: "Port Blair"
   },
   {
     id: "CHANDIGARH",
@@ -64,7 +71,14 @@ export const TERRITORIES = [
       { name: "Tourist Helpline", number: "1363" },
       { name: "Tourist Information Centre", number: "1800-180-2116" }
     ],
-    advisories: ["Capitol Complex requires scheduled guided entry at 10:00 AM, 12:00 PM, or 3:00 PM with government ID."]
+    advisories: ["Capitol Complex requires scheduled guided entry at 10:00 AM, 12:00 PM, or 3:00 PM with government ID."],
+    isoCode: "IN-CH",
+    vehicleCode: "CH",
+    zone: "Northern",
+    areaKm2: 114.0,
+    population2011: 1055450,
+    officialLanguages: ["Hindi", "English"],
+    largestCity: "Chandigarh"
   },
   {
     id: "DNH_DD",
@@ -94,7 +108,14 @@ export const TERRITORIES = [
       { name: "Ambulance", number: "108" },
       { name: "Tourist Helpline", number: "1363" }
     ],
-    advisories: ["Swimming at designated beaches only; follow coastal warning flags during monsoon."]
+    advisories: ["Swimming at designated beaches only; follow coastal warning flags during monsoon."],
+    isoCode: "IN-DH",
+    vehicleCode: "DD",
+    zone: "Western",
+    areaKm2: 603.0,
+    population2011: 587106,
+    officialLanguages: ["Hindi", "English"],
+    largestCity: "Silvassa"
   },
   {
     id: "DELHI",
@@ -124,7 +145,14 @@ export const TERRITORIES = [
       { name: "Ambulance", number: "102" },
       { name: "Tourist Helpline", number: "1363" }
     ],
-    advisories: ["Advance ASI digital ticket booking recommended for Red Fort and Qutub Minar to avoid queues."]
+    advisories: ["Advance ASI digital ticket booking recommended for Red Fort and Qutub Minar to avoid queues."],
+    isoCode: "IN-DL",
+    vehicleCode: "DL",
+    zone: "Northern",
+    areaKm2: 1484.0,
+    population2011: 16787941,
+    officialLanguages: ["Hindi", "English"],
+    largestCity: "Delhi"
   },
   {
     id: "JAMMU_KASHMIR",
@@ -154,7 +182,14 @@ export const TERRITORIES = [
       { name: "Ambulance", number: "108" },
       { name: "Tourist Helpline", number: "1363" }
     ],
-    advisories: ["Gulmarg Gondola tickets sell out rapidly; book exclusively via the official J&K Cable Car portal."]
+    advisories: ["Gulmarg Gondola tickets sell out rapidly; book exclusively via the official J&K Cable Car portal."],
+    isoCode: "IN-JK",
+    vehicleCode: "JK",
+    zone: "Northern",
+    areaKm2: 42241.0,
+    population2011: 12258433,
+    officialLanguages: ["Dogri", "English", "Hindi", "Kashmiri", "Urdu"],
+    largestCity: "Srinagar"
   },
   {
     id: "LADAKH",
@@ -184,7 +219,14 @@ export const TERRITORIES = [
       { name: "Tourist Information Centre Leh", number: "01982-252297" },
       { name: "Tourist Helpline", number: "1363" }
     ],
-    advisories: ["MANDATORY: Minimum 48-hour resting acclimatization in Leh before ascending above 3,500m."]
+    advisories: ["MANDATORY: Minimum 48-hour resting acclimatization in Leh before ascending above 3,500m."],
+    isoCode: "IN-LA",
+    vehicleCode: "LA",
+    zone: "Northern",
+    areaKm2: 59146.0,
+    population2011: 290492,
+    officialLanguages: ["Hindi", "English"],
+    largestCity: "Leh"
   },
   {
     id: "LAKSHADWEEP",
@@ -214,7 +256,14 @@ export const TERRITORIES = [
       { name: "Coast Guard Search & Rescue", number: "1554" },
       { name: "Tourist Helpline", number: "1363" }
     ],
-    advisories: ["Mandatory ePermit required for all non-native visitors prior to arrival via epermit.utl.gov.in."]
+    advisories: ["Mandatory ePermit required for all non-native visitors prior to arrival via epermit.utl.gov.in."],
+    isoCode: "IN-LD",
+    vehicleCode: "LD",
+    zone: "Southern",
+    areaKm2: 32.0,
+    population2011: 64473,
+    officialLanguages: ["English"],
+    largestCity: "Kavaratti"
   },
   {
     id: "PUDUCHERRY",
@@ -244,6 +293,13 @@ export const TERRITORIES = [
       { name: "Tourist Helpline", number: "1363" },
       { name: "Tourist Assistance Bureau", number: "0413-2339497" }
     ],
-    advisories: ["Auroville is an autonomous international township in adjacent Tamil Nadu; check entry rules for Matrimandir viewing."]
+    advisories: ["Auroville is an autonomous international township in adjacent Tamil Nadu; check entry rules for Matrimandir viewing."],
+    isoCode: "IN-PY",
+    vehicleCode: "PY",
+    zone: "Southern",
+    areaKm2: 479.0,
+    population2011: 1247953,
+    officialLanguages: ["Tamil", "Telugu", "Malayalam"],
+    largestCity: "Pondicherry"
   }
 ];

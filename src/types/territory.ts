@@ -52,4 +52,11 @@ export interface UnionTerritory {
   verifiedBy: string;
   emergencyContacts: TerritoryEmergencyContact[];
   advisories: string[];
+  isoCode?: string;
+  vehicleCode?: string;
+  zone?: string;
+  areaKm2?: number;
+  population2011?: number;
+  officialLanguages?: string[];
+  largestCity?: string;
 }

@@ -44,6 +44,8 @@ export interface ApiResponse<T> {
     limit?: number;
     total?: number;
     lastUpdated?: string;
+    note?: string;
+    [key: string]: unknown;
   };
   error?: {
     code: string;

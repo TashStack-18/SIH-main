@@ -12,7 +12,11 @@ export interface BookingProvider {
   type: string;
   badge: string;
   url: string;
-  status: string;
+  status?: string;
+  serviceTypes?: string[];
+  territoryCoverage?: string[];
+  linkStatus?: string;
+  domainVerified?: boolean;
 }
 
 export interface BookableExperience {

@@ -43,3 +43,9 @@ yarn-error.log*
 # Temporary files
 tmp/
 temp/
+
+# Python virtual environment & cache
+.venv/
+venv/
+__pycache__/
+*.pyc

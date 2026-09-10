@@ -31,7 +31,7 @@ export function HeroCarousel() {
       className="hero-carousel-section"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      aria-label="Bharat Safe Yatra Showcase Carousel"
+      aria-label="Dishaara Showcase Carousel"
     >
       {/* Background Slides */}
       {territories.map((ut, idx) => {
@@ -57,7 +57,6 @@ export function HeroCarousel() {
       })}
 
       {/* Main Hero Content */}
-      <div className="hero-carousel-content">
         <div className="hero-text-block">
           {/* City / Territory Name */}
           <h1 className="hero-title">
