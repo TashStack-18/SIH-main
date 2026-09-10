@@ -291,7 +291,7 @@ export default function GoogleMapView() {
 
       {/* Main Map & Intelligence Section */}
       <div style={{ maxWidth: '1380px', margin: '24px auto 0', padding: '0 20px' }}>
-        
+
         {/* Filter Chips Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -365,7 +365,7 @@ export default function GoogleMapView() {
 
         {/* Selected Place Live Intelligence & Route Summary */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px', marginTop: '24px' }}>
-          
+
           {/* Active Place Detail Card (Clean Light Surface) */}
           {selectedPlace && (
             <div
@@ -425,8 +425,8 @@ export default function GoogleMapView() {
                 {'shortDescription' in selectedPlace && selectedPlace.shortDescription
                   ? selectedPlace.shortDescription
                   : 'services' in selectedPlace
-                  ? `24x7 Emergency Medical Facility providing: ${selectedPlace.services?.join(', ')}`
-                  : 'Verified destination coordinate fixture.'}
+                    ? `24x7 Emergency Medical Facility providing: ${selectedPlace.services?.join(', ')}`
+                    : 'Verified destination coordinate fixture.'}
               </p>
 
               {/* Action Buttons */}
