@@ -43,7 +43,6 @@ export const metadata: Metadata = {
 
 import { Navbar } from "@/src/app/components/Navbar";
 import { Footer } from "@/src/app/components/Footer";
-import { IntroAnimation } from "@/src/app/components/IntroAnimation";
 import { FloatingYatraAI } from "@/src/app/components/FloatingYatraAI";
 
 export default function RootLayout({
@@ -74,8 +73,7 @@ export default function RootLayout({
       </head>
       <body className={dmSans.className} style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "var(--color-bg-canvas, #F2F2ED)", color: "var(--color-text-primary, var(--color-primary))", fontFamily: "var(--font-family-body)", overflowX: "hidden" }}>
         <div id="root" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-          {/* TEMPORARILY DISABLED: Change to true to re-enable the finalized intro animation */}
-          {false && <IntroAnimation />}
+          {/* TEMPORARILY DISABLED: IntroAnimation is excluded from this deployment */}
           <Navbar />
           <div style={{ flexGrow: 1 }}>
             {children}
