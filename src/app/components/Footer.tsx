@@ -38,7 +38,7 @@ export function Footer() {
             <span className="badge badge-verified" style={{ fontSize: "0.7rem", background: "var(--color-brand-accent-light)", color: "var(--color-text-primary)", borderColor: "var(--color-accent)" }}>
               8 Union Territories
             </span>
-            <span className="badge badge-danger" style={{ fontSize: "0.7rem" }}>
+            <span className="badge badge-official" style={{ fontSize: "0.7rem" }}>
               24x7 Safety Guard
             </span>
           </div>
@@ -69,7 +69,7 @@ export function Footer() {
                     textDecoration: "none",
                     transition: "color 0.15s ease",
                   }}
-                  className="hover:text-[#C88E44]"
+                  className="hover-accent"
                 >
                   {ut.name}
                 </Link>
@@ -93,11 +93,11 @@ export function Footer() {
             Quick Navigation
           </h4>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
-            <li><Link href="/destinations" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover:text-[#C88E44]">All Verified Destinations</Link></li>
-            <li><Link href="/itinerary" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover:text-[#C88E44]">Smart Itinerary Builder</Link></li>
-            <li><Link href="/map" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover:text-[#C88E44]">Geospatial 3D Map</Link></li>
-            <li><Link href="/ai" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover:text-[#C88E44]">Yatra AI Travel Studio</Link></li>
-            <li><Link href="/safety" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover:text-[#C88E44]">Safety & Emergency Protocol</Link></li>
+            <li><Link href="/destinations" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover-accent">All Verified Destinations</Link></li>
+            <li><Link href="/itinerary" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover-accent">Smart Itinerary Builder</Link></li>
+            <li><Link href="/map" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover-accent">Geospatial 3D Map</Link></li>
+            <li><Link href="/ai" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover-accent">Yatra AI Travel Studio</Link></li>
+            <li><Link href="/safety" style={{ fontSize: "0.85rem", color: "inherit", textDecoration: "none" }} className="hover-accent">Safety & Emergency Protocol</Link></li>
           </ul>
         </div>
 
@@ -146,6 +146,27 @@ export function Footer() {
         </div>
       </div>
 
+      {/* Disclosures */}
+      <div className="container" style={{
+        maxWidth: "var(--container-max-width)",
+        margin: "0 auto var(--space-xl)",
+        padding: "var(--space-md) 0",
+        borderTop: "1px dashed var(--color-border-subtle)",
+        fontSize: "0.75rem",
+        color: "var(--color-text-muted)",
+        lineHeight: 1.5,
+        opacity: 0.8
+      }}>
+        <p style={{ marginBottom: "8px" }}>
+          <strong>Transparency & Privacy Disclosure:</strong> Dishaara utilizes third-party providers including Google Maps APIs for geospatial visualization and Unsplash for imagery. 
+          Your interactions with Yatra AI are processed by external Language Models to provide intelligent travel assistance. 
+          We do not permanently store sensitive personal data or PII in our AI models.
+        </p>
+        <p>
+          By using this platform, you agree to our <Link href="/privacy" className="hover:underline" style={{ color: "inherit" }}>Privacy Policy</Link> regarding LocalStorage and analytics.
+        </p>
+      </div>
+
       {/* Copyright Bar */}
       <div
         className="container"
@@ -162,7 +183,7 @@ export function Footer() {
           margin: "0 auto",
         }}
       >
-        <div>© 2026 Bharat Safe Yatra. Preserving traditions and securing travelers.</div>
+        <div>© 2026 Dishaara. Preserving traditions and securing travelers.</div>
         <div style={{ display: "flex", gap: "16px" }}>
           <Link href="/privacy" style={{ textDecoration: "none", color: "inherit" }} className="hover:underline">Privacy Policy</Link>
           <Link href="/terms" style={{ textDecoration: "none", color: "inherit" }} className="hover:underline">Terms of Service</Link>
