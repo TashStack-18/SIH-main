@@ -59,10 +59,7 @@ export function HeroCarousel() {
       {/* Main Hero Content */}
       <div className="hero-carousel-content">
         
-        {/* Union Territory Tag */}
-        <div className="hero-ut-tag">
-          <span>{current.heroLabel || current.shortName}</span>
-        </div>
+
 
         {/* Hero Headline */}
         <h1 className="hero-title">

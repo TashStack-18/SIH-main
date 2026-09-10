@@ -426,14 +426,7 @@ function DestinationsContent() {
                         loading="lazy"
                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
                       />
-                      <div className="destination-card-badges" style={{ position: "absolute", top: "12px", left: "12px", right: "12px", display: "flex", justifyContent: "space-between" }}>
-                        <span className="badge badge-neutral" style={{ background: "rgba(0,0,0,0.65)", color: "#ffffff", backdropFilter: "blur(6px)", fontWeight: 700 }}>
-                          {dest.type}
-                        </span>
-                        <span className="badge badge-neutral" style={{ background: "rgba(200, 142, 68, 0.85)", color: "#ffffff", fontSize: "0.7rem", fontWeight: 700 }}>
-                          {dest.territoryName}
-                        </span>
-                      </div>
+
                     </div>
 
                     <div className="destination-card-body" style={{ padding: "var(--space-lg)", display: "flex", flexDirection: "column", flexGrow: 1 }}>
@@ -840,11 +833,7 @@ function DestinationsContent() {
                     loading="lazy"
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
-                  <div className="destination-card-badges" style={{ position: "absolute", top: "12px", left: "12px" }}>
-                    <span className="badge badge-neutral" style={{ background: "rgba(0,0,0,0.65)", color: "#ffffff", backdropFilter: "blur(6px)", fontWeight: 700 }}>
-                      {dest.type}
-                    </span>
-                  </div>
+
                 </div>
 
                 {/* Content: Title, description, tags, footer without UT name or Best time */}

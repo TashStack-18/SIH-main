@@ -99,9 +99,7 @@ export default async function TerritoryDetailPage({
                       loading="lazy"
                       style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     >
-                      <div className="destination-card-badges" style={{ position: "absolute", top: "12px", left: "12px", zIndex: 10 }}>
-                        <span className="badge badge-neutral" style={{ background: "rgba(0,0,0,0.6)", color: "#ffffff" }}>{d.type}</span>
-                      </div>
+
                     </PremiumDepthImage>
                   </div>
                   <div className="destination-card-body">

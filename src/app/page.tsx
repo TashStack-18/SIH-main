@@ -58,11 +58,7 @@ export default function HomePage() {
             <article key={dest.id} className="destination-card card-hoverable" style={{ borderRadius: "var(--radius-xl)", overflow: "hidden", border: "1px solid var(--color-border-subtle)" }}>
               <div className="destination-card-media" style={{ height: "220px", position: "relative" }}>
                 <PremiumDepthImage src={dest.image} alt={dest.name} className="destination-card-img" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
-                <div className="destination-card-badges">
-                  <span className="badge badge-neutral" style={{ background: "rgba(45, 27, 20, 0.75)", color: "#ffffff", backdropFilter: "blur(6px)" }}>
-                    {dest.type}
-                  </span>
-                </div>
+
               </div>
 
               <div className="destination-card-body" style={{ padding: "var(--space-lg)", background: "var(--color-bg-surface)" }}>

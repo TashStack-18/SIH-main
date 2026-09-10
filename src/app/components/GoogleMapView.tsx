@@ -210,15 +210,7 @@ export default function GoogleMapView() {
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="badge badge-primary" style={{ background: '#C88E44', color: '#ffffff', fontSize: '0.72rem', fontWeight: 800 }}>
-                  GEOSPATIAL 3D NAVIGATION
-                </span>
-                <span style={{ fontSize: '0.78rem', color: '#15803d', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <span style={{ display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: '#16a34a' }} />
-                  Mapbox GL Daylight 3D Active
-                </span>
-              </div>
+
               <h1 style={{ fontSize: '1.85rem', fontWeight: 800, margin: '6px 0 2px', color: '#2D1B14', letterSpacing: '-0.02em' }}>
                 Interactive Union Territory Map Explorer
               </h1>
