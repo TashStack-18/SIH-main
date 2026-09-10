@@ -210,15 +210,7 @@ export default function GoogleMapView() {
         <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="badge badge-primary" style={{ background: '#C88E44', color: '#ffffff', fontSize: '0.72rem', fontWeight: 800 }}>
-                  GEOSPATIAL 3D NAVIGATION
-                </span>
-                <span style={{ fontSize: '0.78rem', color: '#15803d', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <span style={{ display: 'inline-block', width: '7px', height: '7px', borderRadius: '50%', background: '#16a34a' }} />
-                  Mapbox GL Daylight 3D Active
-                </span>
-              </div>
+
               <h1 style={{ fontSize: '1.85rem', fontWeight: 800, margin: '6px 0 2px', color: '#2D1B14', letterSpacing: '-0.02em' }}>
                 Interactive Union Territory Map Explorer
               </h1>
@@ -291,7 +283,7 @@ export default function GoogleMapView() {
 
       {/* Main Map & Intelligence Section */}
       <div style={{ maxWidth: '1380px', margin: '24px auto 0', padding: '0 20px' }}>
-        
+
         {/* Filter Chips Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -365,7 +357,7 @@ export default function GoogleMapView() {
 
         {/* Selected Place Live Intelligence & Route Summary */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '24px', marginTop: '24px' }}>
-          
+
           {/* Active Place Detail Card (Clean Light Surface) */}
           {selectedPlace && (
             <div
@@ -425,8 +417,8 @@ export default function GoogleMapView() {
                 {'shortDescription' in selectedPlace && selectedPlace.shortDescription
                   ? selectedPlace.shortDescription
                   : 'services' in selectedPlace
-                  ? `24x7 Emergency Medical Facility providing: ${selectedPlace.services?.join(', ')}`
-                  : 'Verified destination coordinate fixture.'}
+                    ? `24x7 Emergency Medical Facility providing: ${selectedPlace.services?.join(', ')}`
+                    : 'Verified destination coordinate fixture.'}
               </p>
 
               {/* Action Buttons */}

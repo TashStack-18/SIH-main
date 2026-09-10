@@ -82,9 +82,7 @@ export function ExploreRail() {
     <section className="explore-rail-wrap">
       <div className="explore-rail-header">
         <div>
-          <span className="badge badge-verified" style={{ marginBottom: "6px" }}>
-            Signature Heritage Journeys
-          </span>
+
           <h2 className="explore-rail-title">
             Explore Authentic India
           </h2>
