@@ -56,7 +56,7 @@ export function BrandLogo({
           transition: 'color 0.2s ease, opacity 0.15s ease',
         }}
       >
-        Bharat Safe Yatra
+        Dishaara
       </span>
     </span>
   );
@@ -65,7 +65,7 @@ export function BrandLogo({
     return (
       <Link
         href={href}
-        aria-label="Bharat Safe Yatra Home"
+        aria-label="Dishaara Home"
         className="brand-link"
         style={{
           textDecoration: 'none',

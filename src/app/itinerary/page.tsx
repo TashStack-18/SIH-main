@@ -20,6 +20,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { VERIFIED_DESTINATIONS, VERIFIED_TERRITORIES, VERIFIED_BOOKING_PROVIDERS } from '@/src/lib/fixtures';
 import { BharatMap } from '@/src/app/components/BharatMap';
 import { YatraAiItineraryEditor } from '@/src/app/components/YatraAiItineraryEditor';
+import { DepthCarousel } from '@/src/app/components/DepthCarousel';
 import { ItineraryBuilder } from '@/src/lib/itinerary/itineraryBuilder';
 import { FeasibilityEngine, ItineraryFeasibilityReport } from '@/src/lib/itinerary/feasibilityEngine';
 import { RecommendationEngine } from '@/src/lib/itinerary/recommendationEngine';
@@ -28,6 +29,115 @@ import { calculateRouteWithFallback } from '@/src/lib/providers/maps';
 import { RouteCalculationResult } from '@/src/lib/providers/types';
 import type { Destination, TerritoryCode } from '@/src/types';
 import type { Itinerary, ItineraryDay, ItineraryItem, TravelStyle, StopStatus, OptimizationProposal } from '@/src/types/itinerary';
+
+function generateBaseItineraryForTerritory(territoryId: string): Itinerary | null {
+  const territory = VERIFIED_TERRITORIES.find((t) => t.id === territoryId || t.name.toLowerCase() === territoryId.toLowerCase());
+  if (!territory) return null;
+
+  const dests = VERIFIED_DESTINATIONS.filter((d) => d.territoryId === territory.id || d.territoryName === territory.name);
+  const selectedDests = dests.slice(0, 6);
+
+  const days: ItineraryDay[] = [];
+  const itemsPerDay = 2;
+  const dayCount = Math.max(1, Math.ceil(selectedDests.length / itemsPerDay));
+
+  for (let d = 1; d <= dayCount; d++) {
+    const dayStops = selectedDests.slice((d - 1) * itemsPerDay, d * itemsPerDay);
+    days.push({
+      dayNumber: d,
+      title: dayStops.length > 0 ? `${dayStops[0].name} Exploration` : `Discover ${territory.name}`,
+      summary: `Highlights of ${territory.name} including key cultural and natural sites.`,
+      items: dayStops.map((dest, i) => ({
+        id: `stop-${d}-${i + 1}`,
+        time: i === 0 ? '09:00 AM' : '02:00 PM',
+        title: dest.name,
+        type: (dest.type as string === 'MONUMENT' ? 'HERITAGE' : dest.type) as any,
+        destinationId: dest.id,
+        notes: dest.tagline || dest.shortDescription || '',
+        durationMinutes: 90,
+        location: dest.coordinates,
+        image: dest.image,
+        status: (i === 0 && d === 1 ? 'ACTIVE' : 'PLANNED') as StopStatus,
+      })),
+    });
+  }
+
+  return {
+    id: `itin-${territory.id}`,
+    title: `Journey through ${territory.name}`,
+    territoryId: territory.id as any,
+    territoryName: territory.name,
+    durationDays: dayCount,
+    travellers: 2,
+    startDate: '2026-09-10',
+    endDate: '2026-09-14',
+    travelStyle: 'BALANCED',
+    estimatedBudget: 25000,
+    days,
+  };
+}
+
+function TerritoryDiscoveryView({ onSelect }: { onSelect: (id: string) => void }) {
+  const [dimensions, setDimensions] = useState({ width: 600, height: 400, spread: 120, depth: 140, blur: 4 });
+
+  useEffect(() => {
+    const handleResize = () => {
+      // LANDSCAPE DIMENSIONS (approx 3:2 ratio)
+      if (window.innerWidth < 400) {
+        setDimensions({ width: 270, height: 180, spread: 45, depth: 60, blur: 2 });
+      } else if (window.innerWidth < 768) {
+        setDimensions({ width: 330, height: 220, spread: 60, depth: 80, blur: 2 });
+      } else if (window.innerWidth < 1024) {
+        setDimensions({ width: 450, height: 300, spread: 80, depth: 100, blur: 3 });
+      } else {
+        setDimensions({ width: 600, height: 400, spread: 120, depth: 140, blur: 4 });
+      }
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const carouselItems = VERIFIED_TERRITORIES.map((t, i) => ({
+    id: t.id,
+    title: t.name,
+    subtitle: (t as any).tagline || (t as any).heroDescription || t.name,
+    image: (t as any).heroImage || '',
+    chapter: String(i + 1).padStart(2, '0')
+  }));
+
+  return (
+    <div className="w-full flex flex-col items-center justify-start pt-8 pb-16" style={{ maxWidth: '1440px', marginInline: 'auto' }}>
+      <header className="text-center mb-6 px-4 z-20">
+        <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-[var(--color-text-primary)] mb-3" style={{ letterSpacing: '-0.02em' }}>
+          PLAN YOUR JOURNEY
+        </h1>
+        <p className="font-mono text-xs md:text-sm tracking-widest text-[var(--color-accent)] uppercase mb-3 font-semibold">
+          Explore India's 8 Union Territories
+        </p>
+        <p className="text-base md:text-lg text-[var(--color-text-secondary)] max-w-xl mx-auto leading-relaxed">
+          Choose where you want to travel and Dishaara will help shape the journey.
+        </p>
+      </header>
+
+      <div className="w-full relative z-10 overflow-hidden" style={{ maxWidth: '1200px', marginInline: 'auto' }}>
+        <DepthCarousel 
+          items={carouselItems} 
+          onSelect={onSelect} 
+          cardWidth={dimensions.width}
+          cardHeight={dimensions.height}
+          spread={dimensions.spread}
+          depth={dimensions.depth}
+          blur={dimensions.blur}
+          tilt={8}
+          perspective={1200}
+          visibleCards={3}
+        />
+      </div>
+    </div>
+  );
+}
 
 function ItineraryContent() {
   const searchParams = useSearchParams();

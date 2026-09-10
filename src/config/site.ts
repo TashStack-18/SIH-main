@@ -3,7 +3,7 @@
  */
 
 export const siteConfig = {
-  name: "Bharat Safe Yatra",
+  name: "Dishaara",
   tagline: "India's Intelligent Union Territory Tourism & Safety Platform",
   description: "Official smart tourism and life safety platform for India's 8 Union Territories. Discover, plan, book, navigate, and stay safe with verified government intelligence, interactive 3D maps, and Yatra AI.",
   url: "https://bharatsafeyatra.gov.in",

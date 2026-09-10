@@ -36,6 +36,7 @@ export function QuickSearchBar() {
             stroke="#9C8D7F"
             strokeWidth="2"
             style={{ flexShrink: 0 }}
+            aria-hidden="true"
           >
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
             <circle cx="12" cy="10" r="3"></circle>
@@ -44,6 +45,7 @@ export function QuickSearchBar() {
             id="qs-territory-dropdown"
             value={selectedTerritory}
             onChange={(e) => setSelectedTerritory(e.target.value)}
+            aria-label="Select Heritage Territory"
           >
             <option value="">Which Heritage Territory? (All 8 UTs)</option>
             {VERIFIED_TERRITORIES.map((ut) => (
@@ -64,6 +66,7 @@ export function QuickSearchBar() {
             stroke="#9C8D7F"
             strokeWidth="2"
             style={{ flexShrink: 0 }}
+            aria-hidden="true"
           >
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -73,6 +76,7 @@ export function QuickSearchBar() {
           <select
             value={season}
             onChange={(e) => setSeason(e.target.value)}
+            aria-label="Select Travel Season"
           >
             <option value="ALL">Dates of Journey (All Seasons)</option>
             <option value="SUMMER">Summer Peak (May – Sep)</option>
@@ -90,6 +94,7 @@ export function QuickSearchBar() {
             stroke="#9C8D7F"
             strokeWidth="2"
             style={{ flexShrink: 0 }}
+            aria-hidden="true"
           >
             <path d="M4 22h16"></path>
             <path d="M4 10h16"></path>
@@ -102,6 +107,7 @@ export function QuickSearchBar() {
           <select
             value={style}
             onChange={(e) => setStyle(e.target.value)}
+            aria-label="Select Travel Style"
           >
             <option value="ALL">Cultural Interests (All Styles)</option>
             <option value="Heritage">Heritage Citadels & Forts</option>
@@ -113,7 +119,7 @@ export function QuickSearchBar() {
 
         {/* Submit Explore Button */}
         <button type="submit" className="search-action-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C88E44" strokeWidth="2.5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2.5" aria-hidden="true">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>

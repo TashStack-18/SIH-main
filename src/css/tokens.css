@@ -5,52 +5,54 @@
 
 :root {
   /* ==========================================
-     BHARAT SAFE YATRA CORE BRAND PALETTE
+     BHARAT SAFE YATRA CORE BRAND PALETTE (NEW EDITORIAL)
      ========================================== */
-  --color-brand-primary: #2D1B14;      /* Deep Heritage Espresso */
-  --color-brand-primary-hover: #431407;/* Rich Roasted Bark */
-  --color-brand-accent: #C88E44;       /* Saffron Ochre Gold */
-  --color-brand-accent-hover: #B27B36; /* Deep Ochre Gold */
-  --color-brand-accent-light: rgba(200, 142, 68, 0.12); /* Subtle Gold Tint */
+  --color-brand-primary: #464B71;      /* Deep Navy */
+  --color-brand-primary-hover: #323652;/* Darker Navy */
+  --color-brand-accent: #118AB2;       /* Teal Blue */
+  --color-brand-accent-hover: #0D6E8F; /* Darker Teal */
+  --color-brand-accent-light: rgba(17, 138, 178, 0.12); /* Subtle Teal Tint */
+  --color-brand-support: #7CD5C7;      /* Mint Teal */
+  --color-brand-heritage: #C88E44;     /* Saffron Gold (Existing Brand Identity) */
 
   /* Surface & Background Hierarchy */
-  --color-bg-canvas: #FAF7F2;          /* Level 0: Main Page Canvas (Warm Cream / Ivory) */
+  --color-bg-canvas: #F2F2ED;          /* Level 0: Main Page Canvas (Warm Off-White) */
   --color-bg-surface: #FFFFFF;         /* Level 1: Primary Card & Component Surface */
-  --color-bg-surface-elevated: #F0EADE;/* Level 2: Section Background / Sandstone Alt Surface */
-  --color-bg-surface-alt: #E8DEC8;     /* Level 3: Muted Parchment / Deep Sand */
-  --color-bg-subtle: #FAF7F2;          /* Subtle Inset Background */
-  --color-glass-bg: rgba(250, 247, 242, 0.92);
-  --color-glass-border: rgba(200, 142, 68, 0.25);
-  --color-bg-scrim: rgba(45, 27, 20, 0.72);
-  --color-bg-scrim-light: rgba(45, 27, 20, 0.35);
+  --color-bg-surface-elevated: #E8E8E3;/* Level 2: Section Background */
+  --color-bg-surface-alt: #DFDFDA;     /* Level 3: Alt Surface */
+  --color-bg-subtle: #F2F2ED;          /* Subtle Inset Background */
+  --color-glass-bg: rgba(242, 242, 237, 0.92);
+  --color-glass-border: rgba(70, 75, 113, 0.15);
+  --color-bg-scrim: rgba(70, 75, 113, 0.72);
+  --color-bg-scrim-light: rgba(70, 75, 113, 0.35);
 
   /* Typography Colors */
-  --color-text-primary: #2D1B14;       /* Deep Espresso Primary Headings & Text */
-  --color-text-secondary: #4A3C31;     /* Warm Umber Secondary Text & Descriptions */
-  --color-text-muted: #78685C;         /* Warm Taupe Captions & Metadata */
-  --color-text-light: #9C8D7F;         /* Subtle Sand Muted Text */
-  --color-text-inverse: #FFFFFF;       /* Pure White Text for Dark Backgrounds & Buttons */
+  --color-text-primary: #464B71;       /* Deep Navy Primary Headings & Text */
+  --color-text-secondary: #5A6080;     /* Navy Lighter Secondary Text */
+  --color-text-muted: #7980A3;         /* Muted Navy Captions & Metadata */
+  --color-text-light: #9CA3C3;         /* Subtle Navy Text */
+  --color-text-inverse: #FFFFFF;       /* Pure White Text for Dark Backgrounds */
 
   /* Borders & Dividers */
-  --color-border-subtle: rgba(200, 142, 68, 0.2); /* Warm Subtle Border */
-  --color-border-medium: #D3C9BD;                 /* Defined Warm Border */
-  --color-border-strong: #9C8D7F;                 /* Strong Warm Border */
+  --color-border-subtle: rgba(70, 75, 113, 0.12); /* Navy Subtle Border */
+  --color-border-medium: rgba(70, 75, 113, 0.25); /* Defined Navy Border */
+  --color-border-strong: rgba(70, 75, 113, 0.4);  /* Strong Navy Border */
 
   /* Buttons & Interactive Elements */
-  --color-btn-primary-bg: #2D1B14;
+  --color-btn-primary-bg: #464B71;
   --color-btn-primary-text: #FFFFFF;
-  --color-btn-primary-hover: #431407;
-  --color-btn-accent-bg: #C88E44;
+  --color-btn-primary-hover: #323652;
+  --color-btn-accent-bg: #118AB2;
   --color-btn-accent-text: #FFFFFF;
-  --color-btn-accent-hover: #B27B36;
-  --color-btn-outline-border: #C88E44;
-  --color-btn-outline-text: #2D1B14;
-  --color-btn-outline-hover-bg: rgba(200, 142, 68, 0.12);
+  --color-btn-accent-hover: #0D6E8F;
+  --color-btn-outline-border: #464B71;
+  --color-btn-outline-text: #464B71;
+  --color-btn-outline-hover-bg: rgba(70, 75, 113, 0.08);
 
   /* Primary Semantic Aliases */
   --color-primary: var(--color-brand-primary);
   --color-primary-hover: var(--color-brand-primary-hover);
-  --color-primary-light: var(--color-brand-accent-light);
+  --color-primary-light: rgba(70, 75, 113, 0.1);
   --color-primary-border: var(--color-border-subtle);
 
   --color-secondary: var(--color-brand-accent);
@@ -64,7 +66,7 @@
   /* Stitch Heritage Soul Backward Compatibility */
   --stitch-primary: var(--color-brand-primary);
   --stitch-on-primary: #FFFFFF;
-  --stitch-accent: var(--color-brand-accent);
+  --stitch-accent: var(--color-brand-heritage); /* Keep gold for some heritage elements */
   --stitch-background: var(--color-bg-canvas);
   --stitch-surface: var(--color-bg-surface);
   --stitch-surface-variant: var(--color-bg-surface-elevated);
@@ -72,14 +74,29 @@
   --stitch-outline: var(--color-border-strong);
   --stitch-outline-variant: var(--color-border-medium);
 
-  /* Badges & Status Colors */
-  --color-verified-bg: rgba(200, 142, 68, 0.15);
-  --color-verified-border: #C88E44;
-  --color-verified-text: #2D1B14;
+  /* ==========================================
+     TERRITORY-SPECIFIC ACCENTS (DIVERSITY)
+     ========================================== */
+  --accent-andaman: #1A9E8E;      /* Island Teal */
+  --accent-chandigarh: #C4923A;   /* Brutalist Amber */
+  --accent-dnhdd: #5B8A72;        /* Fort Verdigris */
+  --accent-delhi: #B8734A;        /* Sandstone Sienna */
+  --accent-jk: #3D7A5E;           /* Alpine Jade */
+  --accent-ladakh: #A68B5B;       /* Himalayan Ochre */
+  --accent-lakshadweep: #24A0B5;  /* Lagoon Aqua */
+  --accent-puducherry: #D4A94E;   /* Promenade Gold */
 
-  --color-official-bg: #F0EADE;
-  --color-official-border: #D3C9BD;
-  --color-official-text: #2D1B14;
+  /* Default territory accent (fallback to global accent) */
+  --color-territory-accent: var(--color-accent);
+
+  /* Badges & Status Colors */
+  --color-verified-bg: rgba(17, 138, 178, 0.12); /* Teal tint */
+  --color-verified-border: #118AB2;
+  --color-verified-text: #118AB2;
+
+  --color-official-bg: rgba(70, 75, 113, 0.08);
+  --color-official-border: rgba(70, 75, 113, 0.2);
+  --color-official-text: #464B71;
 
   --color-success: #16A34A;
   --color-success-bg: rgba(22, 163, 74, 0.12);
@@ -94,9 +111,9 @@
   --color-danger-text: #BA1A1A;
   --color-emergency: #BA1A1A;
 
-  --color-info: #0284c7;
-  --color-info-bg: #f0f9ff;
-  --color-info-text: #075985;
+  --color-info: #118AB2;
+  --color-info-bg: rgba(17, 138, 178, 0.12);
+  --color-info-text: #0D6E8F;
 
   /* ==========================================
      TYPOGRAPHY TOKENS
@@ -138,11 +155,11 @@
   /* ==========================================
      SHADOWS & ELEVATION
      ========================================== */
-  --shadow-subtle: 0 1px 3px rgba(45, 27, 20, 0.04), 0 1px 2px rgba(45, 27, 20, 0.02);
-  --shadow-card: 0 4px 16px rgba(45, 27, 20, 0.06), 0 1px 4px rgba(45, 27, 20, 0.03);
-  --shadow-hover: 0 12px 30px rgba(45, 27, 20, 0.1), 0 3px 8px rgba(45, 27, 20, 0.04);
-  --shadow-elevated: 0 16px 40px rgba(45, 27, 20, 0.12), 0 6px 12px rgba(45, 27, 20, 0.05);
-  --shadow-modal: 0 24px 60px rgba(45, 27, 20, 0.22), 0 10px 20px rgba(45, 27, 20, 0.08);
+  --shadow-subtle: 0 1px 3px rgba(70, 75, 113, 0.04), 0 1px 2px rgba(70, 75, 113, 0.02);
+  --shadow-card: 0 4px 16px rgba(70, 75, 113, 0.06), 0 1px 4px rgba(70, 75, 113, 0.03);
+  --shadow-hover: 0 12px 30px rgba(70, 75, 113, 0.1), 0 3px 8px rgba(70, 75, 113, 0.04);
+  --shadow-elevated: 0 16px 40px rgba(70, 75, 113, 0.12), 0 6px 12px rgba(70, 75, 113, 0.05);
+  --shadow-modal: 0 24px 60px rgba(70, 75, 113, 0.22), 0 10px 20px rgba(70, 75, 113, 0.08);
   --shadow-sos: 0 0 24px rgba(186, 26, 26, 0.4);
 
   /* ==========================================
@@ -168,65 +185,75 @@
   --z-sos: 1500;
 }
 
+/* Territory Accent Mappings */
+[data-territory="andaman-and-nicobar"] { --color-territory-accent: var(--accent-andaman); }
+[data-territory="chandigarh"] { --color-territory-accent: var(--accent-chandigarh); }
+[data-territory="dadra-nagar-haveli-daman-diu"] { --color-territory-accent: var(--accent-dnhdd); }
+[data-territory="delhi"] { --color-territory-accent: var(--accent-delhi); }
+[data-territory="jammu-and-kashmir"] { --color-territory-accent: var(--accent-jk); }
+[data-territory="ladakh"] { --color-territory-accent: var(--accent-ladakh); }
+[data-territory="lakshadweep"] { --color-territory-accent: var(--accent-lakshadweep); }
+[data-territory="puducherry"] { --color-territory-accent: var(--accent-puducherry); }
+
 /* ==========================================
    DARK THEME (CINEMATIC, MAP, & AI MODES)
    ========================================== */
 [data-theme="dark"] {
-  --color-brand-primary: #FAF7F2;
+  --color-brand-primary: #F2F2ED;
   --color-brand-primary-hover: #FFFFFF;
-  --color-brand-accent: #C88E44;
-  --color-brand-accent-hover: #D9A057;
-  --color-brand-accent-light: rgba(200, 142, 68, 0.2);
+  --color-brand-accent: #118AB2;
+  --color-brand-accent-hover: #31A4C9;
+  --color-brand-accent-light: rgba(17, 138, 178, 0.2);
 
-  --color-bg-canvas: #131B2E;
-  --color-bg-surface: #1C2742;
-  --color-bg-surface-elevated: #263353;
-  --color-bg-surface-alt: #2D3D63;
-  --color-bg-subtle: #1C2742;
-  --color-glass-bg: rgba(19, 27, 46, 0.88);
-  --color-glass-border: rgba(200, 142, 68, 0.3);
-  --color-bg-scrim: rgba(5, 8, 15, 0.88);
-  --color-bg-scrim-light: rgba(5, 8, 15, 0.5);
+  --color-bg-canvas: #1C1E2D; /* Deep Navy base for background */
+  --color-bg-surface: #272A40; 
+  --color-bg-surface-elevated: #323652;
+  --color-bg-surface-alt: #3D4263;
+  --color-bg-subtle: #272A40;
+  --color-glass-bg: rgba(28, 30, 45, 0.88);
+  --color-glass-border: rgba(124, 213, 199, 0.2); /* Mint teal border accent */
+  --color-bg-scrim: rgba(10, 11, 16, 0.88);
+  --color-bg-scrim-light: rgba(10, 11, 16, 0.5);
 
-  --color-text-primary: #FAF7F2;
-  --color-text-secondary: #D3C9BD;
-  --color-text-muted: #9C8D7F;
-  --color-text-light: #78685C;
-  --color-text-inverse: #131B2E;
+  --color-text-primary: #F2F2ED;
+  --color-text-secondary: #C9CCD6;
+  --color-text-muted: #A0A3B0;
+  --color-text-light: #7B7E8C;
+  --color-text-inverse: #1C1E2D;
 
-  --color-border-subtle: rgba(200, 142, 68, 0.25);
-  --color-border-medium: rgba(200, 142, 68, 0.4);
-  --color-border-strong: #9C8D7F;
+  --color-border-subtle: rgba(242, 242, 237, 0.1);
+  --color-border-medium: rgba(242, 242, 237, 0.2);
+  --color-border-strong: rgba(242, 242, 237, 0.35);
 
-  --color-btn-primary-bg: #C88E44;
+  --color-btn-primary-bg: #118AB2;
   --color-btn-primary-text: #FFFFFF;
-  --color-btn-primary-hover: #D9A057;
+  --color-btn-primary-hover: #31A4C9;
 
-  --color-primary: #FAF7F2;
+  --color-primary: #F2F2ED;
   --color-primary-hover: #FFFFFF;
-  --color-primary-light: rgba(200, 142, 68, 0.2);
-  --color-primary-border: rgba(200, 142, 68, 0.3);
+  --color-primary-light: rgba(242, 242, 237, 0.1);
+  --color-primary-border: rgba(242, 242, 237, 0.2);
 
-  --color-secondary: #C88E44;
-  --color-secondary-hover: #D9A057;
-  --color-secondary-light: rgba(200, 142, 68, 0.2);
+  --color-secondary: #118AB2;
+  --color-secondary-hover: #31A4C9;
+  --color-secondary-light: rgba(17, 138, 178, 0.2);
 
-  --color-accent: #C88E44;
-  --color-accent-light: rgba(200, 142, 68, 0.2);
+  --color-accent: #118AB2;
+  --color-accent-light: rgba(17, 138, 178, 0.2);
 
-  --stitch-primary: #FAF7F2;
-  --stitch-background: #131B2E;
-  --stitch-surface: #1C2742;
-  --stitch-surface-variant: #263353;
-  --stitch-on-surface-variant: #D3C9BD;
+  --stitch-primary: #F2F2ED;
+  --stitch-background: #1C1E2D;
+  --stitch-surface: #272A40;
+  --stitch-surface-variant: #323652;
+  --stitch-on-surface-variant: #C9CCD6;
 
-  --color-verified-bg: rgba(200, 142, 68, 0.2);
-  --color-verified-border: #C88E44;
-  --color-verified-text: #FAF7F2;
+  --color-verified-bg: rgba(17, 138, 178, 0.2);
+  --color-verified-border: #118AB2;
+  --color-verified-text: #F2F2ED;
 
-  --color-official-bg: rgba(200, 142, 68, 0.15);
-  --color-official-border: rgba(200, 142, 68, 0.35);
-  --color-official-text: #FAF7F2;
+  --color-official-bg: rgba(242, 242, 237, 0.1);
+  --color-official-border: rgba(242, 242, 237, 0.2);
+  --color-official-text: #F2F2ED;
 
   --color-success: #34d399;
   --color-success-bg: rgba(52, 211, 153, 0.12);

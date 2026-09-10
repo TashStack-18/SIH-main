@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { VERIFIED_TERRITORIES } from "@/src/lib/fixtures";
+import { PremiumDepthImage } from "@/src/app/components/PremiumDepthImage";
 
 export const metadata = {
   title: "8 Union Territories Directory",
@@ -19,35 +20,34 @@ export default function TerritoriesPage() {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "var(--space-xl)" }}>
         {VERIFIED_TERRITORIES.map((ut, idx) => (
-          <article key={ut.id} className="card card-hoverable" style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ position: "relative", height: "240px", overflow: "hidden" }}>
-              <img src={ut.heroImage} alt={ut.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
-            </div>
-
-            <div style={{ padding: "var(--space-lg)", display: "flex", flexDirection: "column", flexGrow: 1 }}>
-              <h2 style={{ fontSize: "1.45rem", marginBottom: "6px" }}>{ut.name}</h2>
-              <p style={{ fontSize: "0.875rem", color: "var(--color-accent)", fontWeight: 600, marginBottom: "12px" }}>{ut.tagline}</p>
-              <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", lineHeight: 1.55, marginBottom: "var(--space-md)", flexGrow: 1 }}>
-                {ut.shortDescription}
-              </p>
-
-              <div style={{ marginBottom: "var(--space-md)", background: "var(--color-bg-surface-elevated)", padding: "10px 14px", borderRadius: "var(--radius-md)" }}>
-                <div style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", color: "var(--color-text-muted)", marginBottom: "4px" }}>Key Destinations</div>
-                <div style={{ fontSize: "0.825rem", fontWeight: 600, color: "var(--color-text-primary)" }}>
-                  {ut.popularDestinations.slice(0, 4).join(" • ")}
+          <Link href={`/territories/${ut.slug}`} key={ut.id} data-territory={ut.slug} className="card card-hoverable relative overflow-hidden block" style={{ minHeight: "400px", borderRadius: "var(--radius-xl)", border: "none" }}>
+            <PremiumDepthImage
+              src={ut.heroImage}
+              alt={ut.name}
+              className="w-full h-full object-cover"
+            >
+              <div className="w-full h-full flex flex-col justify-end" style={{ background: "linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.35) 30%, transparent 55%)", padding: "0 20px 20px 20px" }}>
+                <div style={{ position: "absolute", top: "20px", left: "20px", zIndex: 10 }}>
+                  <div style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.08em", color: "var(--color-territory-accent, #ffffff)", textShadow: "0 1px 4px rgba(0,0,0,0.4)" }}>
+                    0{idx + 1} &mdash; {ut.shortName.toUpperCase()}
+                  </div>
+                </div>
+                
+                <div style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(255, 255, 255, 0.65)", fontWeight: 500, marginBottom: "4px" }}>
+                  Capital: {ut.capital}
+                </div>
+                <h2 className="font-serif" style={{ margin: "0 0 6px 0", fontSize: "1.55rem", lineHeight: 1.15, letterSpacing: "0.02em", color: "#ffffff", textShadow: "0 1px 4px rgba(0,0,0,0.4)" }}>
+                  {ut.name}
+                </h2>
+                <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.825rem", lineHeight: 1.45, marginBottom: "16px", fontWeight: 300, textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
+                  {ut.shortDescription}
+                </p>
+                <div style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--color-territory-accent, var(--color-accent))", textTransform: "uppercase", letterSpacing: "0.04em", display: "inline-flex", alignItems: "center" }}>
+                  Explore Territory <span style={{ marginLeft: "4px", fontSize: "1.2em", transition: "transform 0.2s ease" }}>→</span>
                 </div>
               </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "12px", borderTop: "1px solid var(--color-border-subtle)" }}>
-                <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--color-text-muted)" }}>
-                  Best: {ut.weatherSnapshot.bestMonths}
-                </div>
-                <Link href={`/territories/${ut.slug}`} className="btn btn-sm btn-primary">
-                  Explore Territory →
-                </Link>
-              </div>
-            </div>
-          </article>
+            </PremiumDepthImage>
+          </Link>
         ))}
       </div>
     </main>
