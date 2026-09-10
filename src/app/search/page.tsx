@@ -31,7 +31,7 @@ export default async function SearchPage({
     matchedDestinations = matchedDestinations.filter(d => d.territoryId === territoryCode);
     matchedTerritories = matchedTerritories.filter(t => t.code === territoryCode || t.id === territoryCode);
     matchedFestivals = matchedFestivals.filter(f => f.territoryId === territoryCode);
-    matchedBookings = matchedBookings.filter(b => b.territoryId === territoryCode);
+    matchedBookings = matchedBookings.filter(b => b.location.toUpperCase().includes(territoryCode));
   }
 
   if (query) {
@@ -58,7 +58,7 @@ export default async function SearchPage({
 
     matchedBookings = matchedBookings.filter(b =>
       b.title.toLowerCase().includes(query) ||
-      b.territoryName.toLowerCase().includes(query) ||
+      b.location.toLowerCase().includes(query) ||
       b.providerName.toLowerCase().includes(query) ||
       b.description.toLowerCase().includes(query)
     );
@@ -153,11 +153,11 @@ export default async function SearchPage({
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "var(--space-lg)" }}>
               {matchedBookings.map(b => (
                 <div key={b.id} className="card card-hoverable" style={{ padding: "var(--space-lg)", borderLeft: "4px solid var(--color-brand-accent)" }}>
-                  <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-accent)", textTransform: "uppercase", marginBottom: "4px" }}>{b.territoryName} • {b.providerName}</div>
+                  <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-accent)", textTransform: "uppercase", marginBottom: "4px" }}>{b.location} • {b.providerName}</div>
                   <h3 style={{ fontSize: "1.15rem", marginBottom: "6px" }}>{b.title}</h3>
                   <p style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", marginBottom: "12px" }}>{b.description}</p>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "8px", borderTop: "1px solid var(--color-border-subtle)" }}>
-                    <span style={{ fontSize: "0.85rem", fontWeight: 700 }}>₹{b.pricing.inr}</span>
+                    <span style={{ fontSize: "0.85rem", fontWeight: 700 }}>{b.pricing}</span>
                     <Link href="/bookings" className="btn btn-sm btn-outline">View Booking →</Link>
                   </div>
                 </div>

@@ -196,14 +196,14 @@ export function Navbar() {
     VERIFIED_BOOKABLE_EXPERIENCES.forEach((b) => {
       const matchScore =
         (b.title.toLowerCase().includes(q) ? 10 : 0) +
-        (b.territoryName?.toLowerCase().includes(q) ? 5 : 0) +
+        (b.location?.toLowerCase().includes(q) ? 5 : 0) +
         (b.providerName?.toLowerCase().includes(q) ? 4 : 0);
 
       if (matchScore > 0) {
         results.push({
           id: `booking-${b.id}`,
           title: b.title,
-          subtitle: `${b.territoryName} • Official Provider: ${b.providerName}`,
+          subtitle: `${b.location} • Official Provider: ${b.providerName}`,
           category: "Booking",
           badge: "E-Ticket",
           href: "/bookings",
