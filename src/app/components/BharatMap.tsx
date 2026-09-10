@@ -590,7 +590,7 @@ export function BharatMap({
         const url =
           mapMode === 'SATELLITE'
             ? `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${slippyZoom}/${ty}/${wrappedTx}`
-            : `https://basemaps.cartocdn.com/rastertiles/voyager/${slippyZoom}/${wrappedTx}/${ty}@2x.png`;
+            : `https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/${slippyZoom}/${ty}/${wrappedTx}`;
 
         list.push({
           key: `${mapMode}-${slippyZoom}-${tx}-${ty}`,
