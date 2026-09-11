@@ -808,6 +808,72 @@ function ItineraryContent() {
             >
               Yatra AI
             </button>
+            <button
+              onClick={() => setIsJourneyMode((prev) => !prev)}
+              className="btn btn-primary"
+              style={{
+                background: isJourneyMode ? '#10b981' : '#f59e0b',
+                borderColor: isJourneyMode ? '#10b981' : '#f59e0b',
+                color: '#ffffff',
+                fontWeight: 700,
+                fontSize: '0.85rem',
+              }}
+            >
+              {isJourneyMode ? '✓ Exit Journey Mode' : 'Start Live Journey'}
+            </button>
+          </div>
+        </div>
+
+        {/* Duration Scaling & Progress Ribbon */}
+        <div
+          style={{
+            marginTop: '18px',
+            paddingTop: '14px',
+            borderTop: '1px solid #e2e8f0',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '14px',
+          }}
+        >
+          {/* Duration Selector */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: '#94a3b8' }}>
+              Duration Scaling:
+            </span>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              {[2, 3, 5, 7, 10].map((d) => (
+                <button
+                  key={d}
+                  onClick={() => handleDurationScale(d)}
+                  className={`btn btn-sm ${itinerary.durationDays === d ? 'btn-primary' : 'btn-outline'}`}
+                  style={{
+                    padding: '4px 10px',
+                    fontSize: '0.75rem',
+                  }}
+                >
+                  {d} Days
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Journey Completion Progress */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '220px' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1e293b' }}>
+              {completedCount} / {totalStopsCount} Stops ({progressPercent}%)
+            </div>
+            <div style={{ flex: 1, height: '8px', background: 'rgba(200, 142, 68, 0.2)', borderRadius: '9999px', overflow: 'hidden' }}>
+              <div
+                style={{
+                  width: `${progressPercent}%`,
+                  height: '100%',
+                  background: '#10b981',
+                  transition: 'width 0.4s ease',
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
