@@ -20,16 +20,28 @@ interface UTData {
 }
 
 const UT_LIST: UTData[] = [
-  { id: 'ALL', name: 'All 8 UTs', shortName: '🇮🇳 All UTs', coordinates: { lat: 22.5937, lng: 78.9629, zoom: 5 } },
-  { id: 'LADAKH', name: 'Ladakh', shortName: '🏔️ Ladakh', coordinates: { lat: 34.1526, lng: 77.5771, zoom: 8 } },
-  { id: 'JAMMU_KASHMIR', name: 'Jammu & Kashmir', shortName: '❄️ J&K', coordinates: { lat: 34.0837, lng: 74.7973, zoom: 9 } },
-  { id: 'DELHI', name: 'Delhi NCR', shortName: '🏛️ Delhi', coordinates: { lat: 28.6139, lng: 77.2090, zoom: 11 } },
-  { id: 'CHANDIGARH', name: 'Chandigarh', shortName: '🌳 Chandigarh', coordinates: { lat: 30.7333, lng: 76.7794, zoom: 12 } },
-  { id: 'PUDUCHERRY', name: 'Puducherry', shortName: '🌊 Puducherry', coordinates: { lat: 11.9416, lng: 79.8083, zoom: 12 } },
-  { id: 'ANDAMAN_NICOBAR', name: 'Andaman & Nicobar', shortName: '🏝️ Andaman', coordinates: { lat: 11.6234, lng: 92.7265, zoom: 9 } },
-  { id: 'LAKSHADWEEP', name: 'Lakshadweep', shortName: '🪸 Lakshadweep', coordinates: { lat: 10.5667, lng: 72.6417, zoom: 10 } },
-  { id: 'DADRA_NAGAR_HAVELI_DAMAN_DIU', name: 'DNH & Daman & Diu', shortName: '🏰 Daman & Diu', coordinates: { lat: 20.3974, lng: 72.8328, zoom: 10 } },
+  { id: 'ALL', name: 'All 8 UTs', shortName: 'IN All UTs', coordinates: { lat: 22.5937, lng: 78.9629, zoom: 5 } },
+  { id: 'LADAKH', name: 'Ladakh', shortName: 'Ladakh', coordinates: { lat: 34.1526, lng: 77.5771, zoom: 8 } },
+  { id: 'JAMMU_KASHMIR', name: 'Jammu & Kashmir', shortName: 'J&K', coordinates: { lat: 34.0837, lng: 74.7973, zoom: 9 } },
+  { id: 'DELHI', name: 'Delhi NCR', shortName: 'Delhi', coordinates: { lat: 28.6139, lng: 77.2090, zoom: 11 } },
+  { id: 'CHANDIGARH', name: 'Chandigarh', shortName: 'Chandigarh', coordinates: { lat: 30.7333, lng: 76.7794, zoom: 12 } },
+  { id: 'PUDUCHERRY', name: 'Puducherry', shortName: 'Puducherry', coordinates: { lat: 11.9416, lng: 79.8083, zoom: 12 } },
+  { id: 'ANDAMAN_NICOBAR', name: 'Andaman & Nicobar', shortName: 'Andaman', coordinates: { lat: 11.6234, lng: 92.7265, zoom: 9 } },
+  { id: 'LAKSHADWEEP', name: 'Lakshadweep', shortName: 'Lakshadweep', coordinates: { lat: 10.5667, lng: 72.6417, zoom: 10 } },
+  { id: 'DADRA_NAGAR_HAVELI_DAMAN_DIU', name: 'DNH & Daman & Diu', shortName: 'Daman & Diu', coordinates: { lat: 20.3974, lng: 72.8328, zoom: 10 } },
 ];
+
+const UT_COLORS: Record<string, { active: string; shadow: string; border: string }> = {
+  ALL:                              { active: '#C88E44', shadow: 'rgba(200,142,68,0.35)',  border: '#C88E44' },
+  LADAKH:                          { active: '#4A6FA5', shadow: 'rgba(74,111,165,0.35)',  border: '#4A6FA5' },
+  JAMMU_KASHMIR:                   { active: '#2E86AB', shadow: 'rgba(46,134,171,0.35)',  border: '#2E86AB' },
+  DELHI:                           { active: '#C0392B', shadow: 'rgba(192,57,43,0.35)',   border: '#C0392B' },
+  CHANDIGARH:                      { active: '#27AE60', shadow: 'rgba(39,174,96,0.35)',   border: '#27AE60' },
+  PUDUCHERRY:                      { active: '#1A6EA5', shadow: 'rgba(26,110,165,0.35)',  border: '#1A6EA5' },
+  ANDAMAN_NICOBAR:                 { active: '#16A085', shadow: 'rgba(22,160,133,0.35)', border: '#16A085' },
+  LAKSHADWEEP:                     { active: '#D35400', shadow: 'rgba(211,84,0,0.35)',    border: '#D35400' },
+  DADRA_NAGAR_HAVELI_DAMAN_DIU:   { active: '#8E44AD', shadow: 'rgba(142,68,173,0.35)', border: '#8E44AD' },
+};
 
 export default function GoogleMapView() {
   const [selectedUT, setSelectedUT] = useState<string>('DELHI');
@@ -246,15 +258,16 @@ export default function GoogleMapView() {
           <div
             style={{
               display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
               gap: '8px',
-              overflowX: 'auto',
               paddingTop: '18px',
               paddingBottom: '4px',
-              scrollbarWidth: 'none',
             }}
           >
             {UT_LIST.map((ut) => {
               const isSelected = selectedUT === ut.id;
+              const clr = UT_COLORS[ut.id] ?? UT_COLORS['ALL'];
               return (
                 <button
                   key={ut.id}
@@ -263,14 +276,14 @@ export default function GoogleMapView() {
                     whiteSpace: 'nowrap',
                     padding: '8px 18px',
                     borderRadius: '30px',
-                    border: `1.5px solid ${isSelected ? '#C88E44' : 'rgba(200, 142, 68, 0.25)'}`,
-                    background: isSelected ? '#C88E44' : '#FFFFFF',
+                    border: `1.5px solid ${isSelected ? clr.border : 'rgba(200, 142, 68, 0.25)'}`,
+                    background: isSelected ? clr.active : '#FFFFFF',
                     color: isSelected ? '#FFFFFF' : '#4A3C31',
                     fontSize: '0.82rem',
                     fontWeight: isSelected ? 800 : 600,
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
-                    boxShadow: isSelected ? '0 4px 14px rgba(200, 142, 68, 0.35)' : '0 2px 6px rgba(45, 27, 20, 0.04)',
+                    boxShadow: isSelected ? `0 4px 14px ${clr.shadow}` : '0 2px 6px rgba(45, 27, 20, 0.04)',
                   }}
                 >
                   {ut.shortName}
@@ -438,7 +451,7 @@ export default function GoogleMapView() {
                         boxShadow: '0 4px 12px rgba(200, 142, 68, 0.3)',
                       }}
                     >
-                      🚀 Plan Trip Around {selectedPlace.name.split(' ')[0]}
+                      Plan Trip Around {selectedPlace.name.split(' ')[0]}
                     </Link>
                     <Link
                       href={`/destinations/${selectedPlace.slug}`}
