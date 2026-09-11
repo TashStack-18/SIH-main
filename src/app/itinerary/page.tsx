@@ -540,9 +540,7 @@ function ItineraryContent() {
             boxShadow: 'var(--shadow-card, 0 10px 30px rgba(0,0,0,0.3))',
           }}
         >
-          <span className="badge badge-verified" style={{ background: 'var(--color-primary, #C88E44)', color: '#ffffff', marginBottom: '12px' }}>
-            🇮🇳 Dishaara — Next-Gen Itinerary Engine
-          </span>
+
           <h1 className="font-serif" style={{ fontSize: 'clamp(1.9rem, 4vw, 2.8rem)', color: 'var(--color-text-primary, #ffffff)', margin: '8px 0 12px' }}>
             Choose a Destination to Start Planning
           </h1>

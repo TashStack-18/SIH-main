@@ -12,9 +12,10 @@ export function renderNavbar() {
 
   const navLinks = [
     { label: "Home", href: "#/" },
+    { label: "Booking", href: "#/bookings" },
     { label: "Destinations", href: "#/destinations" },
     { label: "Itinerary", href: "#/itinerary" },
-    { label: "Geospatial Map", href: "#/map" },
+    { label: "Map", href: "#/map" },
     { label: "Safety", href: "#/safety" }
   ];
 
@@ -24,7 +25,7 @@ export function renderNavbar() {
         
         <!-- Pure Text Brand Wordmark -->
         <a href="#/" class="brand-logo" aria-label="Dishaara Home">
-          <span class="brand-wordmark">Dishaara</span>
+          <span class="brand-wordmark" style="font-size: 1.5rem; font-family: var(--font-family-serif);">Dishaara</span>
         </a>
 
         <!-- Desktop Navigation Links -->
@@ -46,13 +47,8 @@ export function renderNavbar() {
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <span class="desktop-only" style="display: none;">Search...</span>
+            <span style="font-size: 0.8rem; margin: 0 4px;">Search...</span>
             <span class="kbd-shortcut">⌘K</span>
-          </button>
-
-          <!-- Yatra AI Companion Trigger -->
-          <button class="btn btn-sm btn-outline" id="nav-ai-trigger" aria-label="Open Yatra AI Travel Companion">
-            <span>🤖 Yatra AI</span>
           </button>
 
           <!-- User Profile -->
@@ -85,17 +81,6 @@ export function renderNavbar() {
               </svg>
             `}
           </button>
-
-          <!-- Emergency SOS Action -->
-          <button class="btn btn-sm btn-emergency" id="nav-sos-btn" aria-label="Trigger Emergency SOS Center">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-              <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            <span>SOS</span>
-          </button>
-
         </div>
 
       </div>

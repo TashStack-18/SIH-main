@@ -40,7 +40,7 @@ export default async function DestinationDetailPage({
           <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "12px", fontSize: "0.85rem", flexWrap: "wrap" }}>
             <Link href="/destinations" style={{ color: "rgba(255,255,255,0.8)", textDecoration: "none" }}>Destinations</Link>
             <span>/</span>
-            <Link href={`/territories/${dest.territoryId.toLowerCase().replace(/_/g, '-')}`} style={{ color: "rgba(255,255,255,0.8)", textDecoration: "none" }}>{dest.territoryName}</Link>
+            <Link href={`/destinations?ut=${dest.territoryId.toLowerCase().replace(/_/g, '-')}`} style={{ color: "rgba(255,255,255,0.8)", textDecoration: "none" }}>{dest.territoryName}</Link>
             <span>/</span>
             <span style={{ color: "var(--brand-terracotta-500)", fontWeight: 600 }}>{dest.name}</span>
           </div>
@@ -77,7 +77,7 @@ export default async function DestinationDetailPage({
                 textDecoration: "none",
               }}
             >
-              🗺️ Locate on Map
+              Locate on Map
             </Link>
           </div>
         </div>
@@ -122,7 +122,7 @@ export default async function DestinationDetailPage({
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "var(--space-xl)" }}>
             <section className="card" style={{ padding: "var(--space-xl)" }}>
-              <h3 style={{ fontSize: "1.3rem", marginBottom: "8px" }}>🍲 Local Gastronomy</h3>
+              <h3 style={{ fontSize: "1.3rem", marginBottom: "8px" }}>Local Gastronomy</h3>
               <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", marginBottom: "14px" }}>{dest.food.overview}</p>
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 {dest.food.dishes.map((dish, idx) => (
@@ -135,7 +135,7 @@ export default async function DestinationDetailPage({
             </section>
 
             <section className="card" style={{ padding: "var(--space-xl)" }}>
-              <h3 style={{ fontSize: "1.3rem", marginBottom: "8px" }}>🏛️ Culture & Etiquette</h3>
+              <h3 style={{ fontSize: "1.3rem", marginBottom: "8px" }}>Culture & Etiquette</h3>
               <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", marginBottom: "12px" }}><strong>Tradition:</strong> {dest.culture.traditions}</p>
               <div style={{ background: "var(--color-bg-surface-elevated)", padding: "12px", borderRadius: "var(--radius-sm)", fontSize: "0.85rem", color: "var(--color-text-primary)", borderLeft: "3px solid var(--brand-terracotta-600)" }}>
                 <strong>Etiquette:</strong> {dest.culture.etiquette}

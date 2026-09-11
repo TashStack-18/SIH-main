@@ -6,7 +6,7 @@
  * Dynamic Mapbox GL Markers, Auto Camera Tracking & Clean Daylight Heritage Theme
  */
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import type { RouteCalculationResult } from '@/src/lib/providers/types';
 
 export type BharatMapMode = '3D' | '2D' | 'SATELLITE';
@@ -66,7 +66,7 @@ export function BharatMap({
   const mapboxglModuleRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
   const prevStopsSignatureRef = useRef<string>('');
-  
+
   // Default mode is 3D Bright Daylight Map
   const [mapMode, setMapMode] = useState<BharatMapMode>('3D');
   const [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -87,8 +87,47 @@ export function BharatMap({
   const maxLat = lats.length > 0 ? Math.max(...lats) : 35.0;
   const minLng = lngs.length > 0 ? Math.min(...lngs) : 70.0;
   const maxLng = lngs.length > 0 ? Math.max(...lngs) : 90.0;
-  const centerLat = validStops.length > 0 ? validStops[0].lat : (minLat + maxLat) / 2;
-  const centerLng = validStops.length > 0 ? validStops[0].lng : (minLng + maxLng) / 2;
+  const centerLat = validStops.length > 0 ? (minLat + maxLat) / 2 : 28.6139;
+  const centerLng = validStops.length > 0 ? (minLng + maxLng) / 2 : 77.2090;
+
+  // Compute optimal zoom level for slippy tile engine
+  const calcAutoZoom = useCallback(() => {
+    const span = Math.max(maxLat - minLat, maxLng - minLng);
+    if (span < 0.08) return 13;
+    if (span < 0.25) return 12;
+    if (span < 0.8) return 11;
+    if (span < 2.2) return 9;
+    if (span < 5.0) return 7;
+    return 6;
+  }, [maxLat, minLat, maxLng, minLng]);
+
+  const [slippyZoom, setSlippyZoom] = useState<number>(12);
+  const [panOffset, setPanOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [containerDim, setContainerDim] = useState<{ w: number; h: number }>({ w: 900, h: 540 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef<{ mouseX: number; mouseY: number; startPanX: number; startPanY: number } | null>(null);
+
+  // Sync zoom and center whenever stops change
+  useEffect(() => {
+    setSlippyZoom(calcAutoZoom());
+    setPanOffset({ x: 0, y: 0 });
+  }, [calcAutoZoom]);
+
+  // Track container dimensions via ResizeObserver
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const el = containerRef.current;
+    const updateSize = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        setContainerDim({ w: Math.round(rect.width), h: Math.round(rect.height) });
+      }
+    };
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   // If parent didn't pass routeResult and we have >= 2 stops, fetch verified turn-by-turn road route
   useEffect(() => {
@@ -504,31 +543,145 @@ export function BharatMap({
   }, [activeRoute, isMapLoaded, syncRouteLayer]);
 
   // -------------------------------------------------------------
+  // Web Mercator Slippy Map Tile Calculations
+  // -------------------------------------------------------------
+  const lng2tile = (lng: number, z: number) => {
+    return ((lng + 180) / 360) * Math.pow(2, z);
+  };
+
+  const lat2tile = (lat: number, z: number) => {
+    const rad = (lat * Math.PI) / 180;
+    return (
+      ((1 - Math.log(Math.tan(rad) + 1 / Math.cos(rad)) / Math.PI) / 2) *
+      Math.pow(2, z)
+    );
+  };
+
+  const TILE_SIZE = 256;
+  const effCenterTileX = lng2tile(centerLng, slippyZoom) - panOffset.x / TILE_SIZE;
+  const effCenterTileY = lat2tile(centerLat, slippyZoom) - panOffset.y / TILE_SIZE;
+
+  // Convert (lat, lng) to pixel coords inside the container
+  const toScreenPx = useCallback(
+    (lat: number, lng: number) => {
+      const pxX = (lng2tile(lng, slippyZoom) - effCenterTileX) * TILE_SIZE + containerDim.w / 2;
+      const pxY = (lat2tile(lat, slippyZoom) - effCenterTileY) * TILE_SIZE + containerDim.h / 2;
+      return { x: pxX, y: pxY };
+    },
+    [slippyZoom, effCenterTileX, effCenterTileY, containerDim]
+  );
+
+  // Visible tiles generation
+  const tileList = useMemo(() => {
+    const cols = Math.ceil(containerDim.w / TILE_SIZE) + 3;
+    const rows = Math.ceil(containerDim.h / TILE_SIZE) + 3;
+    const minX = Math.floor(effCenterTileX - cols / 2);
+    const maxX = minX + cols;
+    const minY = Math.floor(effCenterTileY - rows / 2);
+    const maxY = minY + rows;
+
+    const maxTiles = Math.pow(2, slippyZoom);
+    const list: Array<{ key: string; url: string; left: number; top: number }> = [];
+
+    for (let tx = minX; tx <= maxX; tx++) {
+      for (let ty = minY; ty <= maxY; ty++) {
+        if (ty < 0 || ty >= maxTiles) continue;
+        const wrappedTx = ((tx % maxTiles) + maxTiles) % maxTiles;
+        const sub = ['a', 'b', 'c', 'd'][Math.abs(tx + ty) % 4];
+        const cartoKey = process.env.NEXT_PUBLIC_CARTO_KEY || 'cb1_3g9y_1_f90ee3f23d37ea6083cf7b9f';
+        const url =
+          mapMode === 'SATELLITE'
+            ? `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${slippyZoom}/${ty}/${wrappedTx}`
+            : `https://${sub}.basemaps.cartocdn.com/rastertiles/voyager/${slippyZoom}/${wrappedTx}/${ty}@2x.png?key=${cartoKey}`;
+
+        list.push({
+          key: `${mapMode}-${slippyZoom}-${tx}-${ty}`,
+          url,
+          left: (tx - effCenterTileX) * TILE_SIZE + containerDim.w / 2,
+          top: (ty - effCenterTileY) * TILE_SIZE + containerDim.h / 2,
+        });
+      }
+    }
+    return list;
+  }, [containerDim, effCenterTileX, effCenterTileY, slippyZoom, mapMode]);
+
+  // Turn-by-Turn Road Coordinates from OSRM/Mapbox routing engine
+  const roadCoords: [number, number][] = useMemo(() => {
+    if (activeRoute?.geometryGeoJSON?.coordinates && activeRoute.geometryGeoJSON.coordinates.length > 1) {
+      return activeRoute.geometryGeoJSON.coordinates;
+    }
+    return [];
+  }, [activeRoute]);
+
+  const roadPolylinePoints = useMemo(() => {
+    if (roadCoords.length < 2) return '';
+    return roadCoords
+      .map(([lng, lat]) => {
+        const pt = toScreenPx(lat, lng);
+        return `${pt.x.toFixed(1)},${pt.y.toFixed(1)}`;
+      })
+      .join(' ');
+  }, [roadCoords, toScreenPx]);
+
+  // Mouse drag handlers for panning
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    dragStartRef.current = {
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+      startPanX: panOffset.x,
+      startPanY: panOffset.y,
+    };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!dragStartRef.current || !isDragging) return;
+    const dx = e.clientX - dragStartRef.current.mouseX;
+    const dy = e.clientY - dragStartRef.current.mouseY;
+    setPanOffset({
+      x: dragStartRef.current.startPanX + dx,
+      y: dragStartRef.current.startPanY + dy,
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    dragStartRef.current = null;
+  };
+
+  // -------------------------------------------------------------
   // 6. Camera Controls: Fit Journey & Next Stop
   // -------------------------------------------------------------
   const fitJourney = useCallback(() => {
-    if (validStops.length === 0 || !mapInstanceRef.current || !isMapLoaded) return;
-    const map = mapInstanceRef.current;
-    const mapboxgl = mapboxglModuleRef.current;
-    if (!mapboxgl) return;
+    if (validStops.length === 0) return;
 
-    if (validStops.length === 1) {
-      map.flyTo({
-        center: [validStops[0].lng, validStops[0].lat],
-        zoom: 12,
-        pitch: mapMode === '3D' ? 50 : 0,
-        duration: 900,
-      });
-    } else {
-      const bounds = new mapboxgl.LngLatBounds();
-      validStops.forEach((s) => bounds.extend([s.lng, s.lat]));
-      map.fitBounds(bounds, {
-        padding: { top: 70, bottom: 70, left: 70, right: 70 },
-        maxZoom: 14,
-        duration: 900,
-      });
+    if (mapInstanceRef.current && isMapLoaded) {
+      const map = mapInstanceRef.current;
+      const mapboxgl = mapboxglModuleRef.current;
+      if (mapboxgl) {
+        if (validStops.length === 1) {
+          map.flyTo({
+            center: [validStops[0].lng, validStops[0].lat],
+            zoom: 12,
+            pitch: mapMode === '3D' ? 50 : 0,
+            duration: 900,
+          });
+        } else {
+          const bounds = new mapboxgl.LngLatBounds();
+          validStops.forEach((s) => bounds.extend([s.lng, s.lat]));
+          map.fitBounds(bounds, {
+            padding: { top: 70, bottom: 70, left: 70, right: 70 },
+            maxZoom: 14,
+            duration: 900,
+          });
+        }
+        return;
+      }
     }
-  }, [validStops, isMapLoaded, mapMode]);
+
+    setPanOffset({ x: 0, y: 0 });
+    setSlippyZoom(calcAutoZoom());
+  }, [validStops, isMapLoaded, mapMode, calcAutoZoom]);
 
   const focusNextStop = useCallback(() => {
     const currentIndex = validStops.findIndex((s) => s.id === activeStopId);
@@ -538,7 +691,6 @@ export function BharatMap({
         : validStops.find((s) => !s.isCompleted) || validStops[0];
 
     if (!next) return;
-
     if (onSelectStop) onSelectStop(next.id);
 
     if (mapInstanceRef.current && isMapLoaded) {
@@ -548,54 +700,44 @@ export function BharatMap({
         pitch: mapMode === '3D' ? 50 : 0,
         duration: 900,
       });
+      return;
     }
-  }, [validStops, activeStopId, isMapLoaded, mapMode, onSelectStop]);
+
+    const cTileX = lng2tile(centerLng, slippyZoom);
+    const cTileY = lat2tile(centerLat, slippyZoom);
+    const nextTileX = lng2tile(next.lng, slippyZoom);
+    const nextTileY = lat2tile(next.lat, slippyZoom);
+    setPanOffset({
+      x: (cTileX - nextTileX) * TILE_SIZE,
+      y: (cTileY - nextTileY) * TILE_SIZE,
+    });
+  }, [validStops, activeStopId, isMapLoaded, mapMode, onSelectStop, centerLng, centerLat, slippyZoom]);
 
   // -------------------------------------------------------------
   // 7. Switch Modes (3D Outdoors, 2D Outdoors, Satellite)
   // -------------------------------------------------------------
   const handleModeChange = (newMode: BharatMapMode) => {
     setMapMode(newMode);
-    if (!mapInstanceRef.current) return;
+    if (!mapInstanceRef.current || !isMapLoaded) return;
     const map = mapInstanceRef.current;
 
     if (newMode === '3D') {
-      // 3D Bright Daylight Map with 50° pitch
       const currentStyle = map.getStyle()?.sprite || '';
       if (currentStyle.includes('satellite')) {
         map.setStyle('mapbox://styles/mapbox/outdoors-v12');
       }
       map.easeTo({ pitch: 50, bearing: -5, duration: 800 });
     } else if (newMode === '2D') {
-      // 2D Bright Daylight Map (Top-down)
       const currentStyle = map.getStyle()?.sprite || '';
       if (currentStyle.includes('satellite')) {
         map.setStyle('mapbox://styles/mapbox/outdoors-v12');
       }
       map.easeTo({ pitch: 0, bearing: 0, duration: 800 });
     } else if (newMode === 'SATELLITE') {
-      // Photorealistic Satellite Imagery
       map.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
       map.easeTo({ pitch: 50, duration: 800 });
     }
   };
-
-  // Convert lat/lng to container coordinates for SVG fallback ONLY
-  const toMapPercent = (lat: number, lng: number) => {
-    const latSpan = Math.max(0.08, maxLat - minLat);
-    const lngSpan = Math.max(0.08, maxLng - minLng);
-    const pad = 14;
-    const x = pad + ((lng - minLng) / lngSpan) * (100 - pad * 2);
-    const y = pad + ((maxLat - lat) / latSpan) * (100 - pad * 2);
-    return { x: Math.max(6, Math.min(94, x)), y: Math.max(6, Math.min(94, y)) };
-  };
-
-  const polylinePoints = validStops
-    .map((s) => {
-      const pt = toMapPercent(s.lat, s.lng);
-      return `${pt.x},${pt.y}`;
-    })
-    .join(' ');
 
   return (
     <div
@@ -611,68 +753,239 @@ export function BharatMap({
         boxShadow: '0 12px 36px rgba(45, 27, 20, 0.1)',
       }}
     >
-      {/* 1. Underlying Mapbox Container */}
+      {/* 1. Underlying Mapbox Container (Active if Mapbox GL token is present) */}
       <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
 
-      {/* 2. Precision SVG Vector Fallback (Only active if Mapbox GL fails or token is missing) */}
+      {/* 2. Interactive High-Res Slippy Tile Map (Active when Mapbox GL is unavailable) */}
       {(useSvgFallback || !isMapLoaded) && (
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 2 }}>
-          <svg
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-            style={{ width: '100%', height: '100%' }}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            overflow: 'hidden',
+            cursor: isDragging ? 'grabbing' : 'grab',
+            userSelect: 'none',
+          }}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          {/* Tile & Road Stage with 3D Perspective Tilt for 3D & Satellite */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              transform:
+                mapMode === '3D' || mapMode === 'SATELLITE'
+                  ? 'perspective(1000px) rotateX(24deg) scale(1.08)'
+                  : 'none',
+              transformOrigin: '50% 60%',
+              transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
           >
-            <defs>
-              <linearGradient id="bharatRouteGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#C88E44" stopOpacity="0.9" />
-                <stop offset="50%" stopColor="#EA580C" stopOpacity="1" />
-                <stop offset="100%" stopColor="#48BB78" stopOpacity="0.9" />
-              </linearGradient>
-            </defs>
-
-            {validStops.length >= 2 && (
-              <polyline
-                points={polylinePoints}
-                fill="none"
-                stroke="url(#bharatRouteGlow)"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            )}
-          </svg>
-
-          {/* SVG Fallback DOM Markers */}
-          {validStops.map((stop) => {
-            const pt = toMapPercent(stop.lat, stop.lng);
-            return (
-              <div
-                key={stop.id}
-                onClick={() => onSelectStop && onSelectStop(stop.id)}
+            {/* Real Map Tiles (CartoDB Daylight or Esri Satellite) */}
+            {tileList.map((tile: { key: string; url: string; left: number; top: number }) => (
+              <img
+                key={tile.key}
+                src={tile.url}
+                alt=""
+                loading="lazy"
+                draggable={false}
                 style={{
                   position: 'absolute',
-                  left: `${pt.x}%`,
-                  top: `${pt.y}%`,
-                  transform: 'translate(-50%, -50%)',
-                  pointerEvents: 'auto',
-                  cursor: 'pointer',
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: '#C88E44',
-                  border: '2px solid #ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#ffffff',
-                  fontWeight: 800,
-                  fontSize: '0.75rem',
+                  left: `${tile.left}px`,
+                  top: `${tile.top}px`,
+                  width: `${TILE_SIZE}px`,
+                  height: `${TILE_SIZE}px`,
+                  pointerEvents: 'none',
+                  display: 'block',
                 }}
-              >
-                {stop.sequenceNumber}
-              </div>
-            );
-          })}
+              />
+            ))}
+
+            {/* Turn-by-Turn Road Route Layer (Never straight lines) */}
+            <svg
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                pointerEvents: 'none',
+                zIndex: 4,
+              }}
+            >
+              {roadPolylinePoints && (
+                <>
+                  {/* Outer Gold Glow Casing */}
+                  <polyline
+                    points={roadPolylinePoints}
+                    fill="none"
+                    stroke="#C88E44"
+                    strokeWidth="8"
+                    strokeOpacity="0.45"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  {/* Vibrant Saffron Main Road */}
+                  <polyline
+                    points={roadPolylinePoints}
+                    fill="none"
+                    stroke="#EA580C"
+                    strokeWidth="4"
+                    strokeOpacity="0.95"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  {/* Dashed Guidance Center Line */}
+                  <polyline
+                    points={roadPolylinePoints}
+                    fill="none"
+                    stroke="#FFFFFF"
+                    strokeWidth="1.5"
+                    strokeDasharray="6 6"
+                    strokeOpacity="0.85"
+                    strokeLinecap="round"
+                  />
+                </>
+              )}
+            </svg>
+
+            {/* Verified Place Pins & Hospital Markers */}
+            {validStops.map((stop) => {
+              const pt = toScreenPx(stop.lat, stop.lng);
+              const isActive = stop.id === activeStopId || stop.isActive;
+              const isHospital = stop.type === 'HOSPITAL';
+
+              return (
+                <div
+                  key={stop.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (onSelectStop) onSelectStop(stop.id);
+                  }}
+                  onMouseEnter={() => setHoveredStop(stop)}
+                  onMouseLeave={() => setHoveredStop(null)}
+                  style={{
+                    position: 'absolute',
+                    left: `${pt.x}px`,
+                    top: `${pt.y}px`,
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: isActive ? 25 : 15,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    pointerEvents: 'auto',
+                  }}
+                >
+                  {/* Pin Circle */}
+                  <div
+                    style={{
+                      width: isHospital ? '28px' : '32px',
+                      height: isHospital ? '28px' : '32px',
+                      borderRadius: '50%',
+                      background: isHospital ? '#DC2626' : isActive ? '#EA580C' : '#C88E44',
+                      border: '2.5px solid #FFFFFF',
+                      boxShadow: '0 4px 14px rgba(0,0,0,0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#FFFFFF',
+                      fontWeight: 800,
+                      fontSize: isHospital ? '0.75rem' : '0.8rem',
+                      transition: 'transform 0.2s ease',
+                      transform: isActive ? 'scale(1.2)' : 'scale(1)',
+                    }}
+                  >
+                    {isHospital ? '🏥' : stop.sequenceNumber}
+                  </div>
+
+                  {/* Name Label */}
+                  <div
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.95)',
+                      padding: '2px 8px',
+                      borderRadius: '10px',
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      color: '#2D1B14',
+                      whiteSpace: 'nowrap',
+                      marginTop: '4px',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                      border: '1px solid rgba(200, 142, 68, 0.3)',
+                      pointerEvents: 'none',
+                    }}
+                  >
+                    {stop.name}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Floating Zoom Controls */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '20px',
+              right: '16px',
+              zIndex: 35,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+              pointerEvents: 'auto',
+            }}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSlippyZoom((z) => Math.min(18, z + 1));
+              }}
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                background: '#FFFFFF',
+                border: '1px solid rgba(200, 142, 68, 0.3)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                cursor: 'pointer',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                color: '#2D1B14',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              title="Zoom In"
+            >
+              +
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSlippyZoom((z) => Math.max(4, z - 1));
+              }}
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                background: '#FFFFFF',
+                border: '1px solid rgba(200, 142, 68, 0.3)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                cursor: 'pointer',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                color: '#2D1B14',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              title="Zoom Out"
+            >
+              −
+            </button>
+          </div>
         </div>
       )}
 
