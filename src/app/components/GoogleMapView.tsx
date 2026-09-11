@@ -20,15 +20,15 @@ interface UTData {
 }
 
 const UT_LIST: UTData[] = [
-  { id: 'ALL', name: 'All 8 UTs', shortName: 'All UTs', coordinates: { lat: 22.5937, lng: 78.9629, zoom: 5 } },
-  { id: 'LADAKH', name: 'Ladakh', shortName: 'Ladakh', coordinates: { lat: 34.1526, lng: 77.5771, zoom: 8 } },
-  { id: 'JAMMU_KASHMIR', name: 'Jammu & Kashmir', shortName: 'J&K', coordinates: { lat: 34.0837, lng: 74.7973, zoom: 9 } },
-  { id: 'DELHI', name: 'Delhi NCR', shortName: 'Delhi', coordinates: { lat: 28.6139, lng: 77.2090, zoom: 11 } },
-  { id: 'CHANDIGARH', name: 'Chandigarh', shortName: 'Chandigarh', coordinates: { lat: 30.7333, lng: 76.7794, zoom: 12 } },
-  { id: 'PUDUCHERRY', name: 'Puducherry', shortName: 'Puducherry', coordinates: { lat: 11.9416, lng: 79.8083, zoom: 12 } },
-  { id: 'ANDAMAN_NICOBAR', name: 'Andaman & Nicobar', shortName: 'Andaman', coordinates: { lat: 11.6234, lng: 92.7265, zoom: 9 } },
-  { id: 'LAKSHADWEEP', name: 'Lakshadweep', shortName: 'Lakshadweep', coordinates: { lat: 10.5667, lng: 72.6417, zoom: 10 } },
-  { id: 'DADRA_NAGAR_HAVELI_DAMAN_DIU', name: 'DNH & Daman & Diu', shortName: 'Daman & Diu', coordinates: { lat: 20.3974, lng: 72.8328, zoom: 10 } },
+  { id: 'ALL', name: 'All 8 UTs', shortName: '🇮🇳 All UTs', coordinates: { lat: 22.5937, lng: 78.9629, zoom: 5 } },
+  { id: 'LADAKH', name: 'Ladakh', shortName: '🏔️ Ladakh', coordinates: { lat: 34.1526, lng: 77.5771, zoom: 8 } },
+  { id: 'JAMMU_KASHMIR', name: 'Jammu & Kashmir', shortName: '❄️ J&K', coordinates: { lat: 34.0837, lng: 74.7973, zoom: 9 } },
+  { id: 'DELHI', name: 'Delhi NCR', shortName: '🏛️ Delhi', coordinates: { lat: 28.6139, lng: 77.2090, zoom: 11 } },
+  { id: 'CHANDIGARH', name: 'Chandigarh', shortName: '🌳 Chandigarh', coordinates: { lat: 30.7333, lng: 76.7794, zoom: 12 } },
+  { id: 'PUDUCHERRY', name: 'Puducherry', shortName: '🌊 Puducherry', coordinates: { lat: 11.9416, lng: 79.8083, zoom: 12 } },
+  { id: 'ANDAMAN_NICOBAR', name: 'Andaman & Nicobar', shortName: '🏝️ Andaman', coordinates: { lat: 11.6234, lng: 92.7265, zoom: 9 } },
+  { id: 'LAKSHADWEEP', name: 'Lakshadweep', shortName: '🪸 Lakshadweep', coordinates: { lat: 10.5667, lng: 72.6417, zoom: 10 } },
+  { id: 'DADRA_NAGAR_HAVELI_DAMAN_DIU', name: 'DNH & Daman & Diu', shortName: '🏰 Daman & Diu', coordinates: { lat: 20.3974, lng: 72.8328, zoom: 10 } },
 ];
 
 export default function GoogleMapView() {
@@ -202,7 +202,7 @@ export default function GoogleMapView() {
       <div
         style={{
           background: 'linear-gradient(180deg, #FFFFFF 0%, #FAF7F2 100%)',
-          borderBottom: '1px solid rgba(31,122,108, 0.25)',
+          borderBottom: '1px solid rgba(200, 142, 68, 0.25)',
           padding: '28px 20px 20px',
           boxShadow: '0 4px 16px rgba(45, 27, 20, 0.04)',
         }}
@@ -224,14 +224,14 @@ export default function GoogleMapView() {
               <Link
                 href="/itinerary"
                 style={{
-                  background: 'linear-gradient(135deg, #0B1B45 0%, #a76d29 100%)',
+                  background: 'linear-gradient(135deg, #C88E44 0%, #a76d29 100%)',
                   color: '#ffffff',
                   padding: '10px 20px',
                   borderRadius: '10px',
                   fontWeight: 800,
                   fontSize: '0.85rem',
                   textDecoration: 'none',
-                  boxShadow: '0 4px 14px rgba(31,122,108, 0.35)',
+                  boxShadow: '0 4px 14px rgba(200, 142, 68, 0.35)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
@@ -263,14 +263,14 @@ export default function GoogleMapView() {
                     whiteSpace: 'nowrap',
                     padding: '8px 18px',
                     borderRadius: '30px',
-                    border: `1.5px solid ${isSelected ? '#0B1B45' : 'rgba(31,122,108, 0.25)'}`,
-                    background: isSelected ? '#0B1B45' : '#F7F4EE',
-                    color: isSelected ? '#FFFFFF' : '#1F7A6C',
+                    border: `1.5px solid ${isSelected ? '#C88E44' : 'rgba(200, 142, 68, 0.25)'}`,
+                    background: isSelected ? '#C88E44' : '#FFFFFF',
+                    color: isSelected ? '#FFFFFF' : '#4A3C31',
                     fontSize: '0.82rem',
                     fontWeight: isSelected ? 800 : 600,
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
-                    boxShadow: isSelected ? '0 4px 14px rgba(31,122,108, 0.35)' : '0 2px 6px rgba(45, 27, 20, 0.04)',
+                    boxShadow: isSelected ? '0 4px 14px rgba(200, 142, 68, 0.35)' : '0 2px 6px rgba(45, 27, 20, 0.04)',
                   }}
                 >
                   {ut.shortName}
@@ -292,13 +292,13 @@ export default function GoogleMapView() {
               style={{
                 padding: '6px 16px',
                 borderRadius: '20px',
-                border: `1.5px solid ${activeCategory === 'ALL' ? '#0B1B45' : 'rgba(31,122,108, 0.25)'}`,
+                border: `1.5px solid ${activeCategory === 'ALL' ? '#0284c7' : 'rgba(200, 142, 68, 0.25)'}`,
                 fontSize: '0.8rem',
                 fontWeight: 700,
                 cursor: 'pointer',
-                background: activeCategory === 'ALL' ? '#0B1B45' : '#F7F4EE',
-                color: activeCategory === 'ALL' ? '#FFFFFF' : '#1F7A6C',
-                boxShadow: activeCategory === 'ALL' ? '0 2px 8px rgba(11,27,69, 0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
+                background: activeCategory === 'ALL' ? '#0284c7' : '#FFFFFF',
+                color: activeCategory === 'ALL' ? '#FFFFFF' : '#4A3C31',
+                boxShadow: activeCategory === 'ALL' ? '0 2px 8px rgba(2, 132, 199, 0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
               }}
             >
               • All Pins ({mapStops.length})
@@ -308,38 +308,38 @@ export default function GoogleMapView() {
               style={{
                 padding: '6px 16px',
                 borderRadius: '20px',
-                border: `1.5px solid ${activeCategory === 'ATTRACTIONS' ? '#1F7A6C' : 'rgba(31,122,108, 0.25)'}`,
+                border: `1.5px solid ${activeCategory === 'ATTRACTIONS' ? '#C88E44' : 'rgba(200, 142, 68, 0.25)'}`,
                 fontSize: '0.8rem',
                 fontWeight: 700,
                 cursor: 'pointer',
-                background: activeCategory === 'ATTRACTIONS' ? '#1F7A6C' : '#F7F4EE',
-                color: activeCategory === 'ATTRACTIONS' ? '#FFFFFF' : '#1F7A6C',
-                boxShadow: activeCategory === 'ATTRACTIONS' ? '0 2px 8px rgba(31,122,108, 0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
+                background: activeCategory === 'ATTRACTIONS' ? '#C88E44' : '#FFFFFF',
+                color: activeCategory === 'ATTRACTIONS' ? '#FFFFFF' : '#4A3C31',
+                boxShadow: activeCategory === 'ATTRACTIONS' ? '0 2px 8px rgba(200, 142, 68, 0.35)' : '0 1px 4px rgba(0,0,0,0.04)',
               }}
             >
-              Attractions ({filteredDestinations.length})
+              ⛰️ Attractions ({filteredDestinations.length})
             </button>
             <button
               onClick={() => setActiveCategory('EMERGENCY')}
               style={{
                 padding: '6px 16px',
                 borderRadius: '20px',
-                border: `1.5px solid ${activeCategory === 'EMERGENCY' ? '#E8622C' : 'rgba(31,122,108, 0.25)'}`,
+                border: `1.5px solid ${activeCategory === 'EMERGENCY' ? '#059669' : 'rgba(200, 142, 68, 0.25)'}`,
                 fontSize: '0.8rem',
                 fontWeight: 700,
                 cursor: 'pointer',
-                background: activeCategory === 'EMERGENCY' ? '#E8622C' : '#F7F4EE',
-                color: activeCategory === 'EMERGENCY' ? '#FFFFFF' : '#1F7A6C',
-                boxShadow: activeCategory === 'EMERGENCY' ? '0 2px 8px rgba(232,98,44, 0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
+                background: activeCategory === 'EMERGENCY' ? '#059669' : '#FFFFFF',
+                color: activeCategory === 'EMERGENCY' ? '#FFFFFF' : '#4A3C31',
+                boxShadow: activeCategory === 'EMERGENCY' ? '0 2px 8px rgba(5, 150, 105, 0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
               }}
             >
-              24x7 Hospitals ({filteredEmergency.length})
+              🏥 24x7 Hospitals ({filteredEmergency.length})
             </button>
           </div>
 
           <div style={{ fontSize: '0.85rem', color: '#78685C' }}>
             Showing <strong>{mapStops.length}</strong> verified locations across{' '}
-            <span style={{ color: '#0B1B45', fontWeight: 800 }}>
+            <span style={{ color: '#C88E44', fontWeight: 800 }}>
               {UT_LIST.find((u) => u.id === selectedUT)?.name || 'India'}
             </span>
           </div>
@@ -363,7 +363,7 @@ export default function GoogleMapView() {
             <div
               style={{
                 background: '#FFFFFF',
-                border: '1.5px solid rgba(31,122,108, 0.35)',
+                border: '1.5px solid rgba(200, 142, 68, 0.35)',
                 borderRadius: '16px',
                 padding: '24px',
                 boxShadow: '0 10px 30px rgba(45, 27, 20, 0.08)',
@@ -372,7 +372,7 @@ export default function GoogleMapView() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span className="badge badge-primary" style={{ background: '#0B1B45', color: '#ffffff', fontSize: '0.7rem', fontWeight: 800 }}>
+                    <span className="badge badge-primary" style={{ background: '#C88E44', color: '#ffffff', fontSize: '0.7rem', fontWeight: 800 }}>
                       {selectedPlace.type || 'DESTINATION'}
                     </span>
                     <span style={{ fontSize: '0.78rem', color: '#78685C', fontWeight: 600 }}>
@@ -382,7 +382,7 @@ export default function GoogleMapView() {
                   <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#2D1B14', margin: '6px 0 4px' }}>
                     {selectedPlace.name}
                   </h3>
-                  <div style={{ fontSize: '0.85rem', color: '#0B1B45', fontWeight: 700 }}>
+                  <div style={{ fontSize: '0.85rem', color: '#C88E44', fontWeight: 700 }}>
                     {'tagline' in selectedPlace && selectedPlace.tagline ? selectedPlace.tagline : 'address' in selectedPlace ? selectedPlace.address : 'Verified Tourism Asset'}
                   </div>
                 </div>
@@ -392,7 +392,7 @@ export default function GoogleMapView() {
                   <div
                     style={{
                       background: '#FAF7F2',
-                      border: '1px solid rgba(31,122,108, 0.25)',
+                      border: '1px solid rgba(200, 142, 68, 0.25)',
                       borderRadius: '12px',
                       padding: '8px 14px',
                       textAlign: 'right',
@@ -403,7 +403,7 @@ export default function GoogleMapView() {
                     <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#2D1B14' }}>
                       {liveWeather.tempC}°C
                     </div>
-                    <div style={{ fontSize: '0.72rem', color: '#0B1B45', fontWeight: 700 }}>
+                    <div style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: 700 }}>
                       {liveWeather.conditionText}
                     </div>
                     <div style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 700, marginTop: '2px' }}>
@@ -413,7 +413,7 @@ export default function GoogleMapView() {
                 )}
               </div>
 
-              <p style={{ fontSize: '0.9rem', color: '#1F7A6C', lineHeight: '1.6', margin: '14px 0 16px' }}>
+              <p style={{ fontSize: '0.9rem', color: '#4A3C31', lineHeight: '1.6', margin: '14px 0 16px' }}>
                 {'shortDescription' in selectedPlace && selectedPlace.shortDescription
                   ? selectedPlace.shortDescription
                   : 'services' in selectedPlace
@@ -422,23 +422,23 @@ export default function GoogleMapView() {
               </p>
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', paddingTop: '12px', borderTop: '1px solid rgba(31,122,108, 0.15)' }}>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', paddingTop: '12px', borderTop: '1px solid rgba(200, 142, 68, 0.15)' }}>
                 {'slug' in selectedPlace && selectedPlace.slug && (
                   <>
                     <Link
                       href={`/itinerary?destination=${selectedPlace.slug}&territory=${selectedPlace.territoryId}`}
                       style={{
-                        background: '#0B1B45',
+                        background: '#C88E44',
                         color: '#ffffff',
                         padding: '9px 18px',
                         borderRadius: '8px',
                         fontSize: '0.84rem',
                         fontWeight: 800,
                         textDecoration: 'none',
-                        boxShadow: '0 4px 12px rgba(31,122,108, 0.3)',
+                        boxShadow: '0 4px 12px rgba(200, 142, 68, 0.3)',
                       }}
                     >
-                      Plan Trip Around {selectedPlace.name.split(' ')[0]}
+                      🚀 Plan Trip Around {selectedPlace.name.split(' ')[0]}
                     </Link>
                     <Link
                       href={`/destinations/${selectedPlace.slug}`}
@@ -450,7 +450,7 @@ export default function GoogleMapView() {
                         fontSize: '0.84rem',
                         fontWeight: 700,
                         textDecoration: 'none',
-                        border: '1px solid rgba(31,122,108, 0.3)',
+                        border: '1px solid rgba(200, 142, 68, 0.3)',
                       }}
                     >
                       Explore Destination ↗
@@ -481,7 +481,7 @@ export default function GoogleMapView() {
           <div
             style={{
               background: '#FFFFFF',
-              border: '1.5px solid rgba(31,122,108, 0.35)',
+              border: '1.5px solid rgba(200, 142, 68, 0.35)',
               borderRadius: '16px',
               padding: '24px',
               boxShadow: '0 10px 30px rgba(45, 27, 20, 0.08)',
@@ -507,13 +507,13 @@ export default function GoogleMapView() {
 
               {routeResult && (
                 <div style={{ display: 'flex', gap: '16px', marginTop: '18px' }}>
-                  <div style={{ background: '#FAF7F2', padding: '10px 16px', borderRadius: '10px', border: '1px solid rgba(31,122,108, 0.25)' }}>
+                  <div style={{ background: '#FAF7F2', padding: '10px 16px', borderRadius: '10px', border: '1px solid rgba(200, 142, 68, 0.25)' }}>
                     <div style={{ fontSize: '0.72rem', color: '#78685C' }}>Total Route Distance</div>
-                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#0B1B45' }}>
+                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#0284c7' }}>
                       ~{routeResult.totalDistanceKm} km
                     </div>
                   </div>
-                  <div style={{ background: '#FAF7F2', padding: '10px 16px', borderRadius: '10px', border: '1px solid rgba(31,122,108, 0.25)' }}>
+                  <div style={{ background: '#FAF7F2', padding: '10px 16px', borderRadius: '10px', border: '1px solid rgba(200, 142, 68, 0.25)' }}>
                     <div style={{ fontSize: '0.72rem', color: '#78685C' }}>Est. Transit Drive Time</div>
                     <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#16a34a' }}>
                       {Math.floor(routeResult.totalDurationMinutes / 60)}h {routeResult.totalDurationMinutes % 60}m
@@ -524,13 +524,13 @@ export default function GoogleMapView() {
             </div>
 
             {/* Emergency Protocols Footer */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '22px', paddingTop: '14px', borderTop: '1px solid rgba(31,122,108, 0.15)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '22px', paddingTop: '14px', borderTop: '1px solid rgba(200, 142, 68, 0.15)' }}>
               <div style={{ fontSize: '0.78rem', color: '#78685C' }}>
-                Emergency: <strong style={{ color: '#dc2626' }}>ERSS 112</strong> • Tourist Help: <strong style={{ color: '#0B1B45' }}>1363</strong>
+                Emergency: <strong style={{ color: '#dc2626' }}>ERSS 112</strong> • Tourist Help: <strong style={{ color: '#0284c7' }}>1363</strong>
               </div>
               <Link
                 href="/safety"
-                style={{ fontSize: '0.8rem', color: '#0B1B45', fontWeight: 800, textDecoration: 'none' }}
+                style={{ fontSize: '0.8rem', color: '#C88E44', fontWeight: 800, textDecoration: 'none' }}
               >
                 View UT Safety Protocols ↗
               </Link>

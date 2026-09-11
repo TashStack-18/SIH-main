@@ -20,7 +20,8 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { VERIFIED_DESTINATIONS, VERIFIED_TERRITORIES, VERIFIED_BOOKING_PROVIDERS } from '@/src/lib/fixtures';
 import { BharatMap } from '@/src/app/components/BharatMap';
 import { YatraAiItineraryEditor } from '@/src/app/components/YatraAiItineraryEditor';
-import { DepthCarousel } from '@/src/app/components/DepthCarousel';
+import AccordionGallery from '@/src/app/components/AccordionGallery';
+export type ItineraryStep = 'DESTINATION' | 'PLANNING' | 'JOURNEY';
 import { ItineraryBuilder } from '@/src/lib/itinerary/itineraryBuilder';
 import { FeasibilityEngine, ItineraryFeasibilityReport } from '@/src/lib/itinerary/feasibilityEngine';
 import { RecommendationEngine } from '@/src/lib/itinerary/recommendationEngine';
@@ -77,67 +78,69 @@ function generateBaseItineraryForTerritory(territoryId: string): Itinerary | nul
   };
 }
 
-function TerritoryDiscoveryView({ onSelect }: { onSelect: (id: string) => void }) {
-  const [dimensions, setDimensions] = useState({ width: 600, height: 400, spread: 120, depth: 140, blur: 4 });
 
-  useEffect(() => {
-    const handleResize = () => {
-      // LANDSCAPE DIMENSIONS (approx 3:2 ratio)
-      if (window.innerWidth < 400) {
-        setDimensions({ width: 270, height: 180, spread: 45, depth: 60, blur: 2 });
-      } else if (window.innerWidth < 768) {
-        setDimensions({ width: 330, height: 220, spread: 60, depth: 80, blur: 2 });
-      } else if (window.innerWidth < 1024) {
-        setDimensions({ width: 450, height: 300, spread: 80, depth: 100, blur: 3 });
-      } else {
-        setDimensions({ width: 600, height: 400, spread: 120, depth: 140, blur: 4 });
-      }
-    };
-    
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
-  const carouselItems = VERIFIED_TERRITORIES.map((t, i) => ({
-    id: t.id,
-    title: t.name,
-    subtitle: (t as any).tagline || (t as any).heroDescription || t.name,
-    image: (t as any).heroImage || '',
-    chapter: String(i + 1).padStart(2, '0')
-  }));
 
-  return (
-    <div className="w-full flex flex-col items-center justify-start pt-8 pb-16" style={{ maxWidth: '1440px', marginInline: 'auto' }}>
-      <header className="text-center mb-6 px-4 z-20">
-        <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-[var(--color-text-primary)] mb-3" style={{ letterSpacing: '-0.02em' }}>
-          PLAN YOUR JOURNEY
-        </h1>
-        <p className="font-mono text-xs md:text-sm tracking-widest text-[var(--color-accent)] uppercase mb-3 font-semibold">
-          Explore India's 8 Union Territories
-        </p>
-        <p className="text-base md:text-lg text-[var(--color-text-secondary)] max-w-xl mx-auto leading-relaxed">
-          Choose where you want to travel and Dishaara will help shape the journey.
-        </p>
-      </header>
-
-      <div className="w-full relative z-10 overflow-hidden" style={{ maxWidth: '1200px', marginInline: 'auto' }}>
-        <DepthCarousel 
-          items={carouselItems} 
-          onSelect={onSelect} 
-          cardWidth={dimensions.width}
-          cardHeight={dimensions.height}
-          spread={dimensions.spread}
-          depth={dimensions.depth}
-          blur={dimensions.blur}
-          tilt={8}
-          perspective={1200}
-          visibleCards={3}
-        />
-      </div>
-    </div>
-  );
+// --- Added Scheduling Helpers ---
+function parseTimeToMinutes(timeStr: string): number {
+  const match = timeStr.match(/(\d+):(\d+)\s+(AM|PM)/i);
+  if (!match) return 9 * 60;
+  let h = parseInt(match[1]);
+  const m = parseInt(match[2]);
+  const isPM = match[3].toUpperCase() === 'PM';
+  if (h === 12 && !isPM) h = 0;
+  else if (h < 12 && isPM) h += 12;
+  return h * 60 + m;
 }
+
+function formatMinutesToTime(totalMins: number): string {
+  const h24 = Math.floor(totalMins / 60) % 24;
+  const m = Math.floor(totalMins % 60);
+  const isPM = h24 >= 12;
+  let h12 = h24 % 12;
+  if (h12 === 0) h12 = 12;
+  const hh = h12.toString().padStart(2, '0');
+  const mm = m.toString().padStart(2, '0');
+  return `${hh}:${mm} ${isPM ? 'PM' : 'AM'}`;
+}
+
+function recalculateDaySchedule(day: ItineraryDay): ItineraryDay {
+  if (!day.items || day.items.length === 0) return day;
+
+  const newItems = [];
+  for (let i = 0; i < day.items.length; i++) {
+    const item = { ...day.items[i] };
+
+    if (i > 0) {
+      const prevItem = newItems[i - 1];
+      let travelMins = 30;
+      if (prevItem.location && item.location) {
+         travelMins = SpatialEngine.estimateDriveTimeMinutes(
+            SpatialEngine.estimateRoadDistanceKm(prevItem.location.lat, prevItem.location.lng, item.location.lat, item.location.lng)
+         );
+      }
+
+      const prevStartMins = parseTimeToMinutes(prevItem.time);
+      const minimumNextStartTime = prevStartMins + (prevItem.durationMinutes || 90) + travelMins;
+
+      let intendedTime = parseTimeToMinutes(item.time);
+
+      if (intendedTime < minimumNextStartTime) {
+         intendedTime = minimumNextStartTime;
+      }
+
+      item.time = formatMinutesToTime(intendedTime);
+    }
+
+    newItems.push(item);
+  }
+
+  return {
+    ...day,
+    items: newItems
+  };
+}
+// --------------------------------
 
 function ItineraryContent() {
   const searchParams = useSearchParams();
@@ -146,6 +149,8 @@ function ItineraryContent() {
   const territoryParam = searchParams.get('territory');
 
   // State
+  const [step, setStep] = useState<ItineraryStep>('DESTINATION');
+  const [selectedUt, setSelectedUt] = useState<any>(null);
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
   const [activeStopId, setActiveStopId] = useState<string | null>(null);
@@ -243,7 +248,7 @@ function ItineraryContent() {
   // Mode A & Initial Handoff Loader
   // -------------------------------------------------------------
   useEffect(() => {
-    if (destinationParam) {
+    if (destinationParam && step === 'DESTINATION') {
       const match = VERIFIED_DESTINATIONS.find(
         (d) => d.id === destinationParam || d.slug === destinationParam || d.id.toLowerCase() === destinationParam.toLowerCase()
       );
@@ -261,14 +266,11 @@ function ItineraryContent() {
           setItinerary(built.itinerary);
           const firstStop = built.itinerary.days[0]?.items[0]?.id || null;
           setActiveStopId(firstStop);
+          setStep('JOURNEY');
         }
       }
-    } else {
-      // If no destination parameter is provided, itinerary starts as null (prompting the user)
-      setItinerary(null);
-      setSelectedDestination(null);
     }
-  }, [destinationParam, selectedDuration, selectedStyle, selectedTravellers]);
+  }, [destinationParam, step, selectedDuration, selectedStyle, selectedTravellers]);
 
   // -------------------------------------------------------------
   // Recalculate Routes, Feasibility, Detours & Optimization
@@ -360,10 +362,19 @@ function ItineraryContent() {
   // -------------------------------------------------------------
   // User Actions
   // -------------------------------------------------------------
-  const handleSelectStartDestination = (dest: Destination) => {
-    setSelectedDestination(dest);
+  const handleSelectUt = (utItem: any) => {
+    setSelectedUt(utItem);
+    const match = VERIFIED_DESTINATIONS.find((d) => d.territoryId === utItem.id);
+    if (match) {
+      setSelectedDestination(match);
+      setStep('PLANNING');
+    }
+  };
+
+  const handleBuildJourney = () => {
+    if (!selectedDestination) return;
     const built = ItineraryBuilder.buildFromDestination({
-      destinationId: dest.id,
+      destinationId: selectedDestination.id,
       durationDays: selectedDuration,
       travelStyle: selectedStyle,
       travellers: selectedTravellers,
@@ -373,8 +384,17 @@ function ItineraryContent() {
       setItinerary(built.itinerary);
       const firstStop = built.itinerary.days[0]?.items[0]?.id || null;
       setActiveStopId(firstStop);
-      router.push(`/itinerary?destination=${dest.slug}`);
+      setStep('JOURNEY');
+      router.push(`/itinerary?destination=${selectedDestination.slug}`);
     }
+  };
+
+  const handleChangeDestination = () => {
+    setItinerary(null);
+    setSelectedDestination(null);
+    setSelectedUt(null);
+    setStep('DESTINATION');
+    router.push('/itinerary');
   };
 
   const handleToggleStopComplete = (stopId: string) => {
@@ -433,24 +453,49 @@ function ItineraryContent() {
     if (!itinerary) return;
     setItinerary((prev) => {
       if (!prev) return null;
-      const updatedDays: ItineraryDay[] = prev.days.map((d) => ({
-        ...d,
-        items: d.items.filter((item) => item.id !== stopId),
-      })).filter((d) => d.items.length > 0);
+      const updatedDays: ItineraryDay[] = prev.days.map((d) => {
+        const filteredItems = d.items.filter((item) => item.id !== stopId);
+        if (filteredItems.length !== d.items.length) {
+            return recalculateDaySchedule({ ...d, items: filteredItems });
+        }
+        return d;
+      }).filter((d) => d.items.length > 0);
       return { ...prev, days: updatedDays };
     });
   };
 
-  const handleAddDetourStop = (candidate: Destination) => {
+  const handleAddDetourStop = (recOrCandidate: any) => {
     if (!itinerary) return;
     setItinerary((prev) => {
       if (!prev) return null;
+
+      const candidate = recOrCandidate.candidateDestination || recOrCandidate;
+      const originName = recOrCandidate.originName;
+
       const updatedDays: ItineraryDay[] = JSON.parse(JSON.stringify(prev.days));
-      const targetDay = updatedDays[1] || updatedDays[0];
-      if (targetDay) {
-        targetDay.items.push({
+
+      let targetDayIndex = 0;
+      let insertIndex = updatedDays[0].items.length;
+
+      if (originName) {
+        for (let d = 0; d < updatedDays.length; d++) {
+          const idx = updatedDays[d].items.findIndex(i => i.title === originName);
+          if (idx !== -1) {
+            targetDayIndex = d;
+            insertIndex = idx + 1;
+            break;
+          }
+        }
+      } else {
+        targetDayIndex = updatedDays.length > 1 ? 1 : 0;
+        insertIndex = updatedDays[targetDayIndex].items.length;
+      }
+
+      const targetDay = updatedDays[targetDayIndex];
+
+      const newStop: ItineraryItem = {
           id: `stop-${Date.now()}`,
-          time: '02:00 PM',
+          time: '09:00 AM', // Will be recalculated
           title: candidate.name,
           type: candidate.type as any,
           destinationId: candidate.id,
@@ -460,8 +505,11 @@ function ItineraryContent() {
           status: 'PLANNED' as StopStatus,
           isMustVisit: false,
           isLocked: false,
-        });
-      }
+      };
+
+      targetDay.items.splice(insertIndex, 0, newStop);
+      updatedDays[targetDayIndex] = recalculateDaySchedule(targetDay);
+
       return { ...prev, days: updatedDays };
     });
   };
@@ -524,279 +572,241 @@ function ItineraryContent() {
   });
 
   // -------------------------------------------------------------
-  // Mode B / Empty State (No Destination Chosen)
+  // Render: DESTINATION
   // -------------------------------------------------------------
-  if (!itinerary) {
+  if (step === 'DESTINATION') {
     return (
       <main className="container section-spacing" role="main" style={{ maxWidth: '1280px', margin: '0 auto' }}>
-        <div
-          style={{
-            background: 'var(--color-bg-surface-elevated, #1a2230)',
-            border: '1px solid var(--color-border-subtle, rgba(255,255,255,0.1))',
-            borderRadius: 'var(--radius-xl, 16px)',
-            padding: 'clamp(24px, 5vw, 48px)',
-            textAlign: 'center',
-            marginBottom: '32px',
-            boxShadow: 'var(--shadow-card, 0 10px 30px rgba(0,0,0,0.3))',
-          }}
-        >
-
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h1 className="font-serif" style={{ fontSize: 'clamp(1.9rem, 4vw, 2.8rem)', color: 'var(--color-text-primary, #ffffff)', margin: '8px 0 12px' }}>
-            Choose a Destination to Start Planning
+            Choose a destination to start planning
           </h1>
           <p style={{ color: 'var(--color-text-secondary, #94a3b8)', fontSize: '1.05rem', maxWidth: '680px', margin: '0 auto 28px' }}>
-            Select any verified destination across India's 8 Union Territories. The itinerary planner builds your journey strictly around your chosen destination with verified route feasibility.
+            Select any of the 8 Union Territories and Dishaara will shape the journey around it.
           </p>
-
-          {/* Quick Filter by UT */}
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '24px' }}>
-            <button
-              onClick={() => setSelectedUtFilter('ALL')}
-              className={`btn btn-sm ${selectedUtFilter === 'ALL' ? 'btn-primary' : 'btn-outline'}`}
-              style={{ borderRadius: '9999px', fontSize: '0.8rem', padding: '6px 14px' }}
-            >
-              All 8 UTs
-            </button>
-            {VERIFIED_TERRITORIES.map((ut) => (
-              <button
-                key={ut.id}
-                onClick={() => setSelectedUtFilter(ut.id)}
-                className={`btn btn-sm ${selectedUtFilter === ut.id ? 'btn-primary' : 'btn-outline'}`}
-                style={{ borderRadius: '9999px', fontSize: '0.8rem', padding: '6px 14px' }}
-              >
-                {ut.name}
-              </button>
-            ))}
-          </div>
-
-          {/* Search Bar */}
-          <div style={{ maxWidth: '540px', margin: '0 auto 36px', position: 'relative' }}>
-            <input
-              type="text"
-              placeholder="Search verified destinations (e.g. Pangong Tso, Sukhna Lake, Kavaratti, Red Fort)..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '14px 20px',
-                borderRadius: '9999px',
-                border: '1px solid rgba(200, 142, 68, 0.4)',
-                background: 'rgba(15, 23, 42, 0.7)',
-                color: '#ffffff',
-                fontSize: '0.95rem',
-                outline: 'none',
-              }}
-            />
-          </div>
-
-          {/* Trip Preferences Setup */}
-          <div
-            style={{
-              background: 'rgba(15, 23, 42, 0.5)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              borderRadius: '12px',
-              padding: '16px 20px',
-              maxWidth: '800px',
-              margin: '0 auto 36px',
-              display: 'flex',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: '16px',
-            }}
-          >
-            <div>
-              <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: '#94a3b8', fontWeight: 700, marginBottom: '6px' }}>
-                Trip Duration:
-              </div>
-              <div style={{ display: 'flex', gap: '4px' }}>
-                {[2, 3, 5, 7, 10].map((d) => (
-                  <button
-                    key={d}
-                    onClick={() => setSelectedDuration(d)}
-                    style={{
-                      background: selectedDuration === d ? '#C88E44' : 'transparent',
-                      color: selectedDuration === d ? '#ffffff' : '#cbd5e1',
-                      border: '1px solid rgba(200, 142, 68, 0.3)',
-                      borderRadius: '6px',
-                      padding: '4px 10px',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {d}D
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: '#94a3b8', fontWeight: 700, marginBottom: '6px' }}>
-                Travel Pace:
-              </div>
-              <div style={{ display: 'flex', gap: '4px' }}>
-                {(['RELAXED', 'BALANCED', 'FAST-PACED'] as TravelStyle[]).map((st) => (
-                  <button
-                    key={st}
-                    onClick={() => setSelectedStyle(st)}
-                    style={{
-                      background: selectedStyle === st ? '#C88E44' : 'transparent',
-                      color: selectedStyle === st ? '#ffffff' : '#cbd5e1',
-                      border: '1px solid rgba(200, 142, 68, 0.3)',
-                      borderRadius: '6px',
-                      padding: '4px 10px',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {st}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: '#94a3b8', fontWeight: 700, marginBottom: '6px' }}>
-                Travellers:
-              </div>
-              <div style={{ display: 'flex', gap: '4px' }}>
-                {[1, 2, 4, 6].map((num) => (
-                  <button
-                    key={num}
-                    onClick={() => setSelectedTravellers(num)}
-                    style={{
-                      background: selectedTravellers === num ? '#C88E44' : 'transparent',
-                      color: selectedTravellers === num ? '#ffffff' : '#cbd5e1',
-                      border: '1px solid rgba(200, 142, 68, 0.3)',
-                      borderRadius: '6px',
-                      padding: '4px 10px',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {num} 👤
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
 
-        {/* Destination Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
-          {filteredDestinations.map((dest) => (
-            <article
-              key={dest.id}
-              className="card card-hoverable"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                background: 'var(--color-bg-surface-elevated, #1a2230)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-              }}
-            >
-              <div style={{ height: '160px', position: 'relative', overflow: 'hidden' }}>
-                <img
-                  src={dest.image || '/images/Pangong Tso.jpeg'}
-                  alt={dest.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  loading="lazy"
-                />
-                <div style={{ position: 'absolute', top: '10px', left: '10px' }}>
-                  <span className="badge badge-verified" style={{ fontSize: '0.7rem' }}>
-                    {dest.territoryName}
-                  </span>
-                </div>
-              </div>
+        <AccordionGallery items={VERIFIED_TERRITORIES.map(ut => {
+          const config: Record<string, {file: string; pos: string; scale?: number}> = {
+            "ANDAMAN_NICOBAR": { file: "andaman-nicobar.jpg", pos: "30% 60%" },
+            "CHANDIGARH": { file: "chandigarh.jpg", pos: "center 50%" },
+            "DNH_DD": { file: "dadra-nagar-haveli-daman-diu.jpg", pos: "center 65%" },
+            "DELHI": { file: "delhi.jpg", pos: "45% 40%", scale: 1.05 },
+            "JAMMU_KASHMIR": { file: "jammu-kashmir.jpg", pos: "center 60%" },
+            "LADAKH": { file: "ladakh.jpg", pos: "center 55%" },
+            "LAKSHADWEEP": { file: "lakshadweep.jpg", pos: "65% 75%", scale: 1.1 },
+            "PUDUCHERRY": { file: "puducherry.jpg", pos: "center center", scale: 1.02 }
+          };
+          const c = config[ut.id] || { file: null, pos: "center center", scale: 1 };
 
-              <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <div style={{ fontSize: '0.75rem', color: 'var(--color-primary, #C88E44)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>
-                  {dest.type}
-                </div>
-                <h3 style={{ fontSize: '1.1rem', margin: '0 0 6px', color: '#ffffff' }}>{dest.name}</h3>
-                <p style={{ fontSize: '0.825rem', color: '#94a3b8', lineHeight: 1.4, flexGrow: 1, marginBottom: '14px' }}>
-                  {dest.shortDescription}
-                </p>
-
-                <button
-                  onClick={() => handleSelectStartDestination(dest)}
-                  className="btn btn-sm btn-primary"
-                  style={{ width: '100%', fontWeight: 700 }}
-                >
-                  Plan Around {dest.name.split(' ')[0]}
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
+          return {
+            id: ut.id,
+            name: ut.name,
+            slug: ut.slug,
+            image: c.file ? `/images/utflashcard/${c.file}` : (ut as any).heroImage || (ut as any).thumbnailImage,
+            objectPosition: c.pos,
+            scale: c.scale
+          };
+        })} onSelect={handleSelectUt} />
       </main>
     );
   }
 
   // -------------------------------------------------------------
+  // Render: PLANNING
+  // -------------------------------------------------------------
+  if (step === 'PLANNING' && selectedUt) {
+    return (
+      <main className="container section-spacing" role="main" style={{ maxWidth: '640px', margin: '0 auto', display: 'flex', flexDirection: 'column', minHeight: '60vh', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <h2 className="font-serif" style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', color: '#0f172a', margin: '0 0 4px', letterSpacing: '-0.01em' }}>
+            {selectedUt.name}
+          </h2>
+          <div style={{ fontSize: '0.9rem', color: '#475569' }}>
+            Configure your journey preferences below
+          </div>
+        </div>
+
+        <div style={{
+          background: '#ffffff',
+          border: '1px solid #e2e8f0',
+          borderRadius: 'var(--radius-xl, 16px)',
+          padding: 'clamp(24px, 5vw, 40px)',
+          boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+        }}>
+          <div style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: '#64748b', fontWeight: 700, letterSpacing: '0.08em', marginBottom: '24px', textAlign: 'center' }}>
+            JOURNEY DETAILS
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+
+            {/* Trip Duration Stepper */}
+            <div>
+              <div style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600, marginBottom: '12px' }}>
+                Trip duration
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '8px 12px' }}>
+                <button
+                  type="button"
+                  aria-label="Decrease trip duration"
+                  onClick={() => setSelectedDuration(Math.max(1, selectedDuration - 1))}
+                  style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', border: 'none', color: '#0f172a', cursor: 'pointer', fontSize: '1.4rem' }}>
+                  −
+                </button>
+                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: '1.05rem', width: '100px', textAlign: 'center' }}>
+                  {selectedDuration} {selectedDuration === 1 ? 'day' : 'days'}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Increase trip duration"
+                  onClick={() => setSelectedDuration(Math.min(30, selectedDuration + 1))}
+                  style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', border: 'none', color: '#0f172a', cursor: 'pointer', fontSize: '1.4rem' }}>
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Travel Pace */}
+            <div>
+              <div style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600, marginBottom: '12px' }}>
+                Travel pace
+              </div>
+              <div style={{ display: 'flex', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '4px' }}>
+                {(['RELAXED', 'BALANCED', 'FAST-PACED'] as TravelStyle[]).map((st) => (
+                  <button
+                    key={st}
+                    type="button"
+                    onClick={() => setSelectedStyle(st)}
+                    style={{
+                      flex: 1,
+                      background: selectedStyle === st ? '#1e293b' : 'transparent',
+                      color: selectedStyle === st ? '#ffffff' : '#475569',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '12px 4px',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    {st === 'RELAXED' ? 'Relaxed' : st === 'BALANCED' ? 'Balanced' : 'Fast-paced'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Travellers Stepper */}
+            <div>
+              <div style={{ fontSize: '0.9rem', color: '#1e293b', fontWeight: 600, marginBottom: '12px' }}>
+                Travellers
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '8px 12px' }}>
+                <button
+                  type="button"
+                  aria-label="Decrease travellers"
+                  onClick={() => setSelectedTravellers(Math.max(1, selectedTravellers - 1))}
+                  style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', border: 'none', color: '#0f172a', cursor: 'pointer', fontSize: '1.4rem' }}>
+                  −
+                </button>
+                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: '1.05rem', width: '120px', textAlign: 'center' }}>
+                  {selectedTravellers} {selectedTravellers === 1 ? 'traveller' : 'travellers'}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Increase travellers"
+                  onClick={() => setSelectedTravellers(Math.min(15, selectedTravellers + 1))}
+                  style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', border: 'none', color: '#0f172a', cursor: 'pointer', fontSize: '1.4rem' }}>
+                  +
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <div style={{ marginTop: '40px', textAlign: 'center' }}>
+            <button
+              type="button"
+              onClick={handleBuildJourney}
+              className="btn btn-primary"
+              style={{ width: '100%', padding: '16px', fontSize: '1.05rem', fontWeight: 600, letterSpacing: '0.05em' }}
+            >
+              BUILD MY JOURNEY &rarr;
+            </button>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Render: JOURNEY
+  // -------------------------------------------------------------
+  if (!itinerary) return null;
+
+
+
+  const totalVisitMinutes = allItems.reduce((acc, item) => acc + (item.durationMinutes || 0), 0);
+  const totalTravelMinutes = routeResult?.totalDurationMinutes || 0;
+  const totalJourneyMinutes = totalVisitMinutes + totalTravelMinutes;
+
+  const formatMins = (mins: number) => {
+    const h = Math.floor(mins / 60);
+    const m = Math.round(mins % 60);
+    if (h > 0 && m > 0) return `${h}h ${m}m`;
+    if (h > 0) return `${h}h`;
+    return `${m}m`;
+  };
+
+  let runningLocationIndex = 0;
+
   // Active Itinerary Studio View
   // -------------------------------------------------------------
   return (
     <main className="container section-spacing" role="main" style={{ maxWidth: '1440px', margin: '0 auto' }}>
-      
-      {/* 1. Header Box */}
-      <div
-        className="itinerary-header-box"
-        style={{
-          background: 'var(--color-bg-surface-elevated, #1a2230)',
-          border: '1px solid var(--color-border-subtle, rgba(255,255,255,0.1))',
-          borderRadius: 'var(--radius-xl, 16px)',
-          padding: '24px',
-          marginBottom: '24px',
-          boxShadow: 'var(--shadow-card, 0 10px 30px rgba(0,0,0,0.3))',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
+
+      {/* 1. Header Hero */}
+      <div style={{ marginBottom: '40px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px' }}>
           <div>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap' }}>
-              <span className="badge badge-verified" style={{ background: 'var(--color-primary, #C88E44)', color: '#ffffff' }}>
-                🇮🇳 {itinerary.territoryName}
-              </span>
-              <span className="badge badge-neutral" style={{ background: 'rgba(200, 142, 68, 0.2)', color: '#FAF7F2' }}>
-                {itinerary.travelStyle} Style
-              </span>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: saveStatus === 'SAVING' ? '#f59e0b' : '#10b981' }}>
-                {saveStatus === 'SAVING' ? '⏳ Recalculating…' : '✓ Grounded & Autosaved'}
-              </span>
+            <div style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: '#C88E44', fontWeight: 800, letterSpacing: '0.08em', marginBottom: '8px' }}>
+              {itinerary.territoryName}
             </div>
-
-            <h1 className="font-serif" style={{ fontSize: 'clamp(1.6rem, 3.2vw, 2.2rem)', color: 'var(--color-text-primary, #ffffff)', margin: '0 0 6px' }}>
-              {itinerary.title}
+            <h1 className="font-serif" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0f172a', margin: '0 0 8px', letterSpacing: '-0.01em' }}>
+              {selectedDestination?.name || itinerary.days[0]?.items[0]?.title}
             </h1>
-            <p style={{ color: 'var(--color-text-secondary, #94a3b8)', fontSize: '0.9rem', margin: 0 }}>
-              Centred on <strong>{selectedDestination?.name || itinerary.days[0]?.items[0]?.title}</strong> • {itinerary.durationDays} Days • {itinerary.travellers} Travellers
-            </p>
+            <div style={{ fontSize: '1.1rem', color: '#475569' }}>
+              {itinerary.durationDays}-Day {itinerary.travelStyle.toLowerCase().replace('-', ' ')} journey • {itinerary.travellers} {itinerary.travellers === 1 ? 'traveller' : 'travellers'}
+            </div>
+            <div style={{ display: 'flex', gap: '16px', marginTop: '12px', fontSize: '0.85rem', color: '#64748b' }}>
+              <div>
+                <strong style={{ color: '#0f172a' }}>Overall journey:</strong> ~{formatMins(totalJourneyMinutes)}
+              </div>
+              <div>
+                <strong style={{ color: '#0f172a' }}>Visit time:</strong> ~{formatMins(totalVisitMinutes)}
+              </div>
+              {totalTravelMinutes > 0 && (
+                <div>
+                  <strong style={{ color: '#0f172a' }}>Travel time:</strong> ~{formatMins(totalTravelMinutes)}
+                </div>
+              )}
+            </div>
           </div>
-
-          {/* Action CTAs */}
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             <button
-              onClick={() => {
-                setItinerary(null);
-                setSelectedDestination(null);
-                router.push('/itinerary');
-              }}
+              type="button"
+              onClick={handleChangeDestination}
               className="btn btn-outline"
-              style={{ fontWeight: 700, fontSize: '0.85rem' }}
+              style={{ fontSize: '0.9rem', fontWeight: 600, borderColor: '#cbd5e1', color: '#0f172a', background: 'transparent' }}
             >
-              🔄 Change Destination
+              Start a new journey
             </button>
             <button
+              type="button"
               onClick={() => setShowAiEditor((prev) => !prev)}
               className="btn btn-outline"
-              style={{ fontWeight: 700, fontSize: '0.85rem' }}
+              style={{ fontSize: '0.9rem', fontWeight: 600, borderColor: '#cbd5e1', color: '#0f172a', background: 'transparent' }}
             >
-              🤖 Yatra AI Studio
+              Yatra AI
             </button>
             <button
               onClick={() => setIsJourneyMode((prev) => !prev)}
@@ -819,7 +829,7 @@ function ItineraryContent() {
           style={{
             marginTop: '18px',
             paddingTop: '14px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: '1px solid #e2e8f0',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -851,7 +861,7 @@ function ItineraryContent() {
 
           {/* Journey Completion Progress */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '220px' }}>
-            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#FAF7F2' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1e293b' }}>
               {completedCount} / {totalStopsCount} Stops ({progressPercent}%)
             </div>
             <div style={{ flex: 1, height: '8px', background: 'rgba(200, 142, 68, 0.2)', borderRadius: '9999px', overflow: 'hidden' }}>
@@ -868,192 +878,66 @@ function ItineraryContent() {
         </div>
       </div>
 
-      {/* 2. Transparent Route Optimization Proposal Banner (User approval required) */}
-      {optimizationProposal && (
-        <div
-          style={{
-            background: 'linear-gradient(135deg, rgba(200, 142, 68, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%)',
-            border: '1px solid #C88E44',
-            borderRadius: '12px',
-            padding: '16px 20px',
-            marginBottom: '24px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '14px',
-          }}
-        >
-          <div>
-            <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 800, color: '#f59e0b' }}>
-              ⚡ Route Optimizer Suggestion
-            </div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ffffff', marginTop: '2px' }}>
-              {optimizationProposal.rationale}
-            </div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>
-              Suggested order: {optimizationProposal.suggestedSequence.join(' → ')}
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button onClick={handleApplyOptimization} className="btn btn-sm btn-primary" style={{ fontWeight: 700 }}>
-              ✓ Apply Optimized Route
-            </button>
-            <button onClick={handleDismissOptimization} className="btn btn-sm btn-outline">
-              Keep My Plan
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* 3. Feasibility & Health Status Banner */}
+      {/* 2. Quiet Feasibility Insight (JOURNEY CHECK) */}
       {feasibility && (
         <div
           style={{
-            background:
-              feasibility.overallHealth === 'INFEASIBLE'
-                ? '#381414'
-                : feasibility.overallHealth === 'BUSY'
-                ? '#382a14'
-                : '#143820',
-            border: `1px solid ${
-              feasibility.overallHealth === 'INFEASIBLE'
-                ? '#f87171'
-                : feasibility.overallHealth === 'BUSY'
-                ? '#fbbf24'
-                : '#4ade80'
-            }`,
-            borderRadius: '10px',
-            padding: '12px 18px',
-            marginBottom: '24px',
+            background: '#ffffff',
+            border: '1px solid #e2e8f0',
+            borderLeft: `4px solid ${feasibility.overallHealth === 'INFEASIBLE' ? '#ef4444' : feasibility.overallHealth === 'BUSY' ? '#f59e0b' : '#C88E44'}`,
+            borderRadius: '4px 8px 8px 4px',
+            padding: '16px 20px',
+            marginBottom: '32px',
             display: 'flex',
-            justifyContent: 'space-between',
             alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '12px',
+            gap: '16px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '1.2rem' }}>
-              {feasibility.overallHealth === 'INFEASIBLE' ? '⚠️' : feasibility.overallHealth === 'BUSY' ? '⏱️' : '🛡️'}
-            </span>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#FAF7F2' }}>
-                Feasibility Status: {feasibility.overallHealth}
-              </div>
-              <div style={{ fontSize: '0.8rem', color: '#cbd5e1' }}>
-                {feasibility.headlineExplanation}
-              </div>
+          <div>
+            <div style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.05em', marginBottom: '4px' }}>
+              JOURNEY CHECK • {feasibility.overallHealth}
+            </div>
+            <div style={{ fontSize: '0.95rem', color: '#1e293b' }}>
+              {feasibility.headlineExplanation}
             </div>
           </div>
-
-          {feasibility.allWarnings.length > 0 && (
-            <span style={{ fontSize: '0.75rem', background: 'rgba(0,0,0,0.3)', padding: '4px 10px', borderRadius: '6px', color: '#FAF7F2' }}>
-              {feasibility.allWarnings.length} Feasibility Advisory Notes
-            </span>
-          )}
         </div>
       )}
 
-      {/* 4. Main Two-Column Layout: Itinerary Timeline + Unified BharatMap */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '24px', alignItems: 'start' }}>
-        
-        {/* Left Column: Timeline Days & Stops */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          
-          {/* Active Stop Real-Time Telemetry Card */}
-          {activeStopItem && (
-            <div
-              style={{
-                background: 'linear-gradient(135deg, rgba(200, 142, 68, 0.18) 0%, rgba(15, 23, 42, 0.95) 100%)',
-                border: '1px solid rgba(200, 142, 68, 0.4)',
-                borderRadius: '14px',
-                padding: '16px 20px',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
-                    <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', fontWeight: 800, color: '#f59e0b', letterSpacing: '0.05em' }}>
-                      REAL-TIME PLACE TELEMETRY
-                    </span>
-                  </div>
-                  <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', margin: '4px 0 2px' }}>
-                    {activeStopItem.title}
-                  </h4>
-                  <div style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
-                    Coordinates: {activeStopItem.location?.lat.toFixed(4)}°N, {activeStopItem.location?.lng.toFixed(4)}°E
-                  </div>
-                </div>
+      {/* 3. Main Two-Column Layout */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 350px), 1fr))', gap: '48px', alignItems: 'start' }}>
 
-                {/* Live Weather Indicator */}
-                <div
-                  style={{
-                    background: 'rgba(15, 23, 42, 0.8)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '10px',
-                    padding: '8px 14px',
-                    minWidth: '170px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '2px',
-                  }}
-                >
-                  {isWeatherLoading ? (
-                    <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Fetching live weather...</div>
-                  ) : liveStopWeather ? (
-                    <>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff' }}>
-                          {liveStopWeather.tempC}°C
-                        </span>
-                        <span style={{ fontSize: '0.75rem', color: '#38bdf8', fontWeight: 700 }}>
-                          {liveStopWeather.conditionText}
-                        </span>
-                      </div>
-                      <div style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'flex', justifyContent: 'space-between', marginTop: '2px' }}>
-                        <span>💨 {liveStopWeather.windSpeedKmh} km/h</span>
-                        <span>💧 {liveStopWeather.humidityPercent}%</span>
-                        <span style={{ color: '#4ade80' }}>AQI: {liveStopWeather.airQualityBand}</span>
-                      </div>
-                    </>
-                  ) : (
-                    <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Weather data active</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
+        {/* Left Column: Timeline Days & Stops */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
 
           {itinerary.days.map((day) => (
             <div
               key={day.dayNumber}
               style={{
-                background: 'var(--color-bg-surface-elevated, #1a2230)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '14px',
-                padding: '20px',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+                marginBottom: '40px',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <div>
-                  <span className="badge badge-primary" style={{ background: '#C88E44', color: '#ffffff', fontSize: '0.75rem', fontWeight: 800 }}>
-                    DAY {day.dayNumber}
-                  </span>
-                  <h3 style={{ fontSize: '1.15rem', color: '#ffffff', margin: '4px 0 2px' }}>{day.title}</h3>
-                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{day.summary}</div>
+              <div style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid #e2e8f0' }}>
+                <span style={{ color: '#C88E44', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  DAY {String(day.dayNumber).padStart(2, '0')}
+                </span>
+                <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#0f172a', margin: '8px 0 6px', letterSpacing: '-0.01em' }}>
+                  {day.title}
+                </h3>
+                <div style={{ fontSize: '0.95rem', color: '#475569', lineHeight: 1.6, maxWidth: '600px' }}>
+                  {day.summary}
                 </div>
               </div>
 
-              {/* Day Stops */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '14px' }}>
-                {day.items.map((item) => {
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+                {day.items.map((item, index) => {
                   const isActive = activeStopId === item.id;
-                  const isCompleted = item.status === 'COMPLETED';
+                  const isPrimary = index === 0;
+                  const hasLocation = !!item.location;
+                  const currentLocIndex = hasLocation ? runningLocationIndex++ : -1;
+                  const nextSegment = (hasLocation && routeResult?.segments?.[currentLocIndex]) ? routeResult.segments[currentLocIndex] : null;
+                  const destData = VERIFIED_DESTINATIONS.find((d) => d.id === item.destinationId);
 
                   return (
                     <div
@@ -1061,82 +945,67 @@ function ItineraryContent() {
                       id={`stop-card-${item.id}`}
                       onClick={() => setActiveStopId(item.id)}
                       style={{
-                        background: isActive
-                          ? 'linear-gradient(135deg, rgba(200, 142, 68, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%)'
-                          : 'rgba(15, 23, 42, 0.6)',
-                        border: `1.5px solid ${isActive ? '#f59e0b' : 'rgba(255, 255, 255, 0.08)'}`,
-                        borderRadius: '12px',
-                        padding: '14px 16px',
+                        position: 'relative',
+                        padding: '24px 0',
                         cursor: 'pointer',
-                        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-                        boxShadow: isActive
-                          ? '0 0 20px rgba(245, 158, 11, 0.25), 0 8px 24px rgba(0, 0, 0, 0.4)'
-                          : 'none',
-                        transform: isActive ? 'scale(1.01)' : 'scale(1)',
+                        transition: 'opacity 0.2s ease',
+                        borderBottom: '1px solid #f1f5f9',
+                        opacity: isActive ? 1 : 0.6
                       }}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{ fontSize: '0.75rem', color: '#C88E44', fontWeight: 700 }}>
+                      <div style={{ display: 'flex', gap: '20px' }}>
+                        <div style={{ minWidth: '85px', paddingTop: '4px' }}>
+                          <span style={{ fontSize: '0.85rem', color: isActive ? '#C88E44' : '#64748b', fontWeight: 700 }}>
                             {item.time}
                           </span>
-                          <span className="badge badge-neutral" style={{ fontSize: '0.65rem' }}>
-                            {item.type}
-                          </span>
-                          {item.isMustVisit && (
-                            <span style={{ fontSize: '0.65rem', background: '#e11d48', color: '#ffffff', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>
-                              ★ MUST VISIT
-                            </span>
-                          )}
-                          {item.isLocked && (
-                            <span style={{ fontSize: '0.65rem', background: '#475569', color: '#ffffff', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>
-                              🔒 LOCKED
-                            </span>
-                          )}
                         </div>
 
-                        {/* Stop Action Buttons */}
-                        <div style={{ display: 'flex', gap: '6px' }} onClick={(e) => e.stopPropagation()}>
-                          <button
-                            onClick={() => handleToggleLockStop(item.id)}
-                            title={item.isLocked ? 'Unlock stop' : 'Lock stop in place'}
-                            style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.85rem' }}
-                          >
-                            {item.isLocked ? '🔒' : '🔓'}
-                          </button>
-                          <button
-                            onClick={() => handleToggleMustVisit(item.id)}
-                            title={item.isMustVisit ? 'Unmark must-visit' : 'Mark as must-visit'}
-                            style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.85rem' }}
-                          >
-                            {item.isMustVisit ? '★' : '☆'}
-                          </button>
-                          <button
-                            onClick={() => handleToggleStopComplete(item.id)}
-                            className={`btn btn-sm ${isCompleted ? 'btn-primary' : 'btn-outline'}`}
-                            style={{ padding: '2px 8px', fontSize: '0.7rem' }}
-                          >
-                            {isCompleted ? '✓ Done' : 'Mark Done'}
-                          </button>
-                          {!item.isLocked && (
-                            <button
-                              onClick={() => handleRemoveStop(item.id)}
-                              title="Remove stop"
-                              style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.85rem' }}
-                            >
-                              ✕
-                            </button>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                            <div style={{
+                              fontSize: '0.7rem',
+                              color: '#64748b',
+                              textTransform: 'uppercase',
+                              fontWeight: 700,
+                              letterSpacing: '0.05em'
+                            }}>
+                              {item.type}
+                            </div>
+                          </div>
+
+                          <div style={{
+                            fontWeight: isPrimary ? 800 : 600,
+                            fontSize: isPrimary ? '1.25rem' : '1.05rem',
+                            color: '#0f172a',
+                            marginBottom: '8px',
+                            fontFamily: isPrimary ? 'var(--font-serif)' : 'inherit'
+                          }}>
+                            {item.title}
+                          </div>
+
+                          {item.notes && (
+                            <div style={{ fontSize: '0.9rem', color: '#475569', lineHeight: 1.6 }}>
+                              {item.notes}
+                            </div>
+                          )}
+                          {destData?.weather?.bestTime && (
+                            <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '8px' }}>
+                              <strong style={{ color: '#475569' }}>Best time to visit:</strong> {destData.weather.bestTime}
+                            </div>
                           )}
                         </div>
                       </div>
 
-                      <div style={{ fontWeight: 700, fontSize: '0.95rem', color: isCompleted ? '#94a3b8' : '#ffffff' }}>
-                        {item.title}
-                      </div>
-
-                      {item.notes && (
-                        <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '4px', lineHeight: 1.4 }}>
-                          {item.notes}
+                      {nextSegment && (
+                        <div style={{ paddingLeft: '105px', marginTop: '16px', marginBottom: '-8px' }}>
+                          <div style={{ borderLeft: '2px dashed #cbd5e1', paddingLeft: '16px', paddingBottom: '8px', paddingTop: '8px' }}>
+                            <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
+                              ↓ Recommended transport: {routeResult?.mode === 'driving' ? 'Cab / Auto' : routeResult?.mode === 'walking' ? 'Walk' : 'Transit'}
+                            </div>
+                            <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                              Approx. travel: {formatMins(nextSegment.durationSeconds / 60)} ({ (nextSegment.distanceMeters / 1000).toFixed(1) } km)
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -1146,56 +1015,46 @@ function ItineraryContent() {
             </div>
           ))}
 
-          {/* Along-the-Route Recommendations Rail */}
           {detourRecommendations.length > 0 && (
-            <div
-              style={{
-                background: 'var(--color-bg-surface-elevated, #1a2230)',
-                border: '1px solid rgba(14, 165, 233, 0.3)',
-                borderRadius: '14px',
-                padding: '20px',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                <span style={{ fontSize: '1.1rem' }}>💡</span>
-                <div>
-                  <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 800, color: '#38bdf8' }}>
-                    ALONG YOUR ROUTE RECOMMENDATIONS
-                  </div>
-                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                    Verified places near your current route corridor with low detour impact.
-                  </div>
-                </div>
+            <div style={{ marginTop: '20px', padding: '32px 0', borderTop: '1px solid #e2e8f0' }}>
+              <div style={{ fontSize: '0.85rem', textTransform: 'uppercase', fontWeight: 800, color: '#C88E44', letterSpacing: '0.05em', marginBottom: '16px' }}>
+                ALONG YOUR ROUTE RECOMMENDATIONS
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {detourRecommendations.slice(0, 3).map((rec) => (
                   <div
-                    key={rec.candidateDestination.id}
-                    style={{
-                      background: 'rgba(15, 23, 42, 0.7)',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      borderRadius: '8px',
-                      padding: '10px 14px',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: '10px',
-                    }}
+                     key={rec.candidateDestination.id}
+                     style={{
+                       display: 'flex',
+                       justifyContent: 'space-between',
+                       alignItems: 'center',
+                       gap: '10px',
+                       padding: '12px 0',
+                       borderBottom: '1px solid #f1f5f9'
+                     }}
                   >
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#ffffff' }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.95rem', color: '#1e293b' }}>
                         {rec.candidateDestination.name}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: '#38bdf8', marginTop: '2px' }}>
+                      <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '2px' }}>
                         {rec.detourDisplay} (+{rec.addedDistanceKm} km)
                       </div>
                     </div>
 
                     <button
-                      onClick={() => handleAddDetourStop(rec.candidateDestination as any)}
-                      className="btn btn-sm btn-outline"
-                      style={{ fontSize: '0.75rem', padding: '4px 10px', borderColor: '#38bdf8', color: '#38bdf8' }}
+                      type="button"
+                      onClick={() => handleAddDetourStop(rec)}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: '#C88E44',
+                        fontWeight: 600,
+                        fontSize: '0.85rem',
+                        cursor: 'pointer',
+                        padding: '4px 8px'
+                      }}
                     >
                       + Add Stop
                     </button>
@@ -1207,60 +1066,64 @@ function ItineraryContent() {
         </div>
 
         {/* Right Column: Persistent Unified BharatMap */}
-        <div style={{ position: 'sticky', top: '24px' }}>
-          <BharatMap
-            stops={mapStops}
-            routeResult={routeResult}
-            activeStopId={activeStopId}
-            onSelectStop={(id) => setActiveStopId(id)}
-            nearbyPlaces={detourRecommendations.slice(0, 4).map((r) => ({
-              id: r.candidateDestination.id,
-              name: r.candidateDestination.name,
-              lat: r.candidateDestination.coordinates.lat,
-              lng: r.candidateDestination.coordinates.lng,
-              type: r.candidateDestination.type,
-              detourDisplay: r.detourDisplay,
-              distanceKm: r.addedDistanceKm,
-            }))}
-            onAddNearby={(id) => {
-              const match = VERIFIED_DESTINATIONS.find((d) => d.id === id);
-              if (match) handleAddDetourStop(match);
-            }}
-            isJourneyMode={isJourneyMode}
-            height="580px"
-          />
+        <div style={{ position: 'sticky', top: '24px', zIndex: 10 }}>
+          <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid #e2e8f0', background: '#e2e8f0' }}>
+            <BharatMap
+              stops={mapStops}
+              routeResult={routeResult}
+              activeStopId={activeStopId}
+              onSelectStop={(id) => setActiveStopId(id)}
+              nearbyPlaces={detourRecommendations.slice(0, 4).map((r) => ({
+                id: r.candidateDestination.id,
+                name: r.candidateDestination.name,
+                lat: r.candidateDestination.coordinates.lat,
+                lng: r.candidateDestination.coordinates.lng,
+                type: r.candidateDestination.type,
+                detourDisplay: r.detourDisplay,
+                distanceKm: r.addedDistanceKm,
+              }))}
+              onAddNearby={(id) => {
+                const match = VERIFIED_DESTINATIONS.find((d) => d.id === id);
+                if (match) handleAddDetourStop(match); // Fallback for map clicks
+              }}
+              isJourneyMode={isJourneyMode}
+              height="600px"
+            />
+          </div>
 
           {/* Official Booking Providers Section */}
-          <div
-            style={{
-              marginTop: '18px',
-              background: 'var(--color-bg-surface-elevated, #1a2230)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              borderRadius: '12px',
-              padding: '16px',
-            }}
-          >
-            <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 800, color: '#C88E44', marginBottom: '8px' }}>
-              🏨 Verified Booking Portals
+          <div style={{ marginTop: '32px' }}>
+            <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', fontWeight: 800, color: '#64748b', letterSpacing: '0.05em', marginBottom: '12px' }}>
+              BOOKING & OFFICIAL LINKS
             </div>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {VERIFIED_BOOKING_PROVIDERS.filter((p) => p.territoryCoverage?.includes(itinerary.territoryId as any)).map((p) => (
                 <a
                   key={p.id}
                   href={p.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-sm btn-outline"
-                  style={{ fontSize: '0.75rem', padding: '4px 10px' }}
+                  style={{
+                    fontSize: '0.9rem',
+                    color: '#0f172a',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '6px 0',
+                    fontWeight: 500
+                  }}
                 >
-                  {p.name} ↗
+                  {p.name} <span style={{ opacity: 0.5, fontSize: '0.8rem' }}>↗</span>
                 </a>
               ))}
+              {VERIFIED_BOOKING_PROVIDERS.filter((p) => p.territoryCoverage?.includes(itinerary.territoryId as any)).length === 0 && (
+                <div style={{ fontSize: '0.85rem', color: '#64748b' }}>No official providers listed for this route.</div>
+              )}
             </div>
           </div>
         </div>
       </div>
-
       {/* 5. Optional Yatra AI Co-Editor Modal/Drawer */}
       {showAiEditor && (
         <YatraAiItineraryEditor
@@ -1281,8 +1144,8 @@ export default function ItineraryPage() {
     <Suspense
       fallback={
         <div className="container section-spacing" style={{ textAlign: 'center', padding: '100px 0' }}>
-          <div style={{ color: '#C88E44', fontSize: '1.2rem', fontWeight: 700 }}>
-            🇮🇳 Loading Dishaara Itinerary Studio…
+          <div style={{ color: '#C88E44', fontSize: '1.2rem', fontWeight: 700, fontFamily: 'var(--font-serif)' }}>
+            Preparing Dishaara Itinerary...
           </div>
         </div>
       }

@@ -314,7 +314,7 @@ export function Footer() {
                 href="tel:112"
                 style={{
                   background: 'var(--color-bg-surface)',
-                  padding: '8px 14px',
+                  padding: '12px 16px',
                   borderRadius: 'var(--radius-lg, 14px)',
                   border: '1px solid rgba(220, 38, 38, 0.3)',
                   textDecoration: 'none',
@@ -336,17 +336,17 @@ export function Footer() {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     National Emergency (All UTs)
                   </div>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--color-danger, #DC2626)', lineHeight: 1.1, marginTop: '2px' }}>
+                  <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--color-danger, #DC2626)', lineHeight: 1.1, marginTop: '2px' }}>
                     112
                   </div>
                 </div>
                 <div
                   style={{
-                    width: '32px',
-                    height: '32px',
+                    width: '36px',
+                    height: '36px',
                     borderRadius: '50%',
                     background: 'rgba(220, 38, 38, 0.1)',
                     color: 'var(--color-danger, #DC2626)',
@@ -355,7 +355,7 @@ export function Footer() {
                     justifyContent: 'center',
                   }}
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>
                 </div>
@@ -366,7 +366,7 @@ export function Footer() {
                 href="tel:1363"
                 style={{
                   background: 'var(--color-bg-surface)',
-                  padding: '8px 14px',
+                  padding: '12px 16px',
                   borderRadius: 'var(--radius-lg, 14px)',
                   border: '1px solid var(--color-border-subtle)',
                   textDecoration: 'none',
@@ -388,17 +388,17 @@ export function Footer() {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     24x7 Tourist Helpline
                   </div>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--color-text-primary)', lineHeight: 1.1, marginTop: '2px' }}>
+                  <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--color-text-primary)', lineHeight: 1.1, marginTop: '2px' }}>
                     1363
                   </div>
                 </div>
                 <div
                   style={{
-                    width: '32px',
-                    height: '32px',
+                    width: '36px',
+                    height: '36px',
                     borderRadius: '50%',
                     background: 'rgba(200, 142, 68, 0.12)',
                     color: 'var(--color-brand-accent)',
@@ -407,115 +407,47 @@ export function Footer() {
                     justifyContent: 'center',
                   }}
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>
                 </div>
               </a>
 
-              {/* Women Helpline 1091 */}
-              <a
-                href="tel:1091"
-                style={{
-                  background: 'var(--color-bg-surface)',
-                  padding: '8px 14px',
-                  borderRadius: 'var(--radius-lg, 14px)',
-                  border: '1px solid var(--color-border-subtle)',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  boxShadow: 'var(--shadow-subtle)',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--color-brand-accent)';
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(200, 142, 68, 0.15)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--color-border-subtle)';
-                  e.currentTarget.style.boxShadow = 'var(--shadow-subtle)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Women Helpline
-                  </div>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--color-text-primary)', lineHeight: 1.1, marginTop: '2px' }}>
-                    1091
-                  </div>
-                </div>
-                <div
+              {/* Quick Helplines Row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                <a
+                  href="tel:1091"
                   style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    background: 'rgba(200, 142, 68, 0.12)',
-                    color: 'var(--color-brand-accent)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    padding: '8px 10px',
+                    background: 'var(--color-bg-surface)',
+                    border: '1px solid var(--color-border-subtle)',
+                    borderRadius: 'var(--radius-md, 10px)',
+                    textDecoration: 'none',
+                    textAlign: 'center',
+                    fontSize: '0.75rem',
+                    color: 'var(--color-text-secondary)',
+                    fontWeight: 600,
                   }}
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                  </svg>
-                </div>
-              </a>
-
-              {/* Childline 1098 */}
-              <a
-                href="tel:1098"
-                style={{
-                  background: 'var(--color-bg-surface)',
-                  padding: '8px 14px',
-                  borderRadius: 'var(--radius-lg, 14px)',
-                  border: '1px solid var(--color-border-subtle)',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  boxShadow: 'var(--shadow-subtle)',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--color-brand-accent)';
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(200, 142, 68, 0.15)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--color-border-subtle)';
-                  e.currentTarget.style.boxShadow = 'var(--shadow-subtle)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Childline
-                  </div>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--color-text-primary)', lineHeight: 1.1, marginTop: '2px' }}>
-                    1098
-                  </div>
-                </div>
-                <div
+                  Women: <strong style={{ color: 'var(--color-text-primary)' }}>1091</strong>
+                </a>
+                <a
+                  href="tel:1098"
                   style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    background: 'rgba(200, 142, 68, 0.12)',
-                    color: 'var(--color-brand-accent)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    padding: '8px 10px',
+                    background: 'var(--color-bg-surface)',
+                    border: '1px solid var(--color-border-subtle)',
+                    borderRadius: 'var(--radius-md, 10px)',
+                    textDecoration: 'none',
+                    textAlign: 'center',
+                    fontSize: '0.75rem',
+                    color: 'var(--color-text-secondary)',
+                    fontWeight: 600,
                   }}
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                  </svg>
-                </div>
-              </a>
+                  Childline: <strong style={{ color: 'var(--color-text-primary)' }}>1098</strong>
+                </a>
+              </div>
 
               {/* System Relay Indicator */}
               <div
