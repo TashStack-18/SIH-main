@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { BrandLogo } from "./BrandLogo";
+import { LiveSafetyAlertsPopover } from "./LiveSafetyAlertsPopover";
 import {
   VERIFIED_DESTINATIONS,
   VERIFIED_TERRITORIES,
@@ -72,6 +73,8 @@ export function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileSearchExpanded, setIsMobileSearchExpanded] = useState(false);
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
@@ -105,6 +108,8 @@ export function Navbar() {
   useEffect(() => {
     setIsSearchFocused(false);
     setSelectedIndex(-1);
+    setIsMenuOpen(false);
+    setIsMobileSearchExpanded(false);
   }, [pathname]);
 
   const toggleTheme = () => {
@@ -286,421 +291,647 @@ export function Navbar() {
   const isTransparent = isHome && !isScrolled;
 
   return (
-    <header
-      className={`navbar fixed top-0 w-full z-50 transition-all duration-300 ${isTransparent ? "navbar-transparent" : "navbar-scrolled"}`}
-      style={{
-        background: isTransparent
-          ? "transparent"
-          : isDark
-          ? "rgba(19, 27, 46, 0.94)"
-          : "rgba(250, 247, 242, 0.94)",
-        backdropFilter: isTransparent ? "none" : "blur(14px)",
-        WebkitBackdropFilter: isTransparent ? "none" : "blur(14px)",
-        borderBottom: isTransparent ? "none" : "1px solid var(--color-border-subtle)",
-        boxShadow: isScrolled ? "0 10px 30px -15px rgba(0, 0, 0, 0.2)" : "none",
-      }}
-      role="banner"
-    >
-      <div
-        className="navbar-container"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          height: "72px",
-          width: "100%",
-          maxWidth: "100%",
-          padding: "0 clamp(16px, 2.5vw, 28px)",
-          margin: "0 auto",
-          position: "relative",
-        }}
-      >
-        {/* Left Corner: Brand Logo */}
-        <div style={{ display: "flex", alignItems: "center", zIndex: 2 }}>
-          <BrandLogo size="md" textColor={isTransparent ? "#FFFFFF" : undefined} />
-        </div>
+    <>
+      <style>{`
+        /* RESPONSIVE NAVBAR CLASSES */
+        .bsy-navbar-container {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 72px;
+          width: 100%;
+          max-width: 100%;
+          padding: 0 clamp(16px, 2.5vw, 28px);
+          margin: 0 auto;
+          position: relative;
+        }
 
-        {/* Desktop Navigation Links — Exactly Centered on the Screen */}
-        <nav
-          className="nav-links"
-          role="navigation"
-          aria-label="Main Navigation"
+        .bsy-nav-left {
+          display: flex;
+          align-items: center;
+          z-index: 2;
+          flex-shrink: 0;
+        }
+
+        .bsy-nav-center {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 4px;
+          align-items: center;
+          z-index: 1;
+        }
+
+        .bsy-nav-right {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          z-index: 30;
+          margin-left: auto;
+          position: relative;
+          flex-shrink: 0;
+        }
+
+        .bsy-search-form {
+          display: flex;
+          align-items: center;
+          border-radius: var(--radius-pill, 9999px);
+          padding: 7px 14px;
+          gap: 8px;
+          width: 280px;
+          transition: all 0.25s ease;
+          position: relative;
+        }
+
+        .bsy-search-input-wrapper {
+          display: block;
+          flex: 1;
+        }
+
+        .bsy-mobile-menu-trigger {
+          display: none;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        /* STATE 2: COMPACT / SPLIT-SCREEN (~768px - 1100px) */
+        @media (max-width: 1100px) {
+          .bsy-nav-center {
+            display: none !important;
+          }
+          .bsy-mobile-menu-trigger {
+            display: flex;
+          }
+          .bsy-search-form {
+            width: 200px;
+          }
+        }
+
+        /* STATE 3: MOBILE (< 768px) */
+        @media (max-width: 768px) {
+          .bsy-search-form {
+            width: 40px;
+            padding: 0;
+            justify-content: center;
+            background: transparent !important;
+            border: none !important;
+          }
+          .bsy-search-input-wrapper {
+            display: none;
+          }
+
+          /* Expanded search state on mobile */
+          .bsy-nav-right.search-expanded .bsy-search-form {
+            position: absolute;
+            right: 0;
+            width: calc(100vw - 32px);
+            max-width: 400px;
+            background: var(--color-bg-surface, #fff) !important;
+            border: 1px solid var(--color-border-subtle) !important;
+            padding: 7px 14px;
+            z-index: 50;
+          }
+          .bsy-nav-right.search-expanded .bsy-search-input-wrapper {
+            display: block;
+          }
+
+          .hide-on-mobile {
+            display: none !important;
+          }
+        }
+      `}</style>
+
+      {/* MOBILE FULLSCREEN MENU */}
+      {isMenuOpen && (
+        <div
           style={{
-            position: "absolute",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            gap: "4px",
-            alignItems: "center",
-            zIndex: 1,
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)'
           }}
+          onClick={() => setIsMenuOpen(false)}
         >
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`nav-link ${isActive ? "active" : ""}`}
+          <div
+            style={{
+              position: 'absolute', top: 0, right: 0, bottom: 0,
+              width: 'min(320px, 85vw)',
+              background: isDark ? 'rgba(19, 27, 46, 0.98)' : 'rgba(250, 247, 242, 0.98)',
+              boxShadow: '-10px 0 40px rgba(0,0,0,0.2)',
+              padding: '24px',
+              display: 'flex', flexDirection: 'column',
+              overflowY: 'auto'
+            }}
+            onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile Navigation Menu"
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+              <BrandLogo size="sm" textColor={isDark ? '#FFFFFF' : undefined} />
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                aria-label="Close navigation menu"
                 style={{
-                  padding: "6px 14px",
-                  fontSize: "0.875rem",
-                  fontWeight: isActive ? 700 : 500,
-                  textDecoration: "none",
-                  color: isTransparent
-                    ? "#FFFFFF"
-                    : isActive
-                    ? "var(--color-accent)"
-                    : "var(--color-text-secondary)",
-                  background: isTransparent
-                    ? isActive
-                    ? "rgba(255, 255, 255, 0.22)"
-                    : "transparent"
-                    : isActive
-                    ? "rgba(200, 142, 68, 0.12)"
-                    : "transparent",
-                  border: isTransparent && isActive ? "1px solid rgba(255, 255, 255, 0.3)" : "1px solid transparent",
-                  backdropFilter: isTransparent && isActive ? "blur(8px)" : "none",
-                  WebkitBackdropFilter: isTransparent && isActive ? "blur(8px)" : "none",
-                  borderRadius: "var(--radius-pill, 9999px)",
-                  textShadow: isTransparent ? "0 1px 4px rgba(0, 0, 0, 0.6)" : "none",
-                  transition: "all 0.2s ease",
+                  background: 'transparent', border: 'none',
+                  color: isDark ? '#FFFFFF' : 'var(--color-text-primary)',
+                  fontSize: '1.5rem', cursor: 'pointer',
+                  padding: '4px'
+                }}
+              >✕</button>
+            </div>
+
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: '16px' }} aria-label="Mobile Navigation">
+              {navLinks.map(l => {
+                const isActive = pathname === l.href || (l.href !== '/' && pathname.startsWith(l.href));
+                return (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    style={{
+                      fontSize: '1.1rem', fontWeight: isActive ? 700 : 500, textDecoration: 'none',
+                      color: isActive ? 'var(--color-accent)' : (isDark ? '#FFFFFF' : 'var(--color-text-primary)'),
+                      padding: '8px 0'
+                    }}
+                  >{l.label}</Link>
+                );
+              })}
+              <LiveSafetyAlertsPopover isMobile={true} onCloseMobileMenu={() => setIsMenuOpen(false)} />
+
+
+              <div style={{ borderTop: '1px solid var(--color-border-subtle)', margin: '16px 0' }}></div>
+
+              <Link
+                href="/profile"
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  fontSize: '1.1rem', fontWeight: 500, textDecoration: 'none',
+                  color: isDark ? '#FFFFFF' : 'var(--color-text-primary)', padding: '8px 0'
+                }}
+              >Profile</Link>
+
+              <button
+                onClick={() => { toggleTheme(); setIsMenuOpen(false); }}
+                style={{
+                  fontSize: '1.1rem', fontWeight: 500, textAlign: 'left', padding: '8px 0',
+                  color: isDark ? '#FFFFFF' : 'var(--color-text-primary)', background: 'transparent', border: 'none', cursor: 'pointer'
+                }}
+              >Theme: {isDark ? 'Dark' : 'Light'}</button>
+
+              <Link
+                href="/ai"
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  fontSize: '1.1rem', fontWeight: 600, textDecoration: 'none',
+                  color: 'var(--color-accent)', padding: '8px 0'
+                }}
+              >Yatra AI</Link>
+
+              <Link
+                href="/safety"
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  fontSize: '1.1rem', fontWeight: 700, textDecoration: 'none', color: '#dc2626',
+                  marginTop: '16px', display: 'flex', alignItems: 'center', gap: '8px'
                 }}
               >
-                {link.label}
-                {isActive && (
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--color-accent)]" />
-                )}
+                <span style={{ background: '#dc2626', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>SOS</span>
+                Emergency
               </Link>
-            );
-          })}
-        </nav>
+            </nav>
+          </div>
+        </div>
+      )}
 
-        {/* Right Corner: Universal Search Bar with Live Suggestions */}
-        <div
-          ref={searchContainerRef}
-          className="navbar-actions"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            zIndex: 30,
-            marginLeft: "auto",
-            position: "relative",
-          }}
-        >
-          {/* Search Form */}
-          <form
-            onSubmit={handleSearchSubmit}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              background: isTransparent
-                ? "rgba(255, 255, 255, 0.18)"
-                : isDark
-                ? "rgba(255, 255, 255, 0.08)"
-                : "rgba(45, 27, 20, 0.05)",
-              border: isTransparent
-                ? "1px solid rgba(255, 255, 255, 0.32)"
-                : "1px solid var(--color-border-subtle)",
-              backdropFilter: isTransparent ? "blur(12px)" : "none",
-              WebkitBackdropFilter: isTransparent ? "blur(12px)" : "none",
-              borderRadius: "var(--radius-pill, 9999px)",
-              padding: "7px 14px",
-              gap: "8px",
-              width: "280px",
-              transition: "all 0.25s ease",
-              position: "relative",
-            }}
+      {/* Global Page Offset for Non-Home Pages */}
+      {!isHome && <div style={{ height: '72px', width: '100%', flexShrink: 0 }} aria-hidden="true" />}
+      <header
+        className={`navbar fixed top-0 w-full z-50 transition-all duration-300 ${isTransparent ? "navbar-transparent" : "navbar-scrolled"}`}
+        style={{
+          background: isTransparent
+            ? "transparent"
+            : isDark
+            ? "#131B2E"
+            : "#FAF7F2",
+          backdropFilter: "none",
+          WebkitBackdropFilter: "none",
+          borderBottom: isTransparent ? "none" : "1px solid var(--color-border-subtle)",
+          boxShadow: isScrolled ? "0 10px 30px -15px rgba(0, 0, 0, 0.2)" : "none",
+        }}
+        role="banner"
+      >
+        <div className="bsy-navbar-container">
+          {/* Left Corner: Brand Logo */}
+          <div className="bsy-nav-left" style={{ opacity: isMobileSearchExpanded ? 0 : 1, pointerEvents: isMobileSearchExpanded ? 'none' : 'auto', transition: 'opacity 0.2s' }}>
+            <BrandLogo size="md" textColor={isTransparent ? "#FFFFFF" : undefined} />
+          </div>
+
+          {/* Desktop Navigation Links — STATE 1 Only */}
+          <nav
+            className="bsy-nav-center nav-links"
+            role="navigation"
+            aria-label="Main Navigation"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`nav-link ${isActive ? "active" : ""}`}
+                  style={{
+                    padding: "6px 14px",
+                    fontSize: "0.875rem",
+                    fontWeight: isActive ? 700 : 500,
+                    textDecoration: "none",
+                    color: isTransparent
+                      ? "#FFFFFF"
+                      : isActive
+                      ? "var(--color-accent)"
+                      : "var(--color-text-secondary)",
+                    background: isTransparent
+                      ? isActive
+                      ? "rgba(255, 255, 255, 0.22)"
+                      : "transparent"
+                      : isActive
+                      ? "rgba(200, 142, 68, 0.12)"
+                      : "transparent",
+                    border: isTransparent && isActive ? "1px solid rgba(255, 255, 255, 0.3)" : "1px solid transparent",
+                    backdropFilter: isTransparent && isActive ? "blur(8px)" : "none",
+                    WebkitBackdropFilter: isTransparent && isActive ? "blur(8px)" : "none",
+                    borderRadius: "var(--radius-pill, 9999px)",
+                    textShadow: isTransparent ? "0 1px 4px rgba(0, 0, 0, 0.6)" : "none",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {link.label}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--color-accent)]" />
+                  )}
+                </Link>
+              );
+            })}
+            <LiveSafetyAlertsPopover isTransparent={isTransparent} />
+          </nav>
+
+          {/* Right Corner: Universal Search Bar, Actions, and Menu Button */}
+          <div
+            ref={searchContainerRef}
+            className={`bsy-nav-right navbar-actions ${isMobileSearchExpanded ? 'search-expanded' : ''}`}
+          >
+            {/* Search Form */}
+            <form
+              onSubmit={handleSearchSubmit}
+              className="bsy-search-form"
               style={{
-                color: isTransparent ? "rgba(255, 255, 255, 0.85)" : "var(--color-text-muted)",
-                flexShrink: 0,
+                background: (isTransparent && !isMobileSearchExpanded)
+                  ? "rgba(255, 255, 255, 0.18)"
+                  : isDark
+                  ? "rgba(255, 255, 255, 0.08)"
+                  : "rgba(45, 27, 20, 0.05)",
+                border: (isTransparent && !isMobileSearchExpanded)
+                  ? "1px solid rgba(255, 255, 255, 0.32)"
+                  : "1px solid var(--color-border-subtle)",
+                backdropFilter: isTransparent ? "blur(12px)" : "none",
+                WebkitBackdropFilter: isTransparent ? "blur(12px)" : "none",
               }}
             >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setIsSearchFocused(true);
-                setSelectedIndex(-1);
-              }}
-              onFocus={() => setIsSearchFocused(true)}
-              onKeyDown={handleKeyDown}
-              placeholder="Search everything across Bharat..."
-              style={{
-                border: "none",
-                background: "transparent",
-                outline: "none",
-                fontSize: "0.85rem",
-                color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
-                width: "100%",
-              }}
-              className={isTransparent ? "hero-search-input" : ""}
-            />
-            {searchQuery && (
               <button
                 type="button"
                 onClick={() => {
-                  setSearchQuery("");
-                  setIsSearchFocused(false);
+                  if (window.innerWidth <= 768) {
+                    setIsMobileSearchExpanded(true);
+                  }
                 }}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  cursor: "pointer",
-                  color: isTransparent ? "#FFFFFF" : "var(--color-text-muted)",
-                  padding: "0 2px",
-                  fontSize: "0.8rem",
-                  lineHeight: 1,
-                }}
-                aria-label="Clear Search"
+                style={{ background: 'transparent', border: 'none', padding: 0, display: 'flex', cursor: 'pointer' }}
+                aria-label="Search"
               >
-                ✕
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  style={{
+                    color: (isTransparent && !isMobileSearchExpanded) ? "rgba(255, 255, 255, 0.85)" : "var(--color-text-muted)",
+                    flexShrink: 0,
+                  }}
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
               </button>
-            )}
-          </form>
 
-          {/* Real-time Universal Suggestions Dropdown Menu */}
-          {isSearchFocused && searchQuery.trim().length > 0 && (
-            <div
-              style={{
-                position: "absolute",
-                top: "calc(100% + 10px)",
-                right: 0,
-                width: "min(440px, 92vw)",
-                maxHeight: "440px",
-                overflowY: "auto",
-                background: isDark
-                  ? "rgba(19, 27, 46, 0.98)"
-                  : "rgba(255, 255, 255, 0.98)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                border: "1px solid var(--color-border-subtle)",
-                borderRadius: "var(--radius-xl, 16px)",
-                boxShadow: "0 18px 45px -10px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(200, 142, 68, 0.15)",
-                zIndex: 100,
-                padding: "8px 0",
-              }}
-            >
-              {suggestions.length > 0 ? (
-                <>
-                  <div
-                    style={{
-                      padding: "8px 16px",
-                      fontSize: "0.72rem",
-                      fontWeight: 700,
-                      color: "var(--color-brand-accent, #C88E44)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.06em",
-                      borderBottom: "1px solid var(--color-border-subtle)",
-                    }}
-                  >
-                    Instant Results ({suggestions.length})
-                  </div>
+              <div className="bsy-search-input-wrapper">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setIsSearchFocused(true);
+                    setSelectedIndex(-1);
+                  }}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Search everything across Bharat..."
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    outline: "none",
+                    fontSize: "0.85rem",
+                    color: (isTransparent && !isMobileSearchExpanded) ? "#FFFFFF" : "var(--color-text-primary)",
+                    width: "100%",
+                  }}
+                  className={(isTransparent && !isMobileSearchExpanded) ? "hero-search-input" : ""}
+                />
+              </div>
 
-                  <div style={{ padding: "4px 0" }}>
-                    {suggestions.map((item, idx) => {
-                      const isSelected = idx === selectedIndex;
-                      return (
-                        <Link
-                          key={item.id}
-                          href={item.href}
-                          onClick={() => setIsSearchFocused(false)}
-                          onMouseEnter={() => setSelectedIndex(idx)}
-                          style={{
-                            display: "block",
-                            padding: "9px 16px",
-                            textDecoration: "none",
-                            background: isSelected
-                              ? isDark
-                                ? "rgba(200, 142, 68, 0.22)"
-                                : "rgba(200, 142, 68, 0.14)"
-                              : "transparent",
-                            transition: "background 0.15s ease",
-                            borderLeft: isSelected ? "3px solid var(--color-brand-accent, #C88E44)" : "3px solid transparent",
-                          }}
-                        >
-                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", marginBottom: "3px" }}>
-                            <span
+              {/* Clear / Close Search Button */}
+              {(searchQuery || isMobileSearchExpanded) && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSearchQuery("");
+                    setIsSearchFocused(false);
+                    setIsMobileSearchExpanded(false);
+                  }}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    color: (isTransparent && !isMobileSearchExpanded) ? "#FFFFFF" : "var(--color-text-muted)",
+                    padding: "0 2px",
+                    fontSize: "0.8rem",
+                    lineHeight: 1,
+                  }}
+                  aria-label="Clear Search"
+                >
+                  ✕
+                </button>
+              )}
+            </form>
+
+            {/* Real-time Universal Suggestions Dropdown Menu */}
+            {isSearchFocused && searchQuery.trim().length > 0 && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 10px)",
+                  right: 0,
+                  width: "min(440px, 92vw)",
+                  maxHeight: "440px",
+                  overflowY: "auto",
+                  background: isDark
+                    ? "rgba(19, 27, 46, 0.98)"
+                    : "rgba(255, 255, 255, 0.98)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  border: "1px solid var(--color-border-subtle)",
+                  borderRadius: "var(--radius-xl, 16px)",
+                  boxShadow: "0 18px 45px -10px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(200, 142, 68, 0.15)",
+                  zIndex: 100,
+                  padding: "8px 0",
+                }}
+              >
+                {suggestions.length > 0 ? (
+                  <>
+                    <div
+                      style={{
+                        padding: "8px 16px",
+                        fontSize: "0.72rem",
+                        fontWeight: 700,
+                        color: "var(--color-brand-accent, #C88E44)",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.06em",
+                        borderBottom: "1px solid var(--color-border-subtle)",
+                      }}
+                    >
+                      Instant Results ({suggestions.length})
+                    </div>
+
+                    <div style={{ padding: "4px 0" }}>
+                      {suggestions.map((item, idx) => {
+                        const isSelected = idx === selectedIndex;
+                        return (
+                          <Link
+                            key={item.id}
+                            href={item.href}
+                            onClick={() => setIsSearchFocused(false)}
+                            onMouseEnter={() => setSelectedIndex(idx)}
+                            style={{
+                              display: "block",
+                              padding: "9px 16px",
+                              textDecoration: "none",
+                              background: isSelected
+                                ? isDark
+                                  ? "rgba(200, 142, 68, 0.22)"
+                                  : "rgba(200, 142, 68, 0.14)"
+                                : "transparent",
+                              transition: "background 0.15s ease",
+                              borderLeft: isSelected ? "3px solid var(--color-brand-accent, #C88E44)" : "3px solid transparent",
+                            }}
+                          >
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", marginBottom: "3px" }}>
+                              <span
+                                style={{
+                                  fontSize: "0.875rem",
+                                  fontWeight: 700,
+                                  color: "var(--color-text-primary)",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {item.title}
+                              </span>
+                              <span
+                                style={{
+                                  fontSize: "0.68rem",
+                                  fontWeight: 600,
+                                  padding: "2px 7px",
+                                  borderRadius: "4px",
+                                  background: "rgba(200, 142, 68, 0.15)",
+                                  color: "var(--color-brand-accent, #C88E44)",
+                                  flexShrink: 0,
+                                  textTransform: "uppercase",
+                                  letterSpacing: "0.03em",
+                                }}
+                              >
+                                {item.badge}
+                              </span>
+                            </div>
+                            <div
                               style={{
-                                fontSize: "0.875rem",
-                                fontWeight: 700,
-                                color: "var(--color-text-primary)",
+                                fontSize: "0.775rem",
+                                color: "var(--color-text-secondary)",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
                                 whiteSpace: "nowrap",
                               }}
                             >
-                              {item.title}
-                            </span>
-                            <span
-                              style={{
-                                fontSize: "0.68rem",
-                                fontWeight: 600,
-                                padding: "2px 7px",
-                                borderRadius: "4px",
-                                background: "rgba(200, 142, 68, 0.15)",
-                                color: "var(--color-brand-accent, #C88E44)",
-                                flexShrink: 0,
-                                textTransform: "uppercase",
-                                letterSpacing: "0.03em",
-                              }}
-                            >
-                              {item.badge}
-                            </span>
-                          </div>
-                          <div
-                            style={{
-                              fontSize: "0.775rem",
-                              color: "var(--color-text-secondary)",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            {item.subtitle}
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
+                              {item.subtitle}
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
 
-                  {/* Full Search Page Action Footer */}
-                  <div
-                    style={{
-                      borderTop: "1px solid var(--color-border-subtle)",
-                      padding: "8px 16px 4px",
-                      marginTop: "4px",
-                    }}
-                  >
+                    {/* Full Search Page Action Footer */}
+                    <div
+                      style={{
+                        borderTop: "1px solid var(--color-border-subtle)",
+                        padding: "8px 16px 4px",
+                        marginTop: "4px",
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => {
+                          router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+                          setIsSearchFocused(false);
+                          setIsMobileSearchExpanded(false);
+                        }}
+                        style={{
+                          width: "100%",
+                          background: "transparent",
+                          border: "none",
+                          color: "var(--color-brand-accent, #C88E44)",
+                          fontSize: "0.825rem",
+                          fontWeight: 700,
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "6px 0",
+                        }}
+                      >
+                        <span>View all search results for &ldquo;{searchQuery}&rdquo;</span>
+                        <span>→</span>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ padding: "20px 16px", textAlign: "center" }}>
+                    <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "4px" }}>
+                      No exact instant matches
+                    </div>
+                    <div style={{ fontSize: "0.775rem", color: "var(--color-text-secondary)", marginBottom: "12px" }}>
+                      Try searching by territory, destination name, festival, or helpline.
+                    </div>
                     <button
                       type="button"
                       onClick={() => {
                         router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
                         setIsSearchFocused(false);
+                        setIsMobileSearchExpanded(false);
                       }}
-                      style={{
-                        width: "100%",
-                        background: "transparent",
-                        border: "none",
-                        color: "var(--color-brand-accent, #C88E44)",
-                        fontSize: "0.825rem",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: "6px 0",
-                      }}
+                      className="btn btn-sm btn-outline"
+                      style={{ fontSize: "0.8rem", width: "100%" }}
                     >
-                      <span>View all search results for &ldquo;{searchQuery}&rdquo;</span>
-                      <span>→</span>
+                      Search full site database for &ldquo;{searchQuery}&rdquo; →
                     </button>
                   </div>
-                </>
-              ) : (
-                <div style={{ padding: "20px 16px", textAlign: "center" }}>
-                  <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "4px" }}>
-                    No exact instant matches
-                  </div>
-                  <div style={{ fontSize: "0.775rem", color: "var(--color-text-secondary)", marginBottom: "12px" }}>
-                    Try searching by territory, destination name, festival, or helpline.
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-                      setIsSearchFocused(false);
-                    }}
-                    className="btn btn-sm btn-outline"
-                    style={{ fontSize: "0.8rem", width: "100%" }}
-                  >
-                    Search full site database for &ldquo;{searchQuery}&rdquo; →
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* User Profile */}
-          <Link
-            href="/profile"
-            className="btn btn-sm btn-ghost btn-icon-only rounded-full w-10 h-10 flex items-center justify-center text-[var(--color-text-primary)]"
-            aria-label="User Profile"
-            style={{
-              color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
-              background: isTransparent ? "rgba(255, 255, 255, 0.16)" : "transparent",
-              border: isTransparent ? "1px solid rgba(255, 255, 255, 0.25)" : "none",
-              backdropFilter: isTransparent ? "blur(8px)" : "none",
-              WebkitBackdropFilter: isTransparent ? "blur(8px)" : "none",
-              borderRadius: "50%",
-              width: "36px",
-              height: "36px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 0.2s ease",
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </Link>
-
-          {/* Dark/Light Theme Switcher */}
-          <button
-            type="button"
-            className="btn btn-sm btn-ghost btn-icon-only rounded-full w-10 h-10 flex items-center justify-center text-[var(--color-text-primary)]"
-            onClick={toggleTheme}
-            aria-label={`Toggle ${isDark ? "Light" : "Dark"} Mode`}
-            style={{
-              color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
-              background: isTransparent ? "rgba(255, 255, 255, 0.16)" : "transparent",
-              border: isTransparent ? "1px solid rgba(255, 255, 255, 0.25)" : "none",
-              backdropFilter: isTransparent ? "blur(8px)" : "none",
-              WebkitBackdropFilter: isTransparent ? "blur(8px)" : "none",
-              borderRadius: "50%",
-              width: "36px",
-              height: "36px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {isDark ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-              </svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-              </svg>
+                )}
+              </div>
             )}
-          </button>
+
+            {/* User Profile */}
+            <Link
+              href="/profile"
+              className="btn btn-sm btn-ghost btn-icon-only rounded-full w-10 h-10 flex items-center justify-center text-[var(--color-text-primary)] hide-on-mobile"
+              aria-label="User Profile"
+              style={{
+                color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
+                background: isTransparent ? "rgba(255, 255, 255, 0.16)" : "transparent",
+                border: isTransparent ? "1px solid rgba(255, 255, 255, 0.25)" : "none",
+                backdropFilter: isTransparent ? "blur(8px)" : "none",
+                WebkitBackdropFilter: isTransparent ? "blur(8px)" : "none",
+                borderRadius: "50%",
+                width: "36px",
+                height: "36px",
+                display: isMobileSearchExpanded ? "none" : "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </Link>
+
+            {/* Dark/Light Theme Switcher */}
+            <button
+              type="button"
+              className="btn btn-sm btn-ghost btn-icon-only rounded-full w-10 h-10 flex items-center justify-center text-[var(--color-text-primary)] hide-on-mobile"
+              onClick={toggleTheme}
+              aria-label={`Toggle ${isDark ? "Light" : "Dark"} Mode`}
+              style={{
+                color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
+                background: isTransparent ? "rgba(255, 255, 255, 0.16)" : "transparent",
+                border: isTransparent ? "1px solid rgba(255, 255, 255, 0.25)" : "none",
+                backdropFilter: isTransparent ? "blur(8px)" : "none",
+                WebkitBackdropFilter: isTransparent ? "blur(8px)" : "none",
+                borderRadius: "50%",
+                width: "36px",
+                height: "36px",
+                display: isMobileSearchExpanded ? "none" : "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.2s ease",
+              }}
+            >
+              {isDark ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <line x1="12" y1="1" x2="12" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="23"></line>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                  <line x1="1" y1="12" x2="3" y2="12"></line>
+                  <line x1="21" y1="12" x2="23" y2="12"></line>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+              )}
+            </button>
+
+            {/* Mobile Menu Hamburger Button */}
+            <button
+              type="button"
+              className="bsy-mobile-menu-trigger"
+              onClick={() => setIsMenuOpen(true)}
+              aria-label="Open Navigation Menu"
+              aria-expanded={isMenuOpen}
+              style={{
+                color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
+                display: isMobileSearchExpanded ? "none" : undefined,
+              }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
