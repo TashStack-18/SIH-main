@@ -48,20 +48,26 @@ export function BrandLogo({
         verticalAlign: 'middle',
       }}
     >
-      <span
-        className="brand-wordmark font-serif"
-        style={{
-          fontWeight: 700,
-          letterSpacing: '-0.02em',
-          color: textColor,
-          lineHeight: 1,
-          whiteSpace: 'nowrap',
-          transition: 'color 0.2s ease, opacity 0.15s ease',
-          fontSize: '1.5rem',
-        }}
-      >
-        Dishaara
-      </span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <img 
+          src="/favicon.png" 
+          alt="Dishaara Icon" 
+          style={{ 
+            height: size === 'lg' ? '60px' : size === 'sm' ? '30px' : '44px', 
+            width: 'auto',
+            objectFit: 'contain'
+          }} 
+        />
+        <img 
+          src="/logo.png" 
+          alt="Dishaara" 
+          style={{ 
+            height: size === 'lg' ? '46px' : size === 'sm' ? '23px' : '35px', 
+            width: 'auto',
+            objectFit: 'contain' 
+          }} 
+        />
+      </div>
     </span>
   );
 
