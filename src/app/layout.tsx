@@ -43,6 +43,7 @@ export const metadata: Metadata = {
 
 import { Navbar } from "@/src/app/components/Navbar";
 import { Footer } from "@/src/app/components/Footer";
+import { PageContainer } from "@/src/app/components/PageContainer";
 
 export default function RootLayout({
   children,
@@ -74,9 +75,9 @@ export default function RootLayout({
         <div id="root" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
           {/* TEMPORARILY DISABLED: IntroAnimation is excluded from this deployment */}
           <Navbar />
-          <div style={{ flexGrow: 1 }}>
+          <PageContainer>
             {children}
-          </div>
+          </PageContainer>
           <Footer />
         </div>
       </body>

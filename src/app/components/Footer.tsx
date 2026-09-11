@@ -2,19 +2,44 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { VERIFIED_TERRITORIES } from '@/src/lib/fixtures';
 import { BrandLogo } from './BrandLogo';
 
 export function Footer() {
+  const pathname = usePathname();
   const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
+  const [query, setQuery] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  if (pathname !== '/') {
+    return null;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim() && email.includes('@')) {
-      setSubscribed(true);
+    if (!email.trim() || !query.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      await fetch('/api/v1/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'query_or_feedback',
+          email: email.trim(),
+          message: query.trim(),
+        }),
+      });
+    } catch {
+      // Ignore network failures for mock feedback
+    } finally {
+      setIsSubmitting(false);
+      setSubmitted(true);
       setEmail('');
-      setTimeout(() => setSubscribed(false), 5000);
+      setQuery('');
+      setTimeout(() => setSubmitted(false), 4000);
     }
   };
 
@@ -43,7 +68,7 @@ export function Footer() {
       <div className="container relative z-10" style={{ maxWidth: 'var(--container-max-width)', margin: '0 auto', padding: '0 24px' }}>
         
         {/* ============================================================
-            1. PRE-FOOTER NEWSLETTER / TRAVEL ADVISORY BANNER
+            1. SIMPLE PRE-FOOTER: ASK QUERIES OR GIVE FEEDBACK
             ============================================================ */}
         <div
           style={{
@@ -60,7 +85,7 @@ export function Footer() {
             gap: '24px',
           }}
         >
-          <div style={{ flex: '1 1 380px' }}>
+          <div style={{ flex: '1 1 340px' }}>
             <div
               style={{
                 fontSize: '0.75rem',
@@ -71,7 +96,7 @@ export function Footer() {
                 marginBottom: '8px',
               }}
             >
-              Travel Intelligence
+              Support & Feedback
             </div>
             <h3
               style={{
@@ -83,34 +108,35 @@ export function Footer() {
                 margin: '0 0 6px',
               }}
             >
-              Real-Time Insights for Your Next Journey
+              Ask Queries or Give Feedback
             </h3>
             <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-              Receive verified travel advisories, seasonal highlights, and cultural festival guides across all 8 Union Territories.
+              Have questions about your journey or want to share suggestions with our team?
             </p>
           </div>
 
           <form
-            onSubmit={handleSubscribe}
+            onSubmit={handleSubmit}
             style={{
-              flex: '1 1 320px',
+              flex: '1 1 360px',
               maxWidth: '480px',
               display: 'flex',
-              gap: '10px',
-              flexWrap: 'wrap',
+              flexDirection: 'column',
+              gap: '12px',
+              width: '100%',
             }}
           >
-            <div style={{ flex: '1 1 200px', position: 'relative' }}>
+            <div style={{ width: '100%' }}>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email address"
-                aria-label="Email address for travel alerts"
+                placeholder="Your email address"
+                aria-label="Email address"
                 style={{
                   width: '100%',
-                  padding: '12px 16px',
+                  padding: '12px 18px',
                   borderRadius: 'var(--radius-pill, 9999px)',
                   border: '1px solid var(--color-border-medium, #D3C9BD)',
                   background: 'var(--color-bg-canvas)',
@@ -129,26 +155,60 @@ export function Footer() {
                 }}
               />
             </div>
-            <button
-              type="submit"
-              style={{
-                background: 'var(--color-brand-accent)',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: 'var(--radius-pill, 9999px)',
-                padding: '12px 22px',
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                whiteSpace: 'nowrap',
-                boxShadow: '0 2px 8px rgba(200, 142, 68, 0.3)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.9')}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-            >
-              {subscribed ? 'Subscribed' : 'Get Alerts'}
-            </button>
+            <div style={{ width: '100%' }}>
+              <textarea
+                rows={3}
+                required
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Type your query or feedback here..."
+                aria-label="Your query or feedback"
+                style={{
+                  width: '100%',
+                  padding: '12px 18px',
+                  borderRadius: 'var(--radius-lg, 14px)',
+                  border: '1px solid var(--color-border-medium, #D3C9BD)',
+                  background: 'var(--color-bg-canvas)',
+                  color: 'var(--color-text-primary)',
+                  fontSize: '0.875rem',
+                  outline: 'none',
+                  resize: 'vertical',
+                  fontFamily: 'inherit',
+                  transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--color-brand-accent)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(200, 142, 68, 0.15)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--color-border-medium, #D3C9BD)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              />
+            </div>
+            <div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                style={{
+                  background: 'var(--color-brand-accent)',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  borderRadius: 'var(--radius-pill, 9999px)',
+                  padding: '12px 28px',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap',
+                  boxShadow: '0 2px 8px rgba(200, 142, 68, 0.3)',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.9')}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+              >
+                {submitted ? 'Submitted ✓' : isSubmitting ? 'Sending...' : 'Submit'}
+              </button>
+            </div>
           </form>
         </div>
 
