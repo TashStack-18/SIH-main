@@ -541,7 +541,7 @@ function ItineraryContent() {
           }}
         >
           <span className="badge badge-verified" style={{ background: 'var(--color-primary, #C88E44)', color: '#ffffff', marginBottom: '12px' }}>
-            🇮🇳 Bharat Safe Yatra — Next-Gen Itinerary Engine
+            🇮🇳 Dishaara — Next-Gen Itinerary Engine
           </span>
           <h1 className="font-serif" style={{ fontSize: 'clamp(1.9rem, 4vw, 2.8rem)', color: 'var(--color-text-primary, #ffffff)', margin: '8px 0 12px' }}>
             Choose a Destination to Start Planning
@@ -1284,7 +1284,7 @@ export default function ItineraryPage() {
       fallback={
         <div className="container section-spacing" style={{ textAlign: 'center', padding: '100px 0' }}>
           <div style={{ color: '#C88E44', fontSize: '1.2rem', fontWeight: 700 }}>
-            🇮🇳 Loading Bharat Safe Yatra Itinerary Studio…
+            🇮🇳 Loading Dishaara Itinerary Studio…
           </div>
         </div>
       }

@@ -23,8 +23,8 @@ export function renderNavbar() {
       <div class="container navbar-container">
         
         <!-- Pure Text Brand Wordmark -->
-        <a href="#/" class="brand-logo" aria-label="Bharat Safe Yatra Home">
-          <span class="brand-wordmark">Bharat Safe Yatra</span>
+        <a href="#/" class="brand-logo" aria-label="Dishaara Home">
+          <span class="brand-wordmark">Dishaara</span>
         </a>
 
         <!-- Desktop Navigation Links -->

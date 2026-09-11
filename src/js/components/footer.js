@@ -18,7 +18,7 @@ export function renderFooter() {
           <!-- Column 1: Brand & Mission -->
           <div>
             <div class="brand-logo" style="margin-bottom: 16px;">
-              <span class="brand-wordmark">Bharat Safe Yatra</span>
+              <span class="brand-wordmark">Dishaara</span>
             </div>
             <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 16px;">
               India's intelligent tourism and life safety platform covering all 8 Union Territories. Built for Smart India Hackathon (SIH 2026) with verified government knowledge grounding, geospatial routing, and AI assistance.
@@ -79,7 +79,7 @@ export function renderFooter() {
         <!-- Footer Bottom Bar -->
         <div class="footer-bottom">
           <div>
-            © 2026 Bharat Safe Yatra • Smart India Hackathon (SIH 2026). All verified data strictly adheres to Phase 5 official source standards.
+            © 2026 Dishaara • Smart India Hackathon (SIH 2026). All verified data strictly adheres to Phase 5 official source standards.
           </div>
           <div style="display: flex; gap: 16px;">
             <a href="#/safety">Emergency Protocol</a>
