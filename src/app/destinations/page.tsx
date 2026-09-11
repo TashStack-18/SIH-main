@@ -29,10 +29,16 @@ function DestinationsContent() {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Keep state synchronized with URL query changes
+  // Keep state synchronized with URL query changes and scroll completely to top
   useEffect(() => {
     setSelectedTerritoryId(initialTerritoryId);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [initialTerritoryId]);
+
+  // Ensure scroll to top on initial page mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
 
   // Close search suggestions on click outside
   useEffect(() => {
@@ -50,12 +56,13 @@ function DestinationsContent() {
     setSearchQuery("");
     setActiveCategory("ALL");
     setIsSearchFocused(false);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     if (territoryId) {
       const target = VERIFIED_TERRITORIES.find(t => t.id === territoryId);
       const slug = target ? target.slug : territoryId.toLowerCase();
-      router.push(`/destinations?ut=${encodeURIComponent(slug)}`, { scroll: false });
+      router.push(`/destinations?ut=${encodeURIComponent(slug)}`, { scroll: true });
     } else {
-      router.push("/destinations", { scroll: false });
+      router.push("/destinations", { scroll: true });
     }
   };
 
@@ -149,21 +156,6 @@ function DestinationsContent() {
       <div className="section-header" style={{ marginBottom: "var(--space-xl)" }}>
         {selectedTerritoryId && currentTerritory ? (
           <div>
-            <button
-              onClick={() => handleSelectTerritory(null)}
-              className="btn btn-sm btn-outline"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                marginBottom: "16px",
-                fontWeight: 600,
-                borderRadius: "var(--radius-pill)",
-                padding: "6px 16px"
-              }}
-            >
-              ← Back to All 8 Union Territories
-            </button>
             <h1 style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", marginBottom: "8px" }}>
               {currentTerritory.name}
             </h1>
@@ -338,7 +330,6 @@ function DestinationsContent() {
                         onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                       >
                         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                          <span style={{ fontSize: "1.1rem" }}>🏛️</span>
                           <div>
                             <div style={{ fontWeight: 600, fontSize: "0.925rem", color: "var(--color-text-primary)" }}>{ut.name}</div>
                             <div style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)" }}>Capital: {ut.capital}</div>
@@ -610,17 +601,17 @@ function DestinationsContent() {
       {/* VIEW 2: PLACES INSIDE THE SELECTED UNION TERRITORY (e.g., Delhi, Ladakh, etc.) */}
       {selectedTerritoryId && currentTerritory && (
         <section>
-          {/* Territory Hero Feature Card - Expanded by 35%+ */}
+          {/* Territory Hero Feature Card - Expanded & Cleaned */}
           <div
             style={{
               position: "relative",
               borderRadius: "var(--radius-xl)",
               overflow: "hidden",
               marginBottom: "var(--space-2xl)",
-              minHeight: "340px",
+              minHeight: "480px",
               display: "flex",
               alignItems: "flex-end",
-              padding: "48px 36px",
+              padding: "56px 40px",
               color: "#ffffff",
               backgroundImage: `url('${currentTerritory.heroImage || currentTerritory.thumbnailImage}')`,
               backgroundSize: "cover",
@@ -632,26 +623,18 @@ function DestinationsContent() {
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "linear-gradient(180deg, rgba(15,23,42,0.2) 0%, rgba(15,23,42,0.85) 100%)"
+                background: "linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.85) 100%)"
               }}
             />
             <div style={{ position: "relative", zIndex: 2, maxWidth: "880px" }}>
-              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "12px" }}>
-                <span className="badge badge-neutral" style={{ background: "rgba(255,255,255,0.2)", color: "#ffffff", backdropFilter: "blur(6px)" }}>
-                  🏛️ Capital: {currentTerritory.capital}
-                </span>
-                <span className="badge badge-neutral" style={{ background: "rgba(255,255,255,0.2)", color: "#ffffff", backdropFilter: "blur(6px)" }}>
-                  🌡️ {currentTerritory.weatherSnapshot.temp}°C • {currentTerritory.weatherSnapshot.condition}
-                </span>
-                <span className="badge badge-neutral" style={{ background: "rgba(255,255,255,0.2)", color: "#ffffff", backdropFilter: "blur(6px)" }}>
-                  Best time to visit: {currentTerritory.weatherSnapshot.bestMonths}
-                </span>
-              </div>
-              <h2 style={{ color: "#ffffff", fontSize: "clamp(1.9rem, 4vw, 2.75rem)", fontWeight: 800, marginBottom: "10px", lineHeight: 1.2 }}>
+              <h2 style={{ color: "#ffffff", fontSize: "clamp(2rem, 4.5vw, 3rem)", fontWeight: 800, marginBottom: "12px", lineHeight: 1.2 }}>
                 All Places in {currentTerritory.name}
               </h2>
-              <p style={{ color: "rgba(255,255,255,0.92)", fontSize: "1.05rem", lineHeight: 1.6, maxWidth: "800px" }}>
+              <p style={{ color: "rgba(255,255,255,0.92)", fontSize: "1.05rem", lineHeight: 1.6, maxWidth: "840px", marginBottom: "8px" }}>
                 {currentTerritory.description}
+              </p>
+              <p style={{ color: "rgba(255,255,255,0.95)", fontSize: "1rem", fontWeight: 600 }}>
+                Best time to visit: {currentTerritory.weatherSnapshot.bestMonths}
               </p>
             </div>
           </div>
@@ -809,7 +792,8 @@ function DestinationsContent() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-              gap: "var(--space-xl)"
+              gap: "var(--space-xl)",
+              marginBottom: "var(--space-2xl)"
             }}
           >
             {territoryDestinations.map(dest => (
@@ -887,7 +871,7 @@ function DestinationsContent() {
           </div>
 
           {territoryDestinations.length === 0 && (
-            <div className="card" style={{ padding: "48px", textAlign: "center", color: "var(--color-text-muted)" }}>
+            <div className="card" style={{ padding: "48px", textAlign: "center", color: "var(--color-text-muted)", marginBottom: "var(--space-2xl)" }}>
               <div style={{ fontSize: "3rem", marginBottom: "12px" }}>📍</div>
               <h3>No places match your search criteria in {currentTerritory.name}.</h3>
               <p style={{ marginTop: "6px" }}>Try adjusting your search keyword or clearing the category filter.</p>
@@ -903,6 +887,106 @@ function DestinationsContent() {
               </button>
             </div>
           )}
+
+          {/* Verified Emergency Support for Current Territory (Positioned at bottom) */}
+          <div
+            style={{
+              background: "var(--color-bg-surface-elevated, #F0EADE)",
+              borderRadius: "var(--radius-xl, 20px)",
+              padding: "28px 32px",
+              marginTop: "var(--space-2xl)",
+              borderLeft: "5px solid var(--color-danger, #BA1A1A)",
+              boxShadow: "var(--shadow-subtle)",
+            }}
+          >
+            <h3
+              className="font-serif"
+              style={{
+                fontSize: "1.45rem",
+                fontWeight: 700,
+                color: "var(--color-danger, #BA1A1A)",
+                marginBottom: "20px",
+                lineHeight: 1.25,
+              }}
+            >
+              Verified Emergency Support for {currentTerritory.name}
+            </h3>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: "16px",
+                marginBottom: "16px",
+              }}
+            >
+              {currentTerritory.emergencyContacts?.map((contact, idx) => (
+                <a
+                  key={idx}
+                  href={`tel:${contact.number.replace(/[^0-9]/g, "")}`}
+                  style={{
+                    background: "var(--color-bg-surface, #FFFFFF)",
+                    borderRadius: "var(--radius-lg, 14px)",
+                    padding: "16px 20px",
+                    border: "1px solid var(--color-border-subtle)",
+                    textDecoration: "none",
+                    display: "block",
+                    boxShadow: "var(--shadow-subtle)",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.borderColor = "var(--color-danger, #BA1A1A)";
+                    e.currentTarget.style.boxShadow = "var(--shadow-card)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.borderColor = "var(--color-border-subtle)";
+                    e.currentTarget.style.boxShadow = "var(--shadow-subtle)";
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "0.78rem",
+                      fontWeight: 600,
+                      color: "var(--color-text-secondary)",
+                      marginBottom: "6px",
+                    }}
+                  >
+                    {contact.name}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "1.45rem",
+                      fontWeight: 800,
+                      color: "var(--color-danger, #BA1A1A)",
+                      lineHeight: 1.1,
+                    }}
+                  >
+                    {contact.number}
+                  </div>
+                </a>
+              ))}
+            </div>
+
+            {currentTerritory.officialPortal && (
+              <div style={{ fontSize: "0.825rem", color: "var(--color-text-muted)", marginTop: "12px" }}>
+                Official Portal:{" "}
+                <a
+                  href={currentTerritory.officialPortal}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: "var(--color-text-secondary)",
+                    textDecoration: "underline",
+                    fontWeight: 600,
+                  }}
+                >
+                  {currentTerritory.officialPortal} ↗
+                </a>
+              </div>
+            )}
+          </div>
         </section>
       )}
     </main>

@@ -17,7 +17,7 @@ const EXPLORE_RAIL_ITEMS: ExploreRailItem[] = [
     title: "Ancient Monasteries",
     description: "Cliffside Gompas and spiritual retreats across the high-altitude Trans-Himalayas.",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB4ueOr9o5aoCAsuOITjegOJSrDAELHg362nbJHi04ltV9YComzsXcCxnetzEk-yagmNAG9Gb7vdBmFT-W_nkEUnccQBmr0S45mXdnfyeNDGV6tDExeHfrLrW67UOPFq9yT-4VdjsgzXSL_8hUeenEMh3vsFODyBTbsEK1MksG503M37Tcq1J9tRqrM0HU5bjhN-sIjkQ4JFshQpjKVQCVYqCuyqRKmYfwE5sYfCDkaSnM9tCAucG9OIA",
-    href: "/territories/ladakh",
+    href: "/destinations?ut=ladakh",
   },
   {
     id: "exp-jk",
@@ -25,7 +25,7 @@ const EXPLORE_RAIL_ITEMS: ExploreRailItem[] = [
     title: "Houseboat Heritage",
     description: "Living pine-wood craftsmanship upon the tranquil waters of Dal Lake.",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBd_IErbXO2ptn_lWhz-tN-bkbQJdLq0SvpSE2zdeEN7tjlskyXIe519Pr8s4ZsrCX0uPwoZBU0rJUZ3_SeA4fm1RlnR66RSptMFHZVNAY-LOntaTg2K9vw5jdSsT6t75mGJoUHoocflhBkcxvf4vJBCX2B_SoNVvzmji66H-oDW8-_hOsaPSnPes_iLfpeUYD5ppHFrOhjNMomc_aNByz8JI7jbDkGCT9gCytdkDfRphhQ7Iq8exibtQ",
-    href: "/territories/jammu-and-kashmir",
+    href: "/destinations?ut=jammu-and-kashmir",
   },
   {
     id: "exp-andaman",
@@ -33,7 +33,7 @@ const EXPLORE_RAIL_ITEMS: ExploreRailItem[] = [
     title: "Island Chronicles",
     description: "Pristine white sand atolls and colonial legacy amid tropical turquoise seas.",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCA9oL4pzahGaYYoydnBHHT_qCy7dn0mJQCP4XVUvEG1lZawmPJjC5RPe_k_0wVcAmSBe2mqBDAyqN9u_97NZSCKnOQUPb663qPG2BgLUtHPNN5JP_asK07dtE5sULnd8IGfy-rNS_hf1t-WymKTC57VQz0FAOXBA9b-rRcxqF0t_fH5xszBTeLQsBd6k9ojiGArWL9VnImNOtfa8DnifAISDXRAwVKHyDHGy9pMccO_BPCHCeo_xvYWw",
-    href: "/territories/andaman-and-nicobar-islands",
+    href: "/destinations?ut=andaman-and-nicobar-islands",
   },
   {
     id: "exp-lakshadweep",
@@ -41,7 +41,7 @@ const EXPLORE_RAIL_ITEMS: ExploreRailItem[] = [
     title: "Coral Atoll Sanctuaries",
     description: "Untouched bioluminescent lagoons with authorized government ePermits.",
     image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200&auto=format&fit=crop",
-    href: "/territories/lakshadweep",
+    href: "/destinations?ut=lakshadweep",
   },
   {
     id: "exp-delhi",
@@ -49,7 +49,7 @@ const EXPLORE_RAIL_ITEMS: ExploreRailItem[] = [
     title: "Citadels of Empires",
     description: "Centuries of dynastic sandstone fortresses, baolis, and grand UNESCO citadels.",
     image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?q=80&w=1200&auto=format&fit=crop",
-    href: "/territories/delhi",
+    href: "/destinations?ut=delhi",
   },
   {
     id: "exp-puducherry",
@@ -57,7 +57,7 @@ const EXPLORE_RAIL_ITEMS: ExploreRailItem[] = [
     title: "French Coastal Heritage",
     description: "Pastel colonial boulevards and spiritual tranquility along the Coromandel coast.",
     image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1200&auto=format&fit=crop",
-    href: "/territories/puducherry",
+    href: "/destinations?ut=puducherry",
   },
   {
     id: "exp-chandigarh",
@@ -65,7 +65,7 @@ const EXPLORE_RAIL_ITEMS: ExploreRailItem[] = [
     title: "Modernist Utopia",
     description: "Le Corbusier's UNESCO masterwork of open-hand architecture and rock sculptures.",
     image: "https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=1200&auto=format&fit=crop",
-    href: "/territories/chandigarh",
+    href: "/destinations?ut=chandigarh",
   },
   {
     id: "exp-dnhdd",
@@ -73,7 +73,7 @@ const EXPLORE_RAIL_ITEMS: ExploreRailItem[] = [
     title: "Portuguese Seafaring Ramparts",
     description: "16th-century coastal bastions overlooking the winds of the Arabian Sea.",
     image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop",
-    href: "/territories/dadra-and-nagar-haveli-and-daman-and-diu",
+    href: "/destinations?ut=dadra-and-nagar-haveli-and-daman-and-diu",
   },
 ];
 
@@ -88,7 +88,7 @@ export function ExploreRail() {
           </h2>
         </div>
         <Link
-          href="/territories"
+          href="/destinations"
           style={{
             fontSize: "0.85rem",
             fontWeight: 700,
