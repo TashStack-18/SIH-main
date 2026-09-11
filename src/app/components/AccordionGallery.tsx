@@ -15,9 +15,10 @@ export interface AccordionItem {
 
 interface AccordionGalleryProps {
   items: AccordionItem[];
+  onSelect?: (item: AccordionItem) => void;
 }
 
-export default function AccordionGallery({ items }: AccordionGalleryProps) {
+export default function AccordionGallery({ items, onSelect }: AccordionGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const panelsRef = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -129,6 +130,12 @@ export default function AccordionGallery({ items }: AccordionGalleryProps) {
             ref={el => { panelsRef.current[idx] = el; }}
             onMouseEnter={() => setActiveIndex(idx)}
             onFocus={() => setActiveIndex(idx)}
+            onClick={(e) => {
+              if (onSelect) {
+                e.preventDefault();
+                onSelect(item);
+              }
+            }}
             className="accordion-panel"
             style={{
               position: "relative",

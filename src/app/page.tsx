@@ -94,46 +94,8 @@ export default function HomePage() {
       {/* 1. Cinematic Hero Carousel (Stitch Heritage Soul - 8 UTs) */}
       <HeroCarousel />
 
-      {/* 5. 8 Union Territories Explorer Grid */}
-      <section className="section-spacing" style={{ backgroundColor: "var(--color-bg-surface-elevated)" }} aria-label="8 Union Territories Explorer">
-        <div className="container">
-          <div className="section-header-row" style={{ marginBottom: "var(--space-2xl)" }}>
-            <div>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
-                Explore the 8 Union Territories
-              </h2>
-              <p className="sub-text" style={{ color: "var(--color-text-secondary)" }}>
-                From the trans-Himalayan summits of Ladakh to the tropical coral lagoons of Lakshadweep.
-              </p>
-            </div>
-            <Link href="/destinations" className="btn btn-outline" style={{ borderRadius: "var(--radius-pill)", padding: "10px 22px", fontWeight: 600 }}>
-              All Destinations →
-            </Link>
-          </div>
-
-          <AccordionGallery items={VERIFIED_TERRITORIES.map(ut => {
-            const config = {
-              "ANDAMAN_NICOBAR": { file: "andaman-nicobar.jpg", pos: "30% 60%" },
-              "CHANDIGARH": { file: "chandigarh.jpg", pos: "center 50%" },
-              "DNH_DD": { file: "dadra-nagar-haveli-daman-diu.jpg", pos: "center 65%" },
-              "DELHI": { file: "delhi.jpg", pos: "45% 40%", scale: 1.05 },
-              "JAMMU_KASHMIR": { file: "jammu-kashmir.jpg", pos: "center 60%" },
-              "LADAKH": { file: "ladakh.jpg", pos: "center 55%" },
-              "LAKSHADWEEP": { file: "lakshadweep.jpg", pos: "65% 75%", scale: 1.1 },
-              "PUDUCHERRY": { file: "puducherry.jpg", pos: "center center", scale: 1.02 }
-            }[ut.id] || { file: null, pos: "center center", scale: 1 };
-
-            return {
-              id: ut.id,
-              name: ut.name,
-              slug: ut.slug,
-              image: config.file ? `/images/utflashcard/${config.file}` : ut.heroImage || ut.thumbnailImage,
-              objectPosition: config.pos,
-              scale: config.scale
-            };
-          })} />
-        </div>
-      </section>
+      {/* 2. Explore Authentic India (Stitch Horizontal Snap-Scroll Rail) */}
+      <ExploreRail />
 
       {/* 4. Popular Across Bharat's 8 UTs (Destinations Spotlight) */}
       <section className="section-spacing container" aria-label="Popular Verified Destinations">
@@ -196,6 +158,46 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 5. 8 Union Territories Explorer Grid */}
+      <section className="section-spacing" style={{ backgroundColor: "var(--color-bg-surface-elevated)" }} aria-label="8 Union Territories Explorer">
+        <div className="container">
+          <div className="section-header-row" style={{ marginBottom: "var(--space-2xl)" }}>
+            <div>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-[#2D1B14] dark:text-[#FAF7F2]">
+                Explore the 8 Union Territories
+              </h2>
+              <p className="sub-text" style={{ color: "var(--color-text-secondary)" }}>
+                From the trans-Himalayan summits of Ladakh to the tropical coral lagoons of Lakshadweep.
+              </p>
+            </div>
+            <Link href="/destinations" className="btn btn-outline" style={{ borderRadius: "var(--radius-pill)", padding: "10px 22px", fontWeight: 600 }}>
+              All Destinations →
+            </Link>
+          </div>
+
+          <AccordionGallery items={VERIFIED_TERRITORIES.map(ut => {
+            const config = {
+              "ANDAMAN_NICOBAR": { file: "andaman-nicobar.jpg", pos: "30% 60%" },
+              "CHANDIGARH": { file: "chandigarh.jpg", pos: "center 50%" },
+              "DNH_DD": { file: "dadra-nagar-haveli-daman-diu.jpg", pos: "center 65%" },
+              "DELHI": { file: "delhi.jpg", pos: "45% 40%", scale: 1.05 },
+              "JAMMU_KASHMIR": { file: "jammu-kashmir.jpg", pos: "center 60%" },
+              "LADAKH": { file: "ladakh.jpg", pos: "center 55%" },
+              "LAKSHADWEEP": { file: "lakshadweep.jpg", pos: "65% 75%", scale: 1.1 },
+              "PUDUCHERRY": { file: "puducherry.jpg", pos: "center center", scale: 1.02 }
+            }[ut.id] || { file: null, pos: "center center", scale: 1 };
+
+            return {
+              id: ut.id,
+              name: ut.name,
+              slug: ut.slug,
+              image: config.file ? `/images/utflashcard/${config.file}` : ut.heroImage || ut.thumbnailImage,
+              objectPosition: config.pos,
+              scale: config.scale
+            };
+          })} />
+        </div>
+      </section>
 
       {/* 6. Travel by Experience */}
       <section className="section-spacing container" aria-label="Signature Experience Categories">
