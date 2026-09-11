@@ -413,41 +413,88 @@ export function Footer() {
                 </div>
               </a>
 
-              {/* Quick Helplines Row */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                <a
-                  href="tel:1091"
-                  style={{
-                    padding: '8px 10px',
-                    background: 'var(--color-bg-surface)',
-                    border: '1px solid var(--color-border-subtle)',
-                    borderRadius: 'var(--radius-md, 10px)',
-                    textDecoration: 'none',
-                    textAlign: 'center',
-                    fontSize: '0.75rem',
-                    color: 'var(--color-text-secondary)',
-                    fontWeight: 600,
-                  }}
-                >
-                  Women: <strong style={{ color: 'var(--color-text-primary)' }}>1091</strong>
-                </a>
-                <a
-                  href="tel:1098"
-                  style={{
-                    padding: '8px 10px',
-                    background: 'var(--color-bg-surface)',
-                    border: '1px solid var(--color-border-subtle)',
-                    borderRadius: 'var(--radius-md, 10px)',
-                    textDecoration: 'none',
-                    textAlign: 'center',
-                    fontSize: '0.75rem',
-                    color: 'var(--color-text-secondary)',
-                    fontWeight: 600,
-                  }}
-                >
-                  Childline: <strong style={{ color: 'var(--color-text-primary)' }}>1098</strong>
-                </a>
-              </div>
+
+              {/* Women Helpline 1091 */}
+              <a
+                href="tel:1091"
+                style={{
+                  background: 'var(--color-bg-surface)',
+                  padding: '12px 16px',
+                  borderRadius: 'var(--radius-lg, 14px)',
+                  border: '1px solid rgba(147, 51, 234, 0.25)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  boxShadow: 'var(--shadow-subtle)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#9333EA';
+                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(147, 51, 234, 0.15)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(147, 51, 234, 0.25)';
+                  e.currentTarget.style.boxShadow = 'var(--shadow-subtle)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Women Helpline
+                  </div>
+                  <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#9333EA', lineHeight: 1.1, marginTop: '2px' }}>
+                    1091
+                  </div>
+                </div>
+                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(147, 51, 234, 0.1)', color: '#9333EA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </div>
+              </a>
+
+              {/* Childline 1098 */}
+              <a
+                href="tel:1098"
+                style={{
+                  background: 'var(--color-bg-surface)',
+                  padding: '12px 16px',
+                  borderRadius: 'var(--radius-lg, 14px)',
+                  border: '1px solid rgba(234, 88, 12, 0.25)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  boxShadow: 'var(--shadow-subtle)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#EA580C';
+                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(234, 88, 12, 0.15)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(234, 88, 12, 0.25)';
+                  e.currentTarget.style.boxShadow = 'var(--shadow-subtle)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Childline
+                  </div>
+                  <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#EA580C', lineHeight: 1.1, marginTop: '2px' }}>
+                    1098
+                  </div>
+                </div>
+                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(234, 88, 12, 0.1)', color: '#EA580C', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </div>
+              </a>
 
               {/* System Relay Indicator */}
               <div
