@@ -38,7 +38,6 @@ export function Navbar() {
     { label: "Destinations", href: "/destinations" },
     { label: "Itinerary", href: "/itinerary" },
     { label: "Map", href: "/map" },
-    { label: "Safety", href: "/safety" },
     { label: "Booking", href: "/bookings" },
   ];
 
