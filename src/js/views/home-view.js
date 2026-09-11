@@ -281,7 +281,7 @@ export function renderHomeView() {
             </div>
             <h3 style="font-size: 1.4rem; color: #991b1b; margin-bottom: 6px;">Travel Safely with Real-Time Emergency Grounding</h3>
             <p style="font-size: 0.875rem; color: #7f1d1d; line-height: 1.5;">
-              Bharat Safe Yatra maintains verified trauma centers, high-altitude oxygen facilities, coast guard stations, and real-time travel advisories across every Union Territory.
+              Dishaara maintains verified trauma centers, high-altitude oxygen facilities, coast guard stations, and real-time travel advisories across every Union Territory.
             </p>
           </div>
 

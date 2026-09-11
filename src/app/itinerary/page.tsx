@@ -1282,7 +1282,7 @@ export default function ItineraryPage() {
       fallback={
         <div className="container section-spacing" style={{ textAlign: 'center', padding: '100px 0' }}>
           <div style={{ color: '#C88E44', fontSize: '1.2rem', fontWeight: 700 }}>
-            🇮🇳 Loading Bharat Safe Yatra Itinerary Studio…
+            🇮🇳 Loading Dishaara Itinerary Studio…
           </div>
         </div>
       }
