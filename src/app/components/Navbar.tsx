@@ -47,14 +47,6 @@ const SITE_PAGES = [
     keywords: ["booking", "ticket", "hotel", "resort", "ferry", "pass", "permit", "stay"],
   },
   {
-    title: "Life Safety & SOS Emergency Hub",
-    subtitle: "24x7 trauma centers, national helplines (112, 1363) & travel advisories",
-    category: "Tool" as const,
-    badge: "Emergency 24x7",
-    href: "/safety",
-    keywords: ["safety", "emergency", "sos", "police", "helpline", "hospital", "ambulance", "112", "1363", "advisory"],
-  },
-  {
     title: "2026 Cultural Festival Calendar",
     subtitle: "Verified festival schedules directly from UT Tourism departments",
     category: "Tool" as const,
