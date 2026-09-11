@@ -299,7 +299,7 @@ export function YatraAiTravelContext({
             className="btn btn-sm btn-primary"
             style={{ textAlign: 'center', textDecoration: 'none' }}
           >
-            🚀 Open in Itinerary Studio
+            Open in Itinerary Studio
           </Link>
         </div>
       )}
