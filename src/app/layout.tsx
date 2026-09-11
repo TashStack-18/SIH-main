@@ -42,7 +42,6 @@ export const metadata: Metadata = {
 };
 
 import { Navbar } from "@/src/app/components/Navbar";
-import { Footer } from "@/src/app/components/Footer";
 
 export default function RootLayout({
   children,
@@ -77,7 +76,6 @@ export default function RootLayout({
           <div style={{ flexGrow: 1 }}>
             {children}
           </div>
-          <Footer />
         </div>
       </body>
     </html>

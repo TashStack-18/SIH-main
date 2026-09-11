@@ -576,7 +576,7 @@ function ItineraryContent() {
   // -------------------------------------------------------------
   if (step === 'DESTINATION') {
     return (
-      <main className="container section-spacing" role="main" style={{ maxWidth: '1280px', margin: '0 auto' }}>
+      <main className="container section-spacing" role="main" style={{ maxWidth: '1280px', margin: '0 auto', paddingTop: "6rem" }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h1 className="font-serif" style={{ fontSize: 'clamp(1.9rem, 4vw, 2.8rem)', color: 'var(--color-text-primary, #ffffff)', margin: '8px 0 12px' }}>
             Choose a destination to start planning
@@ -617,7 +617,7 @@ function ItineraryContent() {
   // -------------------------------------------------------------
   if (step === 'PLANNING' && selectedUt) {
     return (
-      <main className="container section-spacing" role="main" style={{ maxWidth: '640px', margin: '0 auto', display: 'flex', flexDirection: 'column', minHeight: '60vh', justifyContent: 'center' }}>
+      <main className="container section-spacing" role="main" style={{ maxWidth: '640px', margin: '0 auto', display: 'flex', flexDirection: 'column', minHeight: '60vh', justifyContent: 'center', paddingTop: "6rem" }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h2 className="font-serif" style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', color: '#0f172a', margin: '0 0 4px', letterSpacing: '-0.01em' }}>
             {selectedUt.name}
@@ -762,7 +762,7 @@ function ItineraryContent() {
   // Active Itinerary Studio View
   // -------------------------------------------------------------
   return (
-    <main className="container section-spacing" role="main" style={{ maxWidth: '1440px', margin: '0 auto' }}>
+    <main className="container section-spacing" role="main" style={{ maxWidth: '1440px', margin: '0 auto', paddingTop: "6rem" }}>
 
       {/* 1. Header Hero */}
       <div style={{ marginBottom: '40px' }}>

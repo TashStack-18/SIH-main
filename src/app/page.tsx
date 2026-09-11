@@ -3,6 +3,8 @@ import { VERIFIED_TERRITORIES, VERIFIED_DESTINATIONS, VERIFIED_FESTIVALS } from 
 import { HeroCarousel } from "@/src/app/components/HeroCarousel";
 import { ExploreRail } from "@/src/app/components/ExploreRail";
 import AccordionGallery from "@/src/app/components/AccordionGallery";
+import CinematicFestivalGallery from "@/src/app/components/CinematicFestivalGallery";
+import { Footer } from "@/src/app/components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -302,9 +304,9 @@ export default function HomePage() {
       </section>
 
       {/* 7. 2026 Cultural Festival Calendar */}
-      <section className="section-spacing" style={{ backgroundColor: "var(--color-bg-surface-elevated)" }} aria-label="2026 Cultural Festival Calendar">
-        <div className="container">
-          <div className="section-header-row">
+      <section style={{ backgroundColor: "var(--color-bg-surface-elevated)" }} aria-label="2026 Cultural Festival Calendar">
+        <div className="container py-8">
+          <div className="section-header-row mb-6">
             <div>
               <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight" style={{ color: "var(--color-text-primary)" }}>
                 Cultural Festivals & Events
@@ -317,40 +319,10 @@ export default function HomePage() {
               Full 2026 Calendar →
             </Link>
           </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: "var(--space-lg)" }}>
-            {featuredFestivals.map(fest => (
-              <div
-                key={fest.id}
-                className="festival-card card-hoverable card"
-                style={{
-                  padding: "var(--space-lg)",
-                  display: "flex",
-                  flexDirection: "column"
-                }}
-              >
-                <div className="festival-date-badge" style={{ background: "var(--color-primary)", color: "var(--color-text-inverse)" }}>
-                  <span>{fest.displayDate}</span>
-                </div>
-                <h3 className="font-serif" style={{ fontSize: "1.2rem", color: "var(--color-text-primary)", marginTop: "6px" }}>
-                  {fest.name}
-                </h3>
-                <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-accent)", marginBottom: "6px" }}>
-                  {fest.location} ({fest.territoryName})
-                </div>
-                <p style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", lineHeight: 1.5, flexGrow: 1 }}>
-                  {fest.description}
-                </p>
-                <div style={{ paddingTop: "12px", borderTop: "1px solid var(--color-border-subtle)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.775rem", color: "var(--color-text-muted)", fontWeight: 600 }}>{fest.category}</span>
-                  <Link href="/festivals" style={{ fontSize: "0.825rem", fontWeight: 700, color: "var(--color-accent)" }} className="hover-accent">
-                    View Details →
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
+
+        {/* Cinematic Parallax Travel Animation */}
+        <CinematicFestivalGallery />
       </section>
 
       {/* 8. Life Safety & SOS Hub */}
@@ -401,6 +373,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <Footer />
     </main>
   );
 }
