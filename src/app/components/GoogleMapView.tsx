@@ -16,20 +16,19 @@ interface UTData {
   id: string;
   name: string;
   shortName: string;
-  color: string;
   coordinates: { lat: number; lng: number; zoom: number };
 }
 
 const UT_LIST: UTData[] = [
-  { id: 'ALL', name: 'All 8 UTs', shortName: 'In All UTs', color: '#4B6FA5', coordinates: { lat: 22.5937, lng: 78.9629, zoom: 5 } },
-  { id: 'LADAKH', name: 'Ladakh', shortName: 'Ladakh', color: '#6B7E5A', coordinates: { lat: 34.1526, lng: 77.5771, zoom: 8 } },
-  { id: 'JAMMU_KASHMIR', name: 'Jammu & Kashmir', shortName: 'J&K', color: '#5B8A9F', coordinates: { lat: 34.0837, lng: 74.7973, zoom: 9 } },
-  { id: 'DELHI', name: 'Delhi NCR', shortName: 'Delhi', color: '#8B6C42', coordinates: { lat: 28.6139, lng: 77.2090, zoom: 11 } },
-  { id: 'CHANDIGARH', name: 'Chandigarh', shortName: 'Chandigarh', color: '#5A7A6B', coordinates: { lat: 30.7333, lng: 76.7794, zoom: 12 } },
-  { id: 'PUDUCHERRY', name: 'Puducherry', shortName: 'Puducherry', color: '#7A6B9A', coordinates: { lat: 11.9416, lng: 79.8083, zoom: 12 } },
-  { id: 'ANDAMAN_NICOBAR', name: 'Andaman & Nicobar', shortName: 'Andaman', color: '#4A8A7A', coordinates: { lat: 11.6234, lng: 92.7265, zoom: 9 } },
-  { id: 'LAKSHADWEEP', name: 'Lakshadweep', shortName: 'Lakshadweep', color: '#4A7A9A', coordinates: { lat: 10.5667, lng: 72.6417, zoom: 10 } },
-  { id: 'DADRA_NAGAR_HAVELI_DAMAN_DIU', name: 'DNH & Daman & Diu', shortName: 'Daman & Diu', color: '#8A6A5A', coordinates: { lat: 20.3974, lng: 72.8328, zoom: 10 } },
+  { id: 'ALL', name: 'All 8 UTs', shortName: '🇮🇳 All UTs', coordinates: { lat: 22.5937, lng: 78.9629, zoom: 5 } },
+  { id: 'LADAKH', name: 'Ladakh', shortName: '🏔️ Ladakh', coordinates: { lat: 34.1526, lng: 77.5771, zoom: 8 } },
+  { id: 'JAMMU_KASHMIR', name: 'Jammu & Kashmir', shortName: '❄️ J&K', coordinates: { lat: 34.0837, lng: 74.7973, zoom: 9 } },
+  { id: 'DELHI', name: 'Delhi NCR', shortName: '🏛️ Delhi', coordinates: { lat: 28.6139, lng: 77.2090, zoom: 11 } },
+  { id: 'CHANDIGARH', name: 'Chandigarh', shortName: '🌳 Chandigarh', coordinates: { lat: 30.7333, lng: 76.7794, zoom: 12 } },
+  { id: 'PUDUCHERRY', name: 'Puducherry', shortName: '🌊 Puducherry', coordinates: { lat: 11.9416, lng: 79.8083, zoom: 12 } },
+  { id: 'ANDAMAN_NICOBAR', name: 'Andaman & Nicobar', shortName: '🏝️ Andaman', coordinates: { lat: 11.6234, lng: 92.7265, zoom: 9 } },
+  { id: 'LAKSHADWEEP', name: 'Lakshadweep', shortName: '🪸 Lakshadweep', coordinates: { lat: 10.5667, lng: 72.6417, zoom: 10 } },
+  { id: 'DADRA_NAGAR_HAVELI_DAMAN_DIU', name: 'DNH & Daman & Diu', shortName: '🏰 Daman & Diu', coordinates: { lat: 20.3974, lng: 72.8328, zoom: 10 } },
 ];
 
 export default function GoogleMapView() {
@@ -262,16 +261,16 @@ export default function GoogleMapView() {
                   onClick={() => handleSelectUT(ut.id)}
                   style={{
                     whiteSpace: 'nowrap',
-                    padding: '7px 16px',
+                    padding: '8px 18px',
                     borderRadius: '30px',
-                    border: `1.5px solid ${isSelected ? ut.color : 'rgba(0,0,0,0.10)'}`,
-                    background: isSelected ? ut.color : '#FFFFFF',
-                    color: isSelected ? '#FFFFFF' : '#4A4A4A',
+                    border: `1.5px solid ${isSelected ? '#C88E44' : 'rgba(200, 142, 68, 0.25)'}`,
+                    background: isSelected ? '#C88E44' : '#FFFFFF',
+                    color: isSelected ? '#FFFFFF' : '#4A3C31',
                     fontSize: '0.82rem',
-                    fontWeight: isSelected ? 700 : 500,
+                    fontWeight: isSelected ? 800 : 600,
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
-                    boxShadow: isSelected ? `0 3px 10px ${ut.color}55` : '0 1px 3px rgba(0,0,0,0.06)',
+                    boxShadow: isSelected ? '0 4px 14px rgba(200, 142, 68, 0.35)' : '0 2px 6px rgba(45, 27, 20, 0.04)',
                   }}
                 >
                   {ut.shortName}
@@ -318,7 +317,7 @@ export default function GoogleMapView() {
                 boxShadow: activeCategory === 'ATTRACTIONS' ? '0 2px 8px rgba(200, 142, 68, 0.35)' : '0 1px 4px rgba(0,0,0,0.04)',
               }}
             >
-              Attractions ({filteredDestinations.length})
+              ⛰️ Attractions ({filteredDestinations.length})
             </button>
             <button
               onClick={() => setActiveCategory('EMERGENCY')}
@@ -334,7 +333,7 @@ export default function GoogleMapView() {
                 boxShadow: activeCategory === 'EMERGENCY' ? '0 2px 8px rgba(5, 150, 105, 0.3)' : '0 1px 4px rgba(0,0,0,0.04)',
               }}
             >
-              24x7 Hospitals ({filteredEmergency.length})
+              🏥 24x7 Hospitals ({filteredEmergency.length})
             </button>
           </div>
 
@@ -439,7 +438,7 @@ export default function GoogleMapView() {
                         boxShadow: '0 4px 12px rgba(200, 142, 68, 0.3)',
                       }}
                     >
-                      Plan Trip Around {selectedPlace.name.split(' ')[0]}
+                      🚀 Plan Trip Around {selectedPlace.name.split(' ')[0]}
                     </Link>
                     <Link
                       href={`/destinations/${selectedPlace.slug}`}
