@@ -6,5 +6,9 @@ export const metadata = {
 };
 
 export default function MapPage() {
-  return <GoogleMapView />;
+  return (
+    <main style={{ paddingTop: "6rem" }}>
+      <GoogleMapView />
+    </main>
+  );
 }

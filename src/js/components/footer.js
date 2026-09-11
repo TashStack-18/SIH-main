@@ -97,7 +97,7 @@ export function renderFooter() {
 
         <!-- Footer Bottom Bar -->
         <div style="border-top: 1px solid var(--color-border-subtle); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 0.825rem; color: var(--color-text-muted);">
-          <div>© 2026 <strong>Dishaara</strong>. Built for Bharat Safe Yatra Initiative.</div>
+          <div>© 2026 <strong>Dishaara</strong>. Built for Dishaara Initiative.</div>
           <div style="display: flex; gap: 20px;">
             <a href="#/privacy" style="text-decoration: none; color: inherit;">Privacy Policy</a>
             <a href="#/terms" style="text-decoration: none; color: inherit;">Terms of Service</a>

@@ -324,7 +324,7 @@ class AppStore {
       } else {
         assistantReply = `I have verified your request across the Phase 5 knowledge base covering all 8 Union Territories (Andaman, Chandigarh, DNH & DD, Delhi, J&K, Ladakh, Lakshadweep, Puducherry). How would you like me to assist your trip planning?`;
         citations = [
-          { title: "Bharat Safe Yatra Verified Knowledge Engine", url: "https://bharatsafeyatra.gov.in" }
+          { title: "Dishaara Verified Knowledge Engine", url: "https://bharatsafeyatra.gov.in" }
         ];
       }
 

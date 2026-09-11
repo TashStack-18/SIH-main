@@ -151,7 +151,7 @@ function DestinationsContent() {
   }, [selectedTerritoryId, currentTerritory, activeCategory, searchQuery]);
 
   return (
-    <main className="container section-spacing" role="main">
+    <main className="container section-spacing" role="main" style={{ paddingTop: "6rem" }}>
       {/* Top Header Section */}
       <div className="section-header" style={{ marginBottom: "var(--space-xl)" }}>
         {selectedTerritoryId && currentTerritory ? (
