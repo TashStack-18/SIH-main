@@ -438,7 +438,7 @@ export default function GoogleMapView() {
                         boxShadow: '0 4px 12px rgba(200, 142, 68, 0.3)',
                       }}
                     >
-                      🚀 Plan Trip Around {selectedPlace.name.split(' ')[0]}
+                      Plan Trip Around {selectedPlace.name.split(' ')[0]}
                     </Link>
                     <Link
                       href={`/destinations/${selectedPlace.slug}`}

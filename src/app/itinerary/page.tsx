@@ -728,7 +728,7 @@ function ItineraryContent() {
                   className="btn btn-sm btn-primary"
                   style={{ width: '100%', fontWeight: 700 }}
                 >
-                  🚀 Plan Around {dest.name.split(' ')[0]}
+                  Plan Around {dest.name.split(' ')[0]}
                 </button>
               </div>
             </article>
@@ -809,7 +809,7 @@ function ItineraryContent() {
                 fontSize: '0.85rem',
               }}
             >
-              {isJourneyMode ? '✓ Exit Journey Mode' : '🚀 Start Live Journey'}
+              {isJourneyMode ? '✓ Exit Journey Mode' : 'Start Live Journey'}
             </button>
           </div>
         </div>
