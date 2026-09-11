@@ -2,6 +2,7 @@ import Link from "next/link";
 import { VERIFIED_TERRITORIES, VERIFIED_DESTINATIONS, VERIFIED_FESTIVALS } from "@/src/lib/fixtures";
 import { HeroCarousel } from "@/src/app/components/HeroCarousel";
 import { ExploreRail } from "@/src/app/components/ExploreRail";
+import AccordionGallery from "@/src/app/components/AccordionGallery";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -174,91 +175,27 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-              gap: "var(--space-xl)",
-            }}
-          >
-            {VERIFIED_TERRITORIES.map((ut) => (
-              <Link
-                key={ut.id}
-                href={`/destinations?ut=${ut.slug}`}
-                className="card card-hoverable"
-                style={{
-                  position: "relative",
-                  height: "360px",
-                  borderRadius: "var(--radius-xl, 20px)",
-                  overflow: "hidden",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  padding: "24px",
-                  textDecoration: "none",
-                  boxShadow: "var(--shadow-card)",
-                  border: "1px solid var(--color-border-subtle)",
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                }}
-              >
-                {/* Full-bleed background image */}
-                <img
-                  src={ut.heroImage || ut.thumbnailImage}
-                  alt={ut.name}
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    transition: "transform 0.5s ease",
-                  }}
-                  loading="lazy"
-                />
+          <AccordionGallery items={VERIFIED_TERRITORIES.map(ut => {
+            const config = {
+              "ANDAMAN_NICOBAR": { file: "andaman&nicobar.jpg", pos: "30% 60%" },
+              "CHANDIGARH": { file: "CAHANDIGARH.jpg", pos: "center 50%" },
+              "DNH_DD": { file: "dadar haveli.jpg", pos: "center 65%" },
+              "DELHI": { file: "delhi.jpg", pos: "45% 40%", scale: 1.05 },
+              "JAMMU_KASHMIR": { file: "jammuandkashmir.jpg", pos: "center 60%" },
+              "LADAKH": { file: "ladakh.jpg", pos: "center 55%" },
+              "LAKSHADWEEP": { file: "lakswadweep.jpg", pos: "65% 75%", scale: 1.1 },
+              "PUDUCHERRY": { file: "puducherry.jpg", pos: "center center", scale: 1.02 }
+            }[ut.id] || { file: null, pos: "center center", scale: 1 };
 
-                {/* Dark gradient overlay for crystal clear contrast */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background: "linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.85) 100%)",
-                  }}
-                />
-
-                {/* Text Content Overlay: Name and Explore */}
-                <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", gap: "10px" }}>
-                  <h3
-                    className="font-serif"
-                    style={{
-                      fontSize: "1.45rem",
-                      fontWeight: 700,
-                      color: "#FFFFFF",
-                      margin: 0,
-                      lineHeight: 1.25,
-                      textShadow: "0 2px 8px rgba(0,0,0,0.5)",
-                    }}
-                  >
-                    {ut.name}
-                  </h3>
-                  <div>
-                    <span
-                      style={{
-                        fontSize: "0.85rem",
-                        fontWeight: 700,
-                        color: "var(--color-brand-accent, #C88E44)",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "4px",
-                        textShadow: "0 1px 4px rgba(0,0,0,0.5)",
-                      }}
-                    >
-                      Explore →
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+            return {
+              id: ut.id,
+              name: ut.name,
+              slug: ut.slug,
+              image: config.file ? `/images/utflashcard/${config.file}` : ut.heroImage || ut.thumbnailImage,
+              objectPosition: config.pos,
+              scale: config.scale
+            };
+          })} />
         </div>
       </section>
 
