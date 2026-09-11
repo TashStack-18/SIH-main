@@ -425,27 +425,7 @@ export const FESTIVALS = [
       verificationStatus: "VERIFIED_PRIMARY"
     }
   },
-  {
-    id: "international-yoga-festival",
-    name: "International Yoga Festival",
-    territoryId: "PUDUCHERRY",
-    territoryName: "Puducherry",
-    ut: "Puducherry",
-    location: "Puducherry Beach / Ashrams",
-    startDate: "2026-03-01",
-    endDate: "2026-03-07",
-    displayDate: "March 2026",
-    datePrecision: "DATE_RANGE",
-    category: "CULTURAL",
-    image: "/images/festivals/%2E%20International%20Yoga%20Festival.jpeg",
-    description: "An annual congregation of yoga enthusiasts and practitioners from around the globe.",
-    culturalSignificance: "Promotes spiritual well-being and highlights Puducherry's heritage as a center for yoga and meditation.",
-    officialSource: {
-      name: "Puducherry Tourism",
-      url: "https://puducherry-dt.gov.in/tourist-information/",
-      verificationStatus: "VERIFIED_PRIMARY"
-    }
-  },
+
   {
     id: "villianur-temple-car",
     name: "Villianur Temple Car Festival",
