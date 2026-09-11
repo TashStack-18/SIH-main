@@ -284,11 +284,9 @@ export function Navbar() {
 
   const navLinks = [
     { label: "Home", href: "/" },
-    { label: "Booking", href: "/bookings" },
     { label: "Destinations", href: "/destinations" },
     { label: "Itinerary", href: "/itinerary" },
     { label: "Map", href: "/map" },
-    { label: "Safety", href: "/safety" },
     { label: "Booking", href: "/bookings" },
   ];
 
