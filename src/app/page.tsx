@@ -177,13 +177,13 @@ export default function HomePage() {
 
           <AccordionGallery items={VERIFIED_TERRITORIES.map(ut => {
             const config = {
-              "ANDAMAN_NICOBAR": { file: "andaman&nicobar.jpg", pos: "30% 60%" },
-              "CHANDIGARH": { file: "CAHANDIGARH.jpg", pos: "center 50%" },
-              "DNH_DD": { file: "dadar haveli.jpg", pos: "center 65%" },
+              "ANDAMAN_NICOBAR": { file: "andaman-nicobar.jpg", pos: "30% 60%" },
+              "CHANDIGARH": { file: "chandigarh.jpg", pos: "center 50%" },
+              "DNH_DD": { file: "dadra-nagar-haveli-daman-diu.jpg", pos: "center 65%" },
               "DELHI": { file: "delhi.jpg", pos: "45% 40%", scale: 1.05 },
-              "JAMMU_KASHMIR": { file: "jammuandkashmir.jpg", pos: "center 60%" },
+              "JAMMU_KASHMIR": { file: "jammu-kashmir.jpg", pos: "center 60%" },
               "LADAKH": { file: "ladakh.jpg", pos: "center 55%" },
-              "LAKSHADWEEP": { file: "lakswadweep.jpg", pos: "65% 75%", scale: 1.1 },
+              "LAKSHADWEEP": { file: "lakshadweep.jpg", pos: "65% 75%", scale: 1.1 },
               "PUDUCHERRY": { file: "puducherry.jpg", pos: "center center", scale: 1.02 }
             }[ut.id] || { file: null, pos: "center center", scale: 1 };
 
