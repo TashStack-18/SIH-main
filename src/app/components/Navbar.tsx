@@ -284,6 +284,7 @@ export function Navbar() {
     { label: "Destinations", href: "/destinations" },
     { label: "Itinerary", href: "/itinerary" },
     { label: "Map", href: "/map" },
+    { label: "Experience", href: "/experience" },
     { label: "Booking", href: "/bookings" },
   ];
 
