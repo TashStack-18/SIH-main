@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { BrandLogo } from "./BrandLogo";
-import { LiveSafetyAlertsPopover } from "./LiveSafetyAlertsPopover";
 import {
   VERIFIED_DESTINATIONS,
   VERIFIED_TERRITORIES,
@@ -283,10 +282,56 @@ export function Navbar() {
     { label: "Home", href: "/" },
     { label: "Destinations", href: "/destinations" },
     { label: "Itinerary", href: "/itinerary" },
-    { label: "Map", href: "/map" },
     { label: "Experience", href: "/experience" },
     { label: "Booking", href: "/bookings" },
   ];
+
+  const navRef = useRef<HTMLElement>(null);
+  const linkRefs = useRef<Record<string, HTMLElement | null>>({});
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number; opacity: number }>({
+    left: 0,
+    width: 0,
+    opacity: 0,
+  });
+
+  const activeKey = useMemo(() => {
+    if (hoveredKey) return hoveredKey;
+    const match = navLinks.find(
+      (link) => pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
+    );
+    return match ? match.href : null;
+  }, [pathname, hoveredKey, navLinks]);
+
+  const updateIndicator = useCallback(() => {
+    if (!navRef.current) return;
+    if (activeKey && linkRefs.current[activeKey]) {
+      const el = linkRefs.current[activeKey]!;
+      const navRect = navRef.current.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+
+      const left = elRect.left - navRect.left;
+      const width = elRect.width;
+
+      setIndicatorStyle({
+        left: left + 8,
+        width: Math.max(0, width - 16),
+        opacity: 1,
+      });
+    } else {
+      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
+    }
+  }, [activeKey]);
+
+  useEffect(() => {
+    updateIndicator();
+    const rafId = requestAnimationFrame(updateIndicator);
+    window.addEventListener("resize", updateIndicator);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", updateIndicator);
+    };
+  }, [updateIndicator]);
 
   const isHome = pathname === "/";
   const isTransparent = isHome && !isScrolled;
@@ -465,7 +510,6 @@ export function Navbar() {
                   >{l.label}</Link>
                 );
               })}
-              <LiveSafetyAlertsPopover isMobile={true} onCloseMobileMenu={() => setIsMenuOpen(false)} />
 
 
               <div style={{ borderTop: '1px solid var(--color-border-subtle)', margin: '16px 0' }}></div>
@@ -537,50 +581,76 @@ export function Navbar() {
 
           {/* Desktop Navigation Links — STATE 1 Only */}
           <nav
+            ref={navRef}
             className="bsy-nav-center nav-links"
             role="navigation"
             aria-label="Main Navigation"
+            onMouseLeave={() => setHoveredKey(null)}
+            style={{
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+              display: "flex",
+              gap: "2px",
+              alignItems: "center",
+              height: "100%",
+            }}
           >
             {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+              const isItemHovered = hoveredKey === link.href;
+              const isHighlight = isItemHovered || (!hoveredKey && isActive);
               return (
                 <Link
                   key={link.href}
+                  ref={(el) => { linkRefs.current[link.href] = el; }}
                   href={link.href}
+                  onMouseEnter={() => setHoveredKey(link.href)}
                   className={`nav-link ${isActive ? "active" : ""}`}
                   style={{
-                    padding: "6px 14px",
+                    padding: "8px 14px",
                     fontSize: "0.875rem",
-                    fontWeight: isActive ? 700 : 500,
+                    fontWeight: isHighlight ? 600 : 500,
                     textDecoration: "none",
                     color: isTransparent
-                      ? "#FFFFFF"
-                      : isActive
-                      ? "var(--color-accent)"
+                      ? isHighlight
+                        ? "#FFFFFF"
+                        : "rgba(255, 255, 255, 0.75)"
+                      : isHighlight
+                      ? "var(--color-brand-accent, #C88E44)"
                       : "var(--color-text-secondary)",
-                    background: isTransparent
-                      ? isActive
-                      ? "rgba(255, 255, 255, 0.22)"
-                      : "transparent"
-                      : isActive
-                      ? "rgba(200, 142, 68, 0.12)"
-                      : "transparent",
-                    border: isTransparent && isActive ? "1px solid rgba(255, 255, 255, 0.3)" : "1px solid transparent",
-                    backdropFilter: isTransparent && isActive ? "blur(8px)" : "none",
-                    WebkitBackdropFilter: isTransparent && isActive ? "blur(8px)" : "none",
-                    borderRadius: "var(--radius-pill, 9999px)",
+                    background: "transparent",
+                    border: "none",
+                    borderRadius: 0,
+                    position: "relative",
                     textShadow: isTransparent ? "0 1px 4px rgba(0, 0, 0, 0.6)" : "none",
-                    transition: "all 0.2s ease",
+                    transition: "color 0.2s ease",
                   }}
                 >
                   {link.label}
-                  {isActive && (
-                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--color-accent)]" />
-                  )}
                 </Link>
               );
             })}
-            <LiveSafetyAlertsPopover isTransparent={isTransparent} />
+
+            {/* Animated Moving Line Indicator */}
+            <span
+              className="nav-sliding-indicator"
+              style={{
+                position: "absolute",
+                bottom: "16px",
+                left: `${indicatorStyle.left}px`,
+                width: `${indicatorStyle.width}px`,
+                height: "2.5px",
+                borderRadius: "3px",
+                background: isTransparent
+                  ? "#FFFFFF"
+                  : "var(--color-brand-accent, #C88E44)",
+                boxShadow: "none",
+                opacity: indicatorStyle.opacity,
+                transition: "left 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease, background-color 0.25s ease",
+                pointerEvents: "none",
+              }}
+            />
           </nav>
 
           {/* Right Corner: Universal Search Bar, Actions, and Menu Button */}

@@ -1,23 +1,24 @@
 // @ts-nocheck
 'use client';
+
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
 import { useEffect, useRef } from 'react';
 
 import './CircularGallery.css';
 
-function debounce(func, wait) {
-  let timeout;
-  return function (...args) {
+function debounce(func: any, wait: number) {
+  let timeout: any;
+  return function (this: any, ...args: any[]) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
 
-function lerp(p1, p2, t) {
+function lerp(p1: number, p2: number, t: number) {
   return p1 + (p2 - p1) * t;
 }
 
-function autoBind(instance) {
+function autoBind(instance: any) {
   const proto = Object.getPrototypeOf(instance);
   Object.getOwnPropertyNames(proto).forEach(key => {
     if (key !== 'constructor' && typeof instance[key] === 'function') {
@@ -27,27 +28,29 @@ function autoBind(instance) {
 }
 
 const DEFAULT_FONT = 'bold 30px Figtree';
+// Figtree is not guaranteed to be available on the host page, so the component
+// loads it on demand whenever the default font is used.
 const DEFAULT_FONT_URL = 'https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap';
 
-function deriveFontFamilyFromUrl(url) {
+function deriveFontFamilyFromUrl(url: string) {
   const fileName = (url.split('/').pop() || 'custom-font').split('?')[0];
   const base = fileName.replace(/\.(woff2?|ttf|otf|eot)$/i, '');
   return base.replace(/[^a-zA-Z0-9-_ ]/g, '').trim() || 'CircularGalleryFont';
 }
 
-async function loadFontFromStylesheet(url) {
+async function loadFontFromStylesheet(url: string) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch font stylesheet (${response.status})`);
   const cssText = await response.text();
   const faceBlocks = cssText.match(/@font-face\s*{[^}]*}/g) || [];
   let family = null;
-  const fontFaces = [];
+  const fontFaces: FontFace[] = [];
   for (const block of faceBlocks) {
     const familyMatch = block.match(/font-family:\s*['"]?([^;'"]+)['"]?/);
     const urlMatch = block.match(/url\(\s*['"]?([^'")]+)['"]?\s*\)/);
     if (!familyMatch || !urlMatch) continue;
     family = familyMatch[1].trim();
-    const descriptors = {};
+    const descriptors: FontFaceDescriptors = {};
     const weightMatch = block.match(/font-weight:\s*([^;]+);/);
     const styleMatch = block.match(/font-style:\s*([^;]+);/);
     const rangeMatch = block.match(/unicode-range:\s*([^;]+);/);
@@ -66,7 +69,7 @@ async function loadFontFromStylesheet(url) {
   return family;
 }
 
-async function loadFontFromFile(url) {
+async function loadFontFromFile(url: string) {
   const family = deriveFontFamilyFromUrl(url);
   const fontFace = new FontFace(family, `url(${url})`);
   await fontFace.load();
@@ -74,19 +77,29 @@ async function loadFontFromFile(url) {
   return family;
 }
 
-async function loadCustomFont(fontUrl) {
+async function loadCustomFont(fontUrl: string) {
   const isStylesheet = fontUrl.includes('fonts.googleapis.com') || /\.css(\?.*)?$/i.test(fontUrl);
   return isStylesheet ? loadFontFromStylesheet(fontUrl) : loadFontFromFile(fontUrl);
 }
 
-async function resolveFont(font, fontUrl) {
+// Loads `fontUrl` (a stylesheet such as a Google Fonts URL, or a direct font
+// file) and returns a canvas-ready font string that keeps the size/weight from
+// `font` but swaps in the freshly loaded family. Falls back to `font` on error.
+async function resolveFont(font: string, fontUrl?: string) {
+  // Use the bundled Figtree stylesheet when the caller relies on the default
+  // font, otherwise honor the explicit `fontUrl`.
   const effectiveUrl = fontUrl || (font === DEFAULT_FONT ? DEFAULT_FONT_URL : null);
   if (!effectiveUrl) {
+    // A custom family was supplied without a URL – make sure it is ready (in
+    // case the host page declares it) before we draw it to the canvas,
+    // otherwise the first paint silently falls back to a system font.
     if (document.fonts && document.fonts.load) {
       try {
         await document.fonts.load(font);
         await document.fonts.ready;
-      } catch {}
+      } catch {
+        // Ignore – fall back to whatever the browser provides.
+      }
     }
     return font;
   }
@@ -98,7 +111,9 @@ async function resolveFont(font, fontUrl) {
     if (document.fonts && document.fonts.load) {
       try {
         await document.fonts.load(resolved);
-      } catch {}
+      } catch {
+        // Ignore – we still attempt to render with the requested font.
+      }
     }
     return resolved;
   } catch (error) {
@@ -107,14 +122,14 @@ async function resolveFont(font, fontUrl) {
   }
 }
 
-function getFontSize(font) {
+function getFontSize(font: string) {
   const match = font.match(/(\d+)px/);
   return match ? parseInt(match[1], 10) : 30;
 }
 
-function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'black') {
+function createTextTexture(gl: any, text: string, font = 'bold 30px monospace', color = 'black') {
   const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
+  const context = canvas.getContext('2d')!;
   context.font = font;
   const metrics = context.measureText(text);
   const textWidth = Math.ceil(metrics.width);
@@ -133,7 +148,15 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'blac
 }
 
 class Title {
-  constructor({ gl, plane, renderer, text, textColor = '#545050', font = '30px sans-serif' }) {
+  gl: any;
+  plane: any;
+  renderer: any;
+  text: string;
+  textColor: string;
+  font: string;
+  mesh: any;
+
+  constructor({ gl, plane, renderer, text, textColor = '#545050', font = '30px sans-serif' }: any) {
     autoBind(this);
     this.gl = gl;
     this.plane = plane;
@@ -182,6 +205,33 @@ class Title {
 }
 
 class Media {
+  extra: number;
+  geometry: any;
+  gl: any;
+  image: string;
+  index: number;
+  length: number;
+  renderer: any;
+  scene: any;
+  screen: any;
+  text: string;
+  viewport: any;
+  bend: number;
+  textColor: string;
+  borderRadius: number;
+  font: string;
+  program: any;
+  plane: any;
+  title: any;
+  scale: number;
+  padding: number;
+  width: number;
+  widthTotal: number;
+  x: number;
+  speed: number;
+  isBefore: boolean;
+  isAfter: boolean;
+
   constructor({
     geometry,
     gl,
@@ -197,7 +247,7 @@ class Media {
     textColor,
     borderRadius = 0,
     font
-  }) {
+  }: any) {
     this.extra = 0;
     this.geometry = geometry;
     this.gl = gl;
@@ -267,6 +317,7 @@ class Media {
           
           float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
           
+          // Smooth antialiasing for edges
           float edgeSmooth = 0.002;
           float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
           
@@ -308,7 +359,7 @@ class Media {
       font: this.font
     });
   }
-  update(scroll, direction) {
+  update(scroll: any, direction: string) {
     this.plane.position.x = this.x - scroll.current - this.extra;
 
     const x = this.plane.position.x;
@@ -349,7 +400,7 @@ class Media {
       this.isBefore = this.isAfter = false;
     }
   }
-  onResize({ screen, viewport } = {}) {
+  onResize({ screen, viewport }: any = {}) {
     if (screen) this.screen = screen;
     if (viewport) {
       this.viewport = viewport;
@@ -369,8 +420,31 @@ class Media {
 }
 
 class App {
+  container: HTMLElement;
+  scrollSpeed: number;
+  scroll: { ease: number; current: number; target: number; last: number };
+  onCheckDebounce: any;
+  renderer: any;
+  gl: any;
+  camera: any;
+  scene: any;
+  screen: any;
+  viewport: any;
+  planeGeometry: any;
+  mediasImages: any[];
+  medias: any[];
+  isDown: boolean;
+  start: number;
+  raf: number;
+  boundOnResize: any;
+  boundOnWheel: any;
+  boundOnTouchDown: any;
+  boundOnTouchMove: any;
+  boundOnTouchUp: any;
+  boundOnKeyDown: any;
+
   constructor(
-    container,
+    container: HTMLElement,
     {
       items,
       bend,
@@ -378,17 +452,14 @@ class App {
       borderRadius = 0,
       font = 'bold 30px Figtree',
       scrollSpeed = 2,
-      scrollEase = 0.05,
-      onIndexChange
-    } = {}
+      scrollEase = 0.05
+    }: any = {}
   ) {
     document.documentElement.classList.remove('no-js');
     this.container = container;
     this.scrollSpeed = scrollSpeed;
     this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0 };
     this.onCheckDebounce = debounce(this.onCheck, 200);
-    this.onIndexChange = onIndexChange;
-    this.itemsLength = items?.length || 12;
     this.createRenderer();
     this.createCamera();
     this.createScene();
@@ -397,11 +468,6 @@ class App {
     this.createMedias(items, bend, textColor, borderRadius, font);
     this.update();
     this.addEventListeners();
-    
-    // Initial call to let the parent know the first item is centered
-    if (this.onIndexChange) {
-      this.onIndexChange(0);
-    }
   }
   createRenderer() {
     this.renderer = new Renderer({
@@ -427,20 +493,20 @@ class App {
       widthSegments: 100
     });
   }
-  createMedias(items, bend = 1, textColor, borderRadius, font) {
+  createMedias(items?: Array<{ image: string; text: string }>, bend = 1, textColor?: string, borderRadius = 0, font?: string) {
     const defaultItems = [
-      { image: 'https://picsum.photos/seed/1/800/600', text: 'Bridge' },
-      { image: 'https://picsum.photos/seed/2/800/600', text: 'Desk Setup' },
-      { image: 'https://picsum.photos/seed/3/800/600', text: 'Waterfall' },
-      { image: 'https://picsum.photos/seed/4/800/600', text: 'Strawberries' },
-      { image: 'https://picsum.photos/seed/5/800/600', text: 'Deep Diving' },
-      { image: 'https://picsum.photos/seed/16/800/600', text: 'Train Track' },
-      { image: 'https://picsum.photos/seed/17/800/600', text: 'Santorini' },
-      { image: 'https://picsum.photos/seed/8/800/600', text: 'Blurry Lights' },
-      { image: 'https://picsum.photos/seed/9/800/600', text: 'New York' },
-      { image: 'https://picsum.photos/seed/10/800/600', text: 'Good Boy' },
-      { image: 'https://picsum.photos/seed/21/800/600', text: 'Coastline' },
-      { image: 'https://picsum.photos/seed/12/800/600', text: 'Palm Trees' }
+      { image: `https://picsum.photos/seed/1/800/600?grayscale`, text: 'Bridge' },
+      { image: `https://picsum.photos/seed/2/800/600?grayscale`, text: 'Desk Setup' },
+      { image: `https://picsum.photos/seed/3/800/600?grayscale`, text: 'Waterfall' },
+      { image: `https://picsum.photos/seed/4/800/600?grayscale`, text: 'Strawberries' },
+      { image: `https://picsum.photos/seed/5/800/600?grayscale`, text: 'Deep Diving' },
+      { image: `https://picsum.photos/seed/16/800/600?grayscale`, text: 'Train Track' },
+      { image: `https://picsum.photos/seed/17/800/600?grayscale`, text: 'Santorini' },
+      { image: `https://picsum.photos/seed/8/800/600?grayscale`, text: 'Blurry Lights' },
+      { image: `https://picsum.photos/seed/9/800/600?grayscale`, text: 'New York' },
+      { image: `https://picsum.photos/seed/10/800/600?grayscale`, text: 'Good Boy' },
+      { image: `https://picsum.photos/seed/21/800/600?grayscale`, text: 'Coastline' },
+      { image: `https://picsum.photos/seed/12/800/600?grayscale`, text: 'Palm Trees' }
     ];
     const galleryItems = items && items.length ? items : defaultItems;
     this.mediasImages = galleryItems.concat(galleryItems);
@@ -463,12 +529,12 @@ class App {
       });
     });
   }
-  onTouchDown(e) {
+  onTouchDown(e: any) {
     this.isDown = true;
     this.scroll.position = this.scroll.current;
     this.start = e.touches ? e.touches[0].clientX : e.clientX;
   }
-  onTouchMove(e) {
+  onTouchMove(e: any) {
     if (!this.isDown) return;
     const x = e.touches ? e.touches[0].clientX : e.clientX;
     const distance = (this.start - x) * (this.scrollSpeed * 0.025);
@@ -478,12 +544,12 @@ class App {
     this.isDown = false;
     this.onCheck();
   }
-  onWheel(e) {
+  onWheel(e: any) {
     const delta = e.deltaY || e.wheelDelta || e.detail;
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
     this.onCheckDebounce();
   }
-  onKeyDown(e) {
+  onKeyDown(e: KeyboardEvent) {
     switch (e.key) {
       case 'ArrowRight':
         e.preventDefault();
@@ -514,11 +580,6 @@ class App {
     const itemIndex = Math.round(Math.abs(this.scroll.target) / width);
     const item = width * itemIndex;
     this.scroll.target = this.scroll.target < 0 ? -item : item;
-    
-    if (this.onIndexChange) {
-      const rawIndex = itemIndex % this.itemsLength;
-      this.onIndexChange(rawIndex);
-    }
   }
   onResize() {
     this.screen = {
@@ -588,6 +649,17 @@ class App {
   }
 }
 
+export interface CircularGalleryProps {
+  items?: Array<{ image: string; text: string }>;
+  bend?: number;
+  textColor?: string;
+  borderRadius?: number;
+  font?: string;
+  fontUrl?: string;
+  scrollSpeed?: number;
+  scrollEase?: number;
+}
+
 export default function CircularGallery({
   items,
   bend = 3,
@@ -596,13 +668,12 @@ export default function CircularGallery({
   font = 'bold 30px Figtree',
   fontUrl,
   scrollSpeed = 2,
-  scrollEase = 0.05,
-  onIndexChange
-}) {
-  const containerRef = useRef(null);
+  scrollEase = 0.05
+}: CircularGalleryProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!containerRef.current) return;
-    let app;
+    let app: App | undefined;
     let isMounted = true;
     resolveFont(font, fontUrl).then(resolvedFont => {
       if (!isMounted || !containerRef.current) return;
@@ -613,8 +684,7 @@ export default function CircularGallery({
         borderRadius,
         font: resolvedFont,
         scrollSpeed,
-        scrollEase,
-        onIndexChange
+        scrollEase
       });
     });
 
@@ -622,7 +692,7 @@ export default function CircularGallery({
       isMounted = false;
       if (app) app.destroy();
     };
-  }, [items, bend, textColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase, onIndexChange]);
+  }, [items, bend, textColor, borderRadius, font, fontUrl, scrollSpeed, scrollEase]);
   return (
     <div
       className="circular-gallery"
