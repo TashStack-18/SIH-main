@@ -349,6 +349,7 @@ export function Navbar() {
           max-width: 100%;
           padding: 0 clamp(16px, 2.5vw, 28px);
           margin: 0 auto;
+          gap: 12px;
           position: relative;
         }
 
@@ -360,12 +361,13 @@ export function Navbar() {
         }
 
         .bsy-nav-center {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
           display: flex;
           gap: 4px;
           align-items: center;
+          justify-content: center;
+          flex: 1;
+          min-width: 0;
+          white-space: nowrap;
           z-index: 1;
         }
 
@@ -374,7 +376,6 @@ export function Navbar() {
           align-items: center;
           gap: 8px;
           z-index: 30;
-          margin-left: auto;
           position: relative;
           flex-shrink: 0;
         }
@@ -385,7 +386,7 @@ export function Navbar() {
           border-radius: var(--radius-pill, 9999px);
           padding: 7px 14px;
           gap: 8px;
-          width: 280px;
+          width: 240px;
           transition: all 0.25s ease;
           position: relative;
         }
@@ -408,8 +409,18 @@ export function Navbar() {
           transition: all 0.2s ease;
         }
 
-        /* STATE 2: COMPACT / SPLIT-SCREEN (~768px - 1100px) */
-        @media (max-width: 1100px) {
+        /* Narrow desktop (~1140px - 1320px) */
+        @media (max-width: 1320px) {
+          .bsy-search-form {
+            width: 180px;
+          }
+          .bsy-nav-center {
+            gap: 2px;
+          }
+        }
+
+        /* STATE 2: COMPACT / TABLET (< 1140px) */
+        @media (max-width: 1140px) {
           .bsy-nav-center {
             display: none !important;
           }
@@ -566,17 +577,21 @@ export function Navbar() {
             : isDark
             ? "#131B2E"
             : "#FAF7F2",
-          backdropFilter: "none",
-          WebkitBackdropFilter: "none",
-          borderBottom: isTransparent ? "none" : "1px solid var(--color-border-subtle)",
-          boxShadow: isScrolled ? "0 10px 30px -15px rgba(0, 0, 0, 0.2)" : "none",
+          backdropFilter: isTransparent ? "none" : "blur(16px)",
+          WebkitBackdropFilter: isTransparent ? "none" : "blur(16px)",
+          borderBottom: isTransparent
+            ? "none"
+            : isDark
+            ? "1px solid rgba(255, 255, 255, 0.08)"
+            : "1px solid var(--color-border-subtle)",
+          boxShadow: isTransparent ? "none" : isScrolled ? "0 10px 30px -15px rgba(0, 0, 0, 0.25)" : "none",
         }}
         role="banner"
       >
         <div className="bsy-navbar-container">
           {/* Left Corner: Brand Logo */}
           <div className="bsy-nav-left" style={{ opacity: isMobileSearchExpanded ? 0 : 1, pointerEvents: isMobileSearchExpanded ? 'none' : 'auto', transition: 'opacity 0.2s' }}>
-            <BrandLogo size="md" textColor={isTransparent ? "#FFFFFF" : undefined} />
+            <BrandLogo size="md" textColor={isDark ? "#FFFFFF" : isTransparent ? "#FFFFFF" : undefined} isDark={isDark} />
           </div>
 
           {/* Desktop Navigation Links — STATE 1 Only */}
@@ -663,16 +678,14 @@ export function Navbar() {
               onSubmit={handleSearchSubmit}
               className="bsy-search-form"
               style={{
-                background: (isTransparent && !isMobileSearchExpanded)
-                  ? "rgba(255, 255, 255, 0.18)"
-                  : isDark
-                  ? "rgba(255, 255, 255, 0.08)"
+                background: (isDark || (isTransparent && !isMobileSearchExpanded))
+                  ? "rgba(255, 255, 255, 0.14)"
                   : "rgba(45, 27, 20, 0.05)",
-                border: (isTransparent && !isMobileSearchExpanded)
-                  ? "1px solid rgba(255, 255, 255, 0.32)"
+                border: (isDark || (isTransparent && !isMobileSearchExpanded))
+                  ? "1px solid rgba(255, 255, 255, 0.25)"
                   : "1px solid var(--color-border-subtle)",
-                backdropFilter: isTransparent ? "blur(12px)" : "none",
-                WebkitBackdropFilter: isTransparent ? "blur(12px)" : "none",
+                backdropFilter: (isDark || isTransparent) ? "blur(12px)" : "none",
+                WebkitBackdropFilter: (isDark || isTransparent) ? "blur(12px)" : "none",
               }}
             >
               <button
@@ -693,7 +706,7 @@ export function Navbar() {
                   stroke="currentColor"
                   strokeWidth="2.2"
                   style={{
-                    color: (isTransparent && !isMobileSearchExpanded) ? "rgba(255, 255, 255, 0.85)" : "var(--color-text-muted)",
+                    color: (isDark || (isTransparent && !isMobileSearchExpanded)) ? "rgba(255, 255, 255, 0.9)" : "var(--color-text-muted)",
                     flexShrink: 0,
                   }}
                 >
@@ -719,10 +732,10 @@ export function Navbar() {
                     background: "transparent",
                     outline: "none",
                     fontSize: "0.85rem",
-                    color: (isTransparent && !isMobileSearchExpanded) ? "#FFFFFF" : "var(--color-text-primary)",
+                    color: (isDark || (isTransparent && !isMobileSearchExpanded)) ? "#FFFFFF" : "var(--color-text-primary)",
                     width: "100%",
                   }}
-                  className={(isTransparent && !isMobileSearchExpanded) ? "hero-search-input" : ""}
+                  className={(isDark || (isTransparent && !isMobileSearchExpanded)) ? "hero-search-input" : ""}
                 />
               </div>
 
@@ -740,7 +753,7 @@ export function Navbar() {
                     background: "transparent",
                     border: "none",
                     cursor: "pointer",
-                    color: (isTransparent && !isMobileSearchExpanded) ? "#FFFFFF" : "var(--color-text-muted)",
+                    color: (isDark || (isTransparent && !isMobileSearchExpanded)) ? "#FFFFFF" : "var(--color-text-muted)",
                     padding: "0 2px",
                     fontSize: "0.8rem",
                     lineHeight: 1,
@@ -922,11 +935,11 @@ export function Navbar() {
               className="btn btn-sm btn-ghost btn-icon-only rounded-full w-10 h-10 flex items-center justify-center text-[var(--color-text-primary)] hide-on-mobile"
               aria-label="User Profile"
               style={{
-                color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
-                background: isTransparent ? "rgba(255, 255, 255, 0.16)" : "transparent",
-                border: isTransparent ? "1px solid rgba(255, 255, 255, 0.25)" : "none",
-                backdropFilter: isTransparent ? "blur(8px)" : "none",
-                WebkitBackdropFilter: isTransparent ? "blur(8px)" : "none",
+                color: (isDark || isTransparent) ? "#FFFFFF" : "var(--color-text-primary)",
+                background: (isDark || isTransparent) ? "rgba(255, 255, 255, 0.14)" : "transparent",
+                border: (isDark || isTransparent) ? "1px solid rgba(255, 255, 255, 0.22)" : "none",
+                backdropFilter: (isDark || isTransparent) ? "blur(8px)" : "none",
+                WebkitBackdropFilter: (isDark || isTransparent) ? "blur(8px)" : "none",
                 borderRadius: "50%",
                 width: "36px",
                 height: "36px",
@@ -949,11 +962,11 @@ export function Navbar() {
               onClick={toggleTheme}
               aria-label={`Toggle ${isDark ? "Light" : "Dark"} Mode`}
               style={{
-                color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
-                background: isTransparent ? "rgba(255, 255, 255, 0.16)" : "transparent",
-                border: isTransparent ? "1px solid rgba(255, 255, 255, 0.25)" : "none",
-                backdropFilter: isTransparent ? "blur(8px)" : "none",
-                WebkitBackdropFilter: isTransparent ? "blur(8px)" : "none",
+                color: (isDark || isTransparent) ? "#FFFFFF" : "var(--color-text-primary)",
+                background: (isDark || isTransparent) ? "rgba(255, 255, 255, 0.14)" : "transparent",
+                border: (isDark || isTransparent) ? "1px solid rgba(255, 255, 255, 0.22)" : "none",
+                backdropFilter: (isDark || isTransparent) ? "blur(8px)" : "none",
+                WebkitBackdropFilter: (isDark || isTransparent) ? "blur(8px)" : "none",
                 borderRadius: "50%",
                 width: "36px",
                 height: "36px",
@@ -990,7 +1003,7 @@ export function Navbar() {
               aria-label="Open Navigation Menu"
               aria-expanded={isMenuOpen}
               style={{
-                color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
+                color: (isDark || isTransparent) ? "#FFFFFF" : "var(--color-text-primary)",
                 display: isMobileSearchExpanded ? "none" : undefined,
               }}
             >

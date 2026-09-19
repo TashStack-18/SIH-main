@@ -7,8 +7,10 @@ node_modules/
 /coverage
 
 # Next.js build output
-/.next/
-/out/
+.next/
+**/.next/
+out/
+**/out/
 
 # Production build
 /build

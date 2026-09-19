@@ -48,11 +48,12 @@ const TERRITORIES: Record<string, string> = {
 
 interface LiveSafetyAlertsPopoverProps {
   isTransparent?: boolean;
+  isDark?: boolean;
   isMobile?: boolean;
   onCloseMobileMenu?: () => void;
 }
 
-export function LiveSafetyAlertsPopover({ isTransparent, isMobile, onCloseMobileMenu }: LiveSafetyAlertsPopoverProps) {
+export function LiveSafetyAlertsPopover({ isTransparent, isDark, isMobile, onCloseMobileMenu }: LiveSafetyAlertsPopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [safetyConditions, setSafetyConditions] = useState<SafetyConditions | null>(null);
   const [loading, setLoading] = useState(true);
@@ -181,7 +182,7 @@ export function LiveSafetyAlertsPopover({ isTransparent, isMobile, onCloseMobile
                 padding: "8px 14px",
                 fontSize: "0.875rem",
                 fontWeight: 600,
-                color: isTransparent ? "#FFFFFF" : "var(--color-text-primary)",
+                color: (isDark || isTransparent) ? "#FFFFFF" : "var(--color-text-primary)",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
@@ -190,11 +191,13 @@ export function LiveSafetyAlertsPopover({ isTransparent, isMobile, onCloseMobile
                 gap: "6px",
                 borderRadius: 0,
                 transition: "all 0.2s ease",
-                textShadow: isTransparent ? "0 1px 4px rgba(0, 0, 0, 0.6)" : "none",
+                textShadow: (isDark || isTransparent) ? "0 1px 4px rgba(0, 0, 0, 0.6)" : "none",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
               }
         }
       >
-        <span>Live Safety Alerts</span>
+        <span style={{ whiteSpace: "nowrap" }}>Live Safety Alerts</span>
         {activeCount > 0 && (
           <span
             style={{
