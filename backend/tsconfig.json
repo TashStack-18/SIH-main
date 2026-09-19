@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "next/server": ["./src/shims/next-server"]
+    },
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "ts-node": {
+    "transpileOnly": true
+  }
+}
