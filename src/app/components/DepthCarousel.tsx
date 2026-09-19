@@ -1,254 +1,501 @@
+// @ts-nocheck
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
+import './DepthCarousel.css';
 
-export interface CarouselItem {
-  id: string;
+export interface DepthCarouselItem {
   image: string;
-  title: string;
-  subtitle?: string;
-  description?: string;
-  chapter?: number | string;
+  alt?: string;
+  name?: string;
+  title?: string;
+  territoryName?: string;
+  [key: string]: any;
 }
 
-interface DepthCarouselProps {
-  items: CarouselItem[];
-  onSelect: (id: string) => void;
+export interface DepthCarouselProps {
+  items?: Array<string | DepthCarouselItem>;
   cardWidth?: number;
   cardHeight?: number;
+  radius?: number;
+  tint?: string;
   depth?: number;
   spread?: number;
   tilt?: number;
+  tiltDirection?: 'left' | 'right';
   perspective?: number;
   visibleCards?: number;
+  falloff?: number;
   blur?: number;
+  duration?: number;
+  ease?: string;
+  autoplay?: boolean;
+  autoplayDelay?: number;
+  loop?: boolean;
+  showControls?: boolean;
+  showIndicators?: boolean;
+  onChange?: (index: number, item: any) => void;
+  className?: string;
 }
 
-export function DepthCarousel({
-  items,
-  onSelect,
-  cardWidth = 320,
-  cardHeight = 440,
-  depth = 120,
-  spread = 110,
-  tilt = 12,
-  perspective = 1000,
-  visibleCards = 3,
-  blur = 2,
-}: DepthCarouselProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+const DEFAULT_ITEMS: DepthCarouselItem[] = [
+  { image: 'https://picsum.photos/seed/depth1/800/1000', alt: 'Slide 1' },
+  { image: 'https://picsum.photos/seed/depth2/800/1000', alt: 'Slide 2' },
+  { image: 'https://picsum.photos/seed/depth3/800/1000', alt: 'Slide 3' },
+  { image: 'https://picsum.photos/seed/depth4/800/1000', alt: 'Slide 4' },
+  { image: 'https://picsum.photos/seed/depth5/800/1000', alt: 'Slide 5' },
+  { image: 'https://picsum.photos/seed/depth6/800/1000', alt: 'Slide 6' }
+];
 
-  const prefersReducedMotion = useRef(false);
+const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
+const normalizeItem = (it: string | DepthCarouselItem): DepthCarouselItem =>
+  typeof it === 'string' ? { image: it, alt: '' } : it;
 
-  useEffect(() => {
-    prefersReducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }, []);
+const DepthCarousel = ({
+  items = DEFAULT_ITEMS,
+  cardWidth = 300,
+  cardHeight = 380,
+  radius = 18,
+  tint = '#05060a',
+  depth = 220,
+  spread = 90,
+  tilt = 22,
+  tiltDirection = 'right',
+  perspective = 1400,
+  visibleCards = 4,
+  falloff = 0.2,
+  blur = 6,
+  duration = 700,
+  ease = 'power3.out',
+  autoplay = false,
+  autoplayDelay = 3200,
+  loop = true,
+  showControls = true,
+  showIndicators = true,
+  onChange,
+  className = ''
+}: DepthCarouselProps) => {
+  const data = useMemo(() => (Array.isArray(items) ? items : []).map(normalizeItem), [items]);
+  const count = data.length;
 
-  const handleNext = useCallback(() => {
-    setActiveIndex((prev) => Math.min(prev + 1, items.length - 1));
-  }, [items.length]);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLElement | null)[]>([]);
+  const overlayRefs = useRef<(HTMLElement | null)[]>([]);
 
-  const handlePrev = useCallback(() => {
-    setActiveIndex((prev) => Math.max(prev - 1, 0));
-  }, []);
+  const posRef = useRef(0);
+  const focusRef = useRef(0);
+  const tweenRef = useRef<any>(null);
+  const scaleRef = useRef(1);
+  const cfgRef = useRef<any>({});
+  const onChangeRef = useRef(onChange);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') handleNext();
-      if (e.key === 'ArrowLeft') handlePrev();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleNext, handlePrev]);
+  const dragRef = useRef<any>(null);
+  const wheelTimerRef = useRef<any>(null);
+  const autoTimerRef = useRef<any>(null);
+  const reducedRef = useRef(false);
 
-  // Touch/Drag/Wheel Handling
-  const touchStartX = useRef(0);
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
+  const [active, setActive] = useState(0);
+
+  onChangeRef.current = onChange;
+  cfgRef.current = {
+    count,
+    depth,
+    spread,
+    tilt,
+    tiltDirection,
+    visibleCards,
+    falloff,
+    blur,
+    duration,
+    ease,
+    loop,
+    cardWidth,
+    autoplayDelay
   };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX.current - touchEndX;
-    if (diff > 50) handleNext();
-    if (diff < -50) handlePrev();
-  };
-  const handleWheel = (e: React.WheelEvent) => {
-    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-      if (e.deltaX > 20) handleNext();
-      if (e.deltaX < -20) handlePrev();
-    }
-  };
 
-  // GSAP Animation
-  useEffect(() => {
-    if (!cardsRef.current.length) return;
+  const layout = useCallback((pos: number) => {
+    const cfg = cfgRef.current;
+    const n = cfg.count;
+    if (!n) return;
+    const dir = cfg.tiltDirection === 'left' ? -1 : 1;
+    const sc = scaleRef.current;
 
-    cardsRef.current.forEach((card, index) => {
-      if (!card) return;
+    for (let i = 0; i < n; i++) {
+      const el = cardRefs.current[i];
+      if (!el) continue;
 
-      let dist = index - activeIndex;
-      const total = items.length;
-      
-      // Wrap distance to create a continuous circular spread
-      if (dist > total / 2) {
-        dist -= total;
-      } else if (dist < -total / 2) {
-        dist += total;
+      let d = i - pos;
+      if (cfg.loop && n > 1) {
+        d = ((d % n) + n) % n;
+        if (d > n / 2) d -= n;
       }
-      
-      const isVisible = Math.abs(dist) <= visibleCards;
-      
-      const x = dist * spread;
-      const z = -Math.abs(dist) * depth;
-      const rotateY = dist !== 0 ? Math.sign(dist) * -tilt : 0;
-      const opacity = isVisible ? (1 - Math.abs(dist) * 0.15) : 0;
-      const blurAmount = isVisible ? Math.abs(dist) * blur : blur * visibleCards;
-      const zIndex = items.length - Math.abs(dist);
-      const scale = isVisible ? 1 - Math.abs(dist) * 0.05 : 0.8;
 
-      gsap.to(card, {
-        x,
-        xPercent: -50,
-        z,
-        rotateY,
-        opacity,
-        scale,
-        zIndex,
-        filter: `blur(${blurAmount}px)`,
-        duration: prefersReducedMotion.current ? 0 : 0.6,
-        ease: 'power3.out',
-        pointerEvents: isVisible ? 'auto' : 'none',
-        visibility: isVisible ? 'visible' : 'hidden',
+      const back = Math.max(0, d);
+      const az = Math.abs(d);
+      const shown = az <= cfg.visibleCards + 0.5;
+
+      const tz = -cfg.depth * d;
+      const tx = dir * cfg.spread * d;
+      const ry = dir * cfg.tilt * clamp(d, 0, 1);
+
+      let opacity = d < 0 ? Math.max(0, 1 + d) : 1;
+      if (!shown) opacity = 0;
+
+      const brightness = Math.max(0.15, 1 - back * cfg.falloff);
+      const blurPx = cfg.blur > 0 ? Math.min(cfg.blur, (back / Math.max(1, cfg.visibleCards)) * cfg.blur) : 0;
+      const zi = Math.round(2000 - d * 20);
+
+      el.style.transform = `translate(-50%, -50%) scale(${sc}) translateX(${tx.toFixed(2)}px) translateZ(${tz.toFixed(2)}px) rotateY(${ry.toFixed(3)}deg)`;
+      el.style.opacity = opacity.toFixed(3);
+      el.style.filter = `brightness(${brightness.toFixed(3)}) blur(${blurPx.toFixed(2)}px)`;
+      el.style.zIndex = String(zi);
+      el.style.pointerEvents = shown && opacity > 0.05 ? 'auto' : 'none';
+
+      const ov = overlayRefs.current[i];
+      if (ov) ov.style.opacity = clamp(back * cfg.falloff * 1.25, 0, 0.86).toFixed(3);
+    }
+  }, []);
+
+  const notify = useCallback(
+    (idx: number) => {
+      setActive(idx);
+      onChangeRef.current?.(idx, data[idx]);
+    },
+    [data]
+  );
+
+  const tweenTo = useCallback(
+    (target: number, animate: boolean) => {
+      tweenRef.current?.kill();
+      const cfg = cfgRef.current;
+      const proxy = { p: posRef.current };
+      const dur = animate && !reducedRef.current ? cfg.duration / 1000 : 0;
+      tweenRef.current = gsap.to(proxy, {
+        p: target,
+        duration: dur,
+        ease: cfg.ease,
+        onUpdate: () => {
+          posRef.current = proxy.p;
+          layout(proxy.p);
+        },
+        onComplete: () => {
+          const n = cfg.count;
+          if (n > 0) posRef.current = ((posRef.current % n) + n) % n;
+          layout(posRef.current);
+        }
       });
+    },
+    [layout]
+  );
+
+  const setFocus = useCallback(
+    (rawIndex: number, animate = true) => {
+      const cfg = cfgRef.current;
+      const n = cfg.count;
+      if (!n) return;
+      const idx = cfg.loop ? ((rawIndex % n) + n) % n : clamp(rawIndex, 0, n - 1);
+      let delta = idx - posRef.current;
+      if (cfg.loop && n > 1) {
+        delta = ((delta % n) + n) % n;
+        if (delta > n / 2) delta -= n;
+      }
+      tweenTo(posRef.current + delta, animate);
+      if (idx !== focusRef.current) {
+        focusRef.current = idx;
+        notify(idx);
+      }
+    },
+    [tweenTo, notify]
+  );
+
+  const navigateBy = useCallback((step: number) => setFocus(focusRef.current + step, true), [setFocus]);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const ro = new ResizeObserver(entries => {
+      const w = entries[0].contentRect.width;
+      const cfg = cfgRef.current;
+      const needed = cfg.cardWidth + Math.abs(cfg.spread) * 2 + 120;
+      scaleRef.current = clamp(w / needed, 0.4, 1);
+      layout(posRef.current);
     });
-  }, [activeIndex, items.length, depth, spread, tilt, visibleCards, blur]);
+    ro.observe(root);
+    return () => ro.disconnect();
+  }, [layout]);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      const cfg = cfgRef.current;
+      if (cfg.count < 2) return;
+      e.preventDefault();
+      tweenRef.current?.kill();
+      const raw = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      const delta = e.deltaMode === 1 ? raw * 24 : raw;
+      const step = clamp(delta / (cfg.cardWidth * 0.9), -0.6, 0.6);
+      posRef.current += step;
+      layout(posRef.current);
+      if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
+      wheelTimerRef.current = setTimeout(() => setFocus(Math.round(posRef.current), true), 130);
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+      if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
+    };
+  }, [layout, setFocus]);
+
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    const cfg = cfgRef.current;
+    if (cfg.count < 2) return;
+    tweenRef.current?.kill();
+    dragRef.current = {
+      x: e.clientX,
+      startPos: posRef.current,
+      lastX: e.clientX,
+      lastT: performance.now(),
+      v: 0,
+      moved: false,
+      id: e.pointerId
+    };
+  }, []);
+
+  const onPointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      const drag = dragRef.current;
+      if (!drag) return;
+      const cfg = cfgRef.current;
+      const stepPx = Math.max(cfg.cardWidth * 0.55 * scaleRef.current, 40);
+      const dx = e.clientX - drag.x;
+      if (!drag.moved && Math.abs(dx) > 4) {
+        drag.moved = true;
+        rootRef.current?.setPointerCapture(drag.id);
+      }
+      if (!drag.moved) return;
+      const now = performance.now();
+      const dt = Math.max(now - drag.lastT, 1);
+      drag.v = (e.clientX - drag.lastX) / dt;
+      drag.lastX = e.clientX;
+      drag.lastT = now;
+      posRef.current = drag.startPos - dx / stepPx;
+      layout(posRef.current);
+    },
+    [layout]
+  );
+
+  const onPointerEnd = useCallback(() => {
+    const drag = dragRef.current;
+    if (!drag) return;
+    dragRef.current = null;
+    if (!drag.moved) return;
+    const cfg = cfgRef.current;
+    const stepPx = Math.max(cfg.cardWidth * 0.55 * scaleRef.current, 40);
+    const projected = posRef.current - (drag.v * 180) / stepPx;
+    setFocus(Math.round(projected), true);
+  }, [setFocus]);
+
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        navigateBy(-1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        navigateBy(1);
+      }
+    },
+    [navigateBy]
+  );
+
+  const onCardClick = useCallback(
+    (index: number) => {
+      if (dragRef.current?.moved) return;
+      setFocus(index, true);
+    },
+    [setFocus]
+  );
+
+  useEffect(() => {
+    reducedRef.current = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!autoplay || reducedRef.current || count < 2) return;
+    const root = rootRef.current;
+    let hovered = false;
+    let focused = false;
+    const stop = () => {
+      if (autoTimerRef.current) clearInterval(autoTimerRef.current);
+      autoTimerRef.current = null;
+    };
+    const start = () => {
+      stop();
+      autoTimerRef.current = window.setInterval(
+        () => {
+          if (!hovered && !focused) navigateBy(1);
+        },
+        Math.max(cfgRef.current.autoplayDelay, 600)
+      );
+    };
+    const onEnter = () => {
+      hovered = true;
+    };
+    const onLeave = () => {
+      hovered = false;
+    };
+    const onFocusIn = () => {
+      focused = true;
+    };
+    const onFocusOut = () => {
+      focused = false;
+    };
+    root?.addEventListener('mouseenter', onEnter);
+    root?.addEventListener('mouseleave', onLeave);
+    root?.addEventListener('focusin', onFocusIn);
+    root?.addEventListener('focusout', onFocusOut);
+    start();
+    return () => {
+      stop();
+      root?.removeEventListener('mouseenter', onEnter);
+      root?.removeEventListener('mouseleave', onLeave);
+      root?.removeEventListener('focusin', onFocusIn);
+      root?.removeEventListener('focusout', onFocusOut);
+    };
+  }, [autoplay, autoplayDelay, count, navigateBy]);
+
+  useEffect(() => {
+    layout(posRef.current);
+  }, [layout, depth, spread, tilt, tiltDirection, visibleCards, falloff, blur, cardWidth, cardHeight, radius, count]);
+
+  useEffect(
+    () => () => {
+      tweenRef.current?.kill();
+      if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
+      if (autoTimerRef.current) clearInterval(autoTimerRef.current);
+    },
+    []
+  );
 
   return (
-    <div className="relative w-full overflow-hidden py-12 flex flex-col items-center select-none">
-      
-      <div 
-        ref={containerRef}
-        className="relative flex items-center justify-center outline-none"
-        style={{ perspective: `${perspective}px`, width: '100%', height: `${cardHeight}px` }}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onWheel={handleWheel}
-        tabIndex={0}
-        aria-label="Interactive Destinations Carousel"
-      >
-        {items.map((item, index) => {
-          const isActive = index === activeIndex;
-          
-          return (
-            <div
-              key={item.id}
-              ref={(el) => { cardsRef.current[index] = el; }}
-              className="absolute top-0 cursor-pointer rounded-2xl overflow-hidden shadow-2xl transition-colors glass-panel"
-              style={{
-                left: '50%',
-                top: '50%',
-                marginTop: `-${cardHeight / 2}px`,
-                width: `${cardWidth}px`,
-                height: `${cardHeight}px`,
-                border: isActive ? '1px solid var(--color-accent)' : '1px solid var(--color-border-subtle)',
-                transformStyle: 'preserve-3d',
-                backgroundColor: 'var(--color-bg-surface)',
-                willChange: 'transform, opacity, filter',
+    <div
+      ref={rootRef}
+      className={`depth-carousel ${className}`.trim()}
+      style={{ '--dc-perspective': `${perspective}px` } as React.CSSProperties}
+      role="group"
+      aria-roledescription="carousel"
+      aria-label="Depth carousel"
+      tabIndex={0}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerEnd}
+      onPointerCancel={onPointerEnd}
+      onKeyDown={onKeyDown}
+    >
+      <div className="depth-carousel__stage" ref={stageRef}>
+        {data.map((item, i) => (
+          <div
+            key={i}
+            className="depth-carousel__card"
+            ref={el => {
+              cardRefs.current[i] = el;
+            }}
+            style={{ width: cardWidth, height: cardHeight, borderRadius: radius }}
+            aria-roledescription="slide"
+            aria-label={`${i + 1} of ${count}`}
+            aria-hidden={active !== i}
+            onClick={() => onCardClick(i)}
+          >
+            <img className="depth-carousel__img" src={item.image} alt={item.alt || ''} draggable={false} />
+            <span
+              className="depth-carousel__tint"
+              ref={el => {
+                overlayRefs.current[i] = el;
               }}
-              onClick={() => {
-                if (!isActive) {
-                  setActiveIndex(index);
-                }
-              }}
-            >
-              {/* Image */}
-              <div className="relative w-full h-full">
-                {item.image && (
-                  <img 
-                    src={item.image} 
-                    alt={item.title} 
-                    className="absolute inset-0 w-full h-full object-cover" 
-                    style={{ objectPosition: 'center 40%' }}
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent mix-blend-multiply" />
-                
-                {/* Content Overlay */}
-                <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end text-white">
-                  {item.chapter && (
-                    <div className="font-mono text-xs text-[var(--color-accent)] uppercase tracking-widest mb-2 font-semibold">
-                      Chapter {item.chapter}
-                    </div>
-                  )}
-                  <h3 className="font-serif text-3xl md:text-4xl mb-3 leading-tight" style={{ letterSpacing: '-0.01em', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
-                    {item.title}
-                  </h3>
-                  
-                  <div 
-                    className="overflow-hidden transition-all duration-500 ease-out" 
-                    style={{ maxHeight: isActive ? '100px' : '0px', opacity: isActive ? 1 : 0 }}
-                  >
-                    <p className="text-sm text-white/80 mb-6 line-clamp-2 leading-relaxed">
-                      {item.description || item.subtitle}
-                    </p>
-                    <button 
-                      className="font-mono text-xs uppercase tracking-widest text-[var(--color-accent)] font-semibold flex items-center gap-2 group-hover:text-white transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevents carousel selection trigger if it's somehow active
-                        if (isActive) onSelect(item.id);
-                      }}
-                      tabIndex={isActive ? 0 : -1}
-                    >
-                      Plan this journey <span className="transform transition-transform group-hover:translate-x-1">→</span>
-                    </button>
-                  </div>
+              style={{ background: tint }}
+            />
+            {item.alt && (
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: '24px 16px 14px',
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%)',
+                  color: '#ffffff',
+                  pointerEvents: 'none',
+                  zIndex: 2
+                }}
+              >
+                <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-accent, #e5a93c)', fontWeight: 700, marginBottom: '2px' }}>
+                  {item.territoryName || 'Union Territory'}
+                </div>
+                <div style={{ fontSize: '1.05rem', fontWeight: 700, fontFamily: 'var(--font-serif, inherit)', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                  {item.alt}
                 </div>
               </div>
-            </div>
-          );
-        })}
+            )}
+          </div>
+        ))}
       </div>
 
-      {/* Controls */}
-      <div className="flex items-center gap-6 mt-8 z-10">
-        <button 
-          onClick={handlePrev}
-          disabled={activeIndex === 0}
-          className="p-3 rounded-full border border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-border-strong)] disabled:opacity-30 disabled:pointer-events-none transition-colors"
-          aria-label="Previous destination"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
-        
-        <div className="flex gap-2">
-          {items.map((_, i) => (
+      {showControls && count > 1 && (
+        <>
+          <button
+            type="button"
+            className="depth-carousel__arrow depth-carousel__arrow--prev"
+            aria-label="Previous slide"
+            onClick={() => navigateBy(-1)}
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                d="M15 5l-7 7 7 7"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="depth-carousel__arrow depth-carousel__arrow--next"
+            aria-label="Next slide"
+            onClick={() => navigateBy(1)}
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                d="M9 5l7 7-7 7"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        </>
+      )}
+
+      {showIndicators && count > 1 && (
+        <div className="depth-carousel__dots" role="tablist" aria-label="Slides">
+          {data.map((_, i) => (
             <button
               key={i}
-              onClick={() => setActiveIndex(i)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${activeIndex === i ? 'bg-[var(--color-accent)] w-6' : 'bg-[var(--color-border-strong)] hover:bg-[var(--color-text-muted)]'}`}
-              aria-label={`Go to destination ${i + 1}`}
+              type="button"
+              role="tab"
+              aria-selected={active === i}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`depth-carousel__dot${active === i ? ' is-active' : ''}`}
+              onClick={() => setFocus(i, true)}
             />
           ))}
         </div>
-
-        <button 
-          onClick={handleNext}
-          disabled={activeIndex === items.length - 1}
-          className="p-3 rounded-full border border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-border-strong)] disabled:opacity-30 disabled:pointer-events-none transition-colors"
-          aria-label="Next destination"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
-      </div>
-
+      )}
     </div>
   );
-}
+};
+
+export default DepthCarousel;

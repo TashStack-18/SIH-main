@@ -14,8 +14,7 @@ export function renderNavbar() {
     { label: "Home", href: "#/" },
     { label: "Booking", href: "#/bookings" },
     { label: "Destinations", href: "#/destinations" },
-    { label: "Itinerary", href: "#/itinerary" },
-    { label: "Map", href: "#/map" }
+    { label: "Itinerary", href: "#/itinerary" }
   ];
 
   return `

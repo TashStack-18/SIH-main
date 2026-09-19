@@ -2,6 +2,7 @@ import Link from "next/link";
 import { VERIFIED_TERRITORIES, VERIFIED_DESTINATIONS, VERIFIED_FESTIVALS } from "@/src/lib/fixtures";
 import { HeroCarousel } from "@/src/app/components/HeroCarousel";
 import AccordionGallery from "@/src/app/components/AccordionGallery";
+import PopularDestinationsCarousel from "@/src/app/components/PopularDestinationsCarousel";
 import { Footer } from "@/src/app/components/Footer";
 import type { Metadata } from "next";
 
@@ -11,9 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const popularDestinations = VERIFIED_DESTINATIONS.slice(0, 6);
+  const popularDestinations = VERIFIED_DESTINATIONS.slice(0, 10);
   const featuredFestivals = VERIFIED_FESTIVALS.slice(0, 4);
-
 
   return (
     <main role="main">
@@ -73,53 +73,25 @@ export default function HomePage() {
               Hand-picked destinations with verified coordinates, entry guidelines, and seasonal intelligence.
             </p>
           </div>
-          <Link href="/destinations" className="btn btn-outline">
+          <Link
+            href="/destinations"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "0.95rem",
+              fontWeight: 600,
+              color: "var(--color-text-primary)",
+              textDecoration: "none",
+              transition: "color 0.2s ease, transform 0.2s ease",
+            }}
+            className="hover-accent"
+          >
             View All Destinations →
           </Link>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "var(--space-xl)" }}>
-          {popularDestinations.map(dest => (
-            <article key={dest.id} className="destination-card card-hoverable" style={{ borderRadius: "var(--radius-xl)", overflow: "hidden", border: "1px solid var(--color-border-subtle)" }}>
-              <div className="destination-card-media" style={{ height: "220px", position: "relative" }}>
-                <img src={dest.image} alt={dest.name} className="destination-card-img" style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
-                <div className="destination-card-badges">
-                  <span className="badge badge-neutral" style={{ background: "rgba(45, 27, 20, 0.75)", color: "#ffffff", backdropFilter: "blur(6px)" }}>
-                    {dest.type}
-                  </span>
-                </div>
-              </div>
-
-              <div className="destination-card-body" style={{ padding: "var(--space-lg)", background: "var(--color-bg-surface)" }}>
-                <div className="destination-card-location" style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-accent)", textTransform: "uppercase" }}>
-                  {dest.territoryName} • {dest.type}
-                </div>
-                <h3 className="destination-card-title font-serif" style={{ fontSize: "1.3rem", margin: "4px 0 8px", color: "var(--color-text-primary)" }}>
-                  {dest.name}
-                </h3>
-                <p className="destination-card-desc" style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", lineHeight: 1.5, marginBottom: "14px" }}>
-                  {dest.shortDescription}
-                </p>
-                <div className="destination-card-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "12px", borderTop: "1px solid var(--color-border-subtle)" }}>
-                  <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--color-text-muted)" }}>
-                    Best: {dest.weather.bestTime}
-                  </span>
-                  <div style={{ display: "flex", gap: "6px" }}>
-                    <Link href={`/destinations/${dest.slug}`} className="btn btn-sm btn-outline">
-                      Details
-                    </Link>
-                    <Link
-                      href={`/itinerary?destination=${dest.slug}&territory=${dest.territoryId}&source=home_card`}
-                      className="btn btn-sm btn-primary"
-                    >
-                      + Itinerary
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+        <PopularDestinationsCarousel destinations={popularDestinations} />
       </section>
 
       {/* 7. 2026 Cultural Festival Calendar */}
@@ -174,54 +146,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 8. Life Safety & SOS Hub */}
-      <section className="container" style={{ margin: "var(--space-3xl) auto" }} aria-label="Life Safety & SOS Emergency">
-        <div
-          style={{
-            background: "var(--color-bg-surface-elevated)",
-            border: "1px solid var(--color-border-subtle)",
-            borderRadius: "var(--radius-xl)",
-            padding: "var(--space-2xl)",
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: "var(--space-lg)",
-          }}
-        >
-          <div style={{ maxWidth: "680px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-              <span className="badge badge-danger">
-                Life Safety Protocol
-              </span>
-              <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-danger)" }}>
-                National Helpline: 112 • Tourist Support: 1363
-              </span>
-            </div>
-            <h3 className="font-serif" style={{ fontSize: "1.5rem", color: "var(--color-text-primary)", marginBottom: "6px" }}>
-              Travel Safely with Real-Time Emergency Grounding
-            </h3>
-            <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", lineHeight: 1.55 }}>
-              Dishaara maintains verified trauma centers, high-altitude oxygen facilities, coast guard stations, and real-time travel advisories across every Union Territory.
-            </p>
-          </div>
-
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-            <Link
-              href="/safety"
-              className="btn btn-emergency btn-lg"
-              style={{
-                textDecoration: "none",
-                fontWeight: 700,
-                borderRadius: "var(--radius-pill)",
-                padding: "12px 28px",
-              }}
-            >
-              Open Emergency SOS Center
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <Footer />

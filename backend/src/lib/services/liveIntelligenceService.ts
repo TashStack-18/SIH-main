@@ -1,9 +1,22 @@
-import { LiveAlert, RouteCalculationResult } from '../providers/types';
+import { RouteCalculationResult } from '../providers/types';
 import { VERIFIED_ADVISORIES } from '../fixtures';
 import { WeatherApiProvider } from '../providers/weather/weatherApiProvider';
-import { TERRITORY_SLUG_MAP } from '../fixtures/index';
+import { ActiveTravelAdvisory } from '../../types';
 
 const TRAFFIC_WARNING_THRESHOLD = 0.10; // 10%
+
+export interface LiveAlert {
+  id: string;
+  territoryId: string;
+  title: string;
+  description: string;
+  severity: 'Info' | 'Moderate' | 'High' | 'Critical';
+  timestamp: string;
+  source: string;
+  type: string;
+  coordinates?: [number, number];
+  url?: string;
+}
 
 export interface RouteTravelConditions {
   currentDurationMinutes: number;
@@ -15,7 +28,7 @@ export interface RouteTravelConditions {
 
 export interface LiveSafetyConditions {
   liveAlerts: LiveAlert[];
-  advisories: typeof VERIFIED_ADVISORIES;
+  advisories: ActiveTravelAdvisory[];
   fetchedAt: string;
   error?: boolean;
 }
@@ -38,8 +51,6 @@ export class LiveIntelligenceService {
     const alerts: LiveAlert[] = [];
     let hasError = false;
 
-    // We only fetch live alerts for the specific territory to avoid rate limits, or all if none provided.
-    // However, if we need all UTs, we map over them.
     const slugsToFetch = territorySlug ? [territorySlug] : Object.keys(territoryCoords);
 
     const fetchPromises = slugsToFetch.map(async (slug) => {
@@ -48,46 +59,50 @@ export class LiveIntelligenceService {
 
       try {
         const weatherData = await this.weatherProvider.getWeatherByCoords(coords.lat, coords.lng);
-        if (weatherData && weatherData.alerts) {
-          // Tag the alerts with the territory slug
-          return weatherData.alerts.map(a => ({ ...a, territoryId: slug }));
+        if (weatherData && (weatherData as unknown as { alerts?: LiveAlert[] }).alerts) {
+          const rawAlerts = (weatherData as unknown as { alerts: LiveAlert[] }).alerts;
+          return rawAlerts.map((a: LiveAlert) => ({ ...a, territoryId: slug }));
         }
-      } catch (err) {
+      } catch {
         hasError = true;
       }
       return [];
     });
 
     const results = await Promise.all(fetchPromises);
-    results.forEach((res) => alerts.push(...res));
+    results.forEach((res: LiveAlert[]) => alerts.push(...res));
 
     // Deduplicate alerts by title+description
     const uniqueAlertsMap = new Map<string, LiveAlert>();
-    alerts.forEach(alert => {
+    alerts.forEach((alert) => {
       uniqueAlertsMap.set(alert.title + alert.description, alert);
     });
-    
+
     const liveAlerts = Array.from(uniqueAlertsMap.values()).sort((a, b) => {
-      const sevMap: Record<string, number> = { 'Critical': 4, 'High': 3, 'Moderate': 2, 'Info': 1 };
+      const sevMap: Record<string, number> = { Critical: 4, High: 3, Moderate: 2, Info: 1 };
       const sevA = sevMap[a.severity] || 0;
       const sevB = sevMap[b.severity] || 0;
       return sevB - sevA;
     });
 
-    let advisories = VERIFIED_ADVISORIES;
+    let advisories: ActiveTravelAdvisory[] = VERIFIED_ADVISORIES;
     if (territorySlug) {
-      advisories = advisories.filter(a => a.territorySlug === territorySlug);
+      const normalizedSlug = territorySlug.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      advisories = advisories.filter((a) =>
+        a.territoryId.toLowerCase().includes(normalizedSlug) ||
+        a.territoryName.toLowerCase().replace(/\s+/g, '-').includes(territorySlug)
+      );
     }
 
     return {
       liveAlerts,
       advisories,
       fetchedAt: new Date().toISOString(),
-      error: hasError
+      error: hasError,
     };
   }
 
-  getRouteTravelConditions(route: RouteCalculationResult): RouteTravelConditions | null {
+  getRouteTravelConditions(route: RouteCalculationResult & { trafficDelaySeconds?: number; typicalDurationMinutes?: number }): RouteTravelConditions | null {
     const delaySecs = route.trafficDelaySeconds;
     const typMins = route.typicalDurationMinutes;
     const curMins = route.totalDurationMinutes;
@@ -115,7 +130,7 @@ export class LiveIntelligenceService {
       typicalDurationMinutes: typMins,
       trafficDelaySeconds: delaySecs,
       warningMessage,
-      isHeavierThanUsual
+      isHeavierThanUsual,
     };
   }
 }
