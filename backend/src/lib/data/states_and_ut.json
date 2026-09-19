@@ -1,0 +1,705 @@
+[
+  {
+    "name": "Andhra Pradesh",
+    "type": "State",
+    "isoCode": "IN-AP",
+    "vehicleCode": "AP",
+    "zone": "Southern",
+    "capital": "Amaravati",
+    "largestCity": "Visakhapatnam",
+    "statehood": "1956-11-01",
+    "population2011": 49506799,
+    "areaKm2": 162975.0,
+    "officialLanguages": [
+      "Telugu"
+    ],
+    "additionalOfficialLanguages": [
+      "Urdu"
+    ]
+  },
+  {
+    "name": "Arunachal Pradesh",
+    "type": "State",
+    "isoCode": "IN-AR",
+    "vehicleCode": "AR",
+    "zone": "North-Eastern",
+    "capital": "Itanagar",
+    "largestCity": "Itanagar",
+    "statehood": "1987-02-20",
+    "population2011": 1383727,
+    "areaKm2": 83743.0,
+    "officialLanguages": [
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Assam",
+    "type": "State",
+    "isoCode": "IN-AS",
+    "vehicleCode": "AS",
+    "zone": "North-Eastern",
+    "capital": "Dispur",
+    "largestCity": "Guwahati",
+    "statehood": "1950-01-26",
+    "population2011": 31205576,
+    "areaKm2": 78438.0,
+    "officialLanguages": [
+      "Assamese",
+      "Boro"
+    ],
+    "additionalOfficialLanguages": [
+      "Bengali",
+      "Meitei"
+    ]
+  },
+  {
+    "name": "Bihar",
+    "type": "State",
+    "isoCode": "IN-BR",
+    "vehicleCode": "BR",
+    "zone": "Eastern",
+    "capital": "Patna",
+    "largestCity": "Patna",
+    "statehood": "1950-01-26",
+    "population2011": 104099452,
+    "areaKm2": 94163.0,
+    "officialLanguages": [
+      "Hindi"
+    ],
+    "additionalOfficialLanguages": [
+      "Urdu"
+    ]
+  },
+  {
+    "name": "Chhattisgarh",
+    "type": "State",
+    "isoCode": "IN-CG",
+    "vehicleCode": "CG",
+    "zone": "Central",
+    "capital": "Raipur",
+    "largestCity": "Raipur",
+    "statehood": "2000-11-01",
+    "population2011": 25545198,
+    "areaKm2": 135194.0,
+    "officialLanguages": [
+      "Hindi"
+    ],
+    "additionalOfficialLanguages": [
+      "Hindi",
+      "Chhattisgarhi"
+    ]
+  },
+  {
+    "name": "Goa",
+    "type": "State",
+    "isoCode": "IN-GA",
+    "vehicleCode": "GA",
+    "zone": "Western",
+    "capital": "Panaji",
+    "largestCity": "Vasco da Gama",
+    "statehood": "1987-05-30",
+    "population2011": 1458545,
+    "areaKm2": 3702.0,
+    "officialLanguages": [
+      "Konkani"
+    ],
+    "additionalOfficialLanguages": [
+      "Marathi"
+    ]
+  },
+  {
+    "name": "Gujarat",
+    "type": "State",
+    "isoCode": "IN-GJ",
+    "vehicleCode": "GJ",
+    "zone": "Western",
+    "capital": "Gandhinagar",
+    "largestCity": "Ahmedabad",
+    "statehood": "1960-05-01",
+    "population2011": 60439692,
+    "areaKm2": 196024.0,
+    "officialLanguages": [
+      "Gujarati"
+    ],
+    "additionalOfficialLanguages": [
+      "Hindi"
+    ]
+  },
+  {
+    "name": "Haryana",
+    "type": "State",
+    "isoCode": "IN-HR",
+    "vehicleCode": "HR",
+    "zone": "Northern",
+    "capital": "Chandigarh",
+    "largestCity": "Faridabad",
+    "statehood": "1966-11-01",
+    "population2011": 25351462,
+    "areaKm2": 44212.0,
+    "officialLanguages": [
+      "Hindi"
+    ],
+    "additionalOfficialLanguages": [
+      "Punjabi"
+    ]
+  },
+  {
+    "name": "Himachal Pradesh",
+    "type": "State",
+    "isoCode": "IN-HP",
+    "vehicleCode": "HP",
+    "zone": "Northern",
+    "capital": "Shimla (Summer) Dharamshala (Winter)",
+    "largestCity": "Shimla",
+    "statehood": "1971-01-25",
+    "population2011": 6864602,
+    "areaKm2": 55673.0,
+    "officialLanguages": [
+      "Hindi"
+    ],
+    "additionalOfficialLanguages": [
+      "Sanskrit"
+    ]
+  },
+  {
+    "name": "Jharkhand",
+    "type": "State",
+    "isoCode": "IN-JH",
+    "vehicleCode": "JH",
+    "zone": "Eastern",
+    "capital": "Ranchi",
+    "largestCity": "Jamshedpur",
+    "statehood": "2000-11-15",
+    "population2011": 32988134,
+    "areaKm2": 79714.0,
+    "officialLanguages": [
+      "Hindi"
+    ],
+    "additionalOfficialLanguages": [
+      "Angika",
+      "Bengali",
+      "Bhojpuri",
+      "Bhumij",
+      "Ho",
+      "Kharia",
+      "Khortha",
+      "Kurmali",
+      "Kurukh",
+      "Magahi",
+      "Maithili",
+      "Mundari",
+      "Nagpuri",
+      "Odia",
+      "Santali",
+      "Urdu"
+    ]
+  },
+  {
+    "name": "Karnataka",
+    "type": "State",
+    "isoCode": "IN-KA",
+    "vehicleCode": "KA",
+    "zone": "Southern",
+    "capital": "Bengaluru (Summer) Belagavi (Winter)",
+    "largestCity": "Bengaluru",
+    "statehood": "1956-11-01",
+    "population2011": 61095297,
+    "areaKm2": 191791.0,
+    "officialLanguages": [
+      "Kannada"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Kerala",
+    "type": "State",
+    "isoCode": "IN-KL",
+    "vehicleCode": "KL",
+    "zone": "Southern",
+    "capital": "Thiruvananthapuram",
+    "largestCity": "Thiruvananthapuram",
+    "statehood": "1956-11-01",
+    "population2011": 33406061,
+    "areaKm2": 38863.0,
+    "officialLanguages": [
+      "Malayalam"
+    ],
+    "additionalOfficialLanguages": [
+      "English"
+    ]
+  },
+  {
+    "name": "Madhya Pradesh",
+    "type": "State",
+    "isoCode": "IN-MP",
+    "vehicleCode": "MP",
+    "zone": "Central",
+    "capital": "Bhopal",
+    "largestCity": "Indore",
+    "statehood": "1956-11-01",
+    "population2011": 72626809,
+    "areaKm2": 308252.0,
+    "officialLanguages": [
+      "Hindi"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Maharashtra",
+    "type": "State",
+    "isoCode": "IN-MH",
+    "vehicleCode": "MH",
+    "zone": "Western",
+    "capital": "Mumbai (Summer) Nagpur (Winter)",
+    "largestCity": "Mumbai",
+    "statehood": "1960-05-01",
+    "population2011": 112374333,
+    "areaKm2": 307713.0,
+    "officialLanguages": [
+      "Marathi"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Manipur",
+    "type": "State",
+    "isoCode": "IN-MN",
+    "vehicleCode": "MN",
+    "zone": "North-Eastern",
+    "capital": "Imphal",
+    "largestCity": "Imphal",
+    "statehood": "1972-01-21",
+    "population2011": 2855794,
+    "areaKm2": 22327.0,
+    "officialLanguages": [
+      "Meitei"
+    ],
+    "additionalOfficialLanguages": [
+      "English"
+    ]
+  },
+  {
+    "name": "Meghalaya",
+    "type": "State",
+    "isoCode": "IN-ML",
+    "vehicleCode": "ML",
+    "zone": "North-Eastern",
+    "capital": "Shillong",
+    "largestCity": "Shillong",
+    "statehood": "1972-01-21",
+    "population2011": 2966889,
+    "areaKm2": 22429.0,
+    "officialLanguages": [
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Mizoram",
+    "type": "State",
+    "isoCode": "IN-MZ",
+    "vehicleCode": "MZ",
+    "zone": "North-Eastern",
+    "capital": "Aizawl",
+    "largestCity": "Aizawl",
+    "statehood": "1987-02-20",
+    "population2011": 1097206,
+    "areaKm2": 21081.0,
+    "officialLanguages": [
+      "Mizo",
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Nagaland",
+    "type": "State",
+    "isoCode": "IN-NL",
+    "vehicleCode": "NL",
+    "zone": "North-Eastern",
+    "capital": "Kohima",
+    "largestCity": "Dimapur",
+    "statehood": "1963-12-01",
+    "population2011": 1978502,
+    "areaKm2": 16579.0,
+    "officialLanguages": [
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Odisha",
+    "type": "State",
+    "isoCode": "IN-OD",
+    "vehicleCode": "OD",
+    "zone": "Eastern",
+    "capital": "Bhubaneswar",
+    "largestCity": "Bhubaneswar",
+    "statehood": "1950-01-26",
+    "population2011": 41974218,
+    "areaKm2": 155707.0,
+    "officialLanguages": [
+      "Odia"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Punjab",
+    "type": "State",
+    "isoCode": "IN-PB",
+    "vehicleCode": "PB",
+    "zone": "Northern",
+    "capital": "Chandigarh",
+    "largestCity": "Ludhiana",
+    "statehood": "1966-11-01",
+    "population2011": 27743338,
+    "areaKm2": 50362.0,
+    "officialLanguages": [
+      "Punjabi"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Rajasthan",
+    "type": "State",
+    "isoCode": "IN-RJ",
+    "vehicleCode": "RJ",
+    "zone": "Northern",
+    "capital": "Jaipur",
+    "largestCity": "Jaipur",
+    "statehood": "1950-01-26",
+    "population2011": 68548437,
+    "areaKm2": 342239.0,
+    "officialLanguages": [
+      "Hindi"
+    ],
+    "additionalOfficialLanguages": [
+      "English"
+    ]
+  },
+  {
+    "name": "Sikkim",
+    "type": "State",
+    "isoCode": "IN-SK",
+    "vehicleCode": "SK",
+    "zone": "North-Eastern",
+    "capital": "Gangtok",
+    "largestCity": "Gangtok",
+    "statehood": "1975-05-16",
+    "population2011": 610577,
+    "areaKm2": 7096.0,
+    "officialLanguages": [
+      "Nepali",
+      "Sikkimese",
+      "Lepcha",
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "Gurung",
+      "Limbu",
+      "Magar",
+      "Mukhia",
+      "Newari",
+      "Rai",
+      "Sherpa",
+      "Tamang"
+    ]
+  },
+  {
+    "name": "Tamil Nadu",
+    "type": "State",
+    "isoCode": "IN-TN",
+    "vehicleCode": "TN",
+    "zone": "Southern",
+    "capital": "Chennai",
+    "largestCity": "Chennai",
+    "statehood": "1956-11-01",
+    "population2011": 72147030,
+    "areaKm2": 130058.0,
+    "officialLanguages": [
+      "Tamil"
+    ],
+    "additionalOfficialLanguages": [
+      "English"
+    ]
+  },
+  {
+    "name": "Telangana",
+    "type": "State",
+    "isoCode": "IN-TS",
+    "vehicleCode": "TG",
+    "zone": "Southern",
+    "capital": "Hyderabad",
+    "largestCity": "Hyderabad",
+    "statehood": "2014-06-02",
+    "population2011": 35193978,
+    "areaKm2": 112077.0,
+    "officialLanguages": [
+      "Telugu"
+    ],
+    "additionalOfficialLanguages": [
+      "Urdu"
+    ]
+  },
+  {
+    "name": "Tripura",
+    "type": "State",
+    "isoCode": "IN-TR",
+    "vehicleCode": "TR",
+    "zone": "North-Eastern",
+    "capital": "Agartala",
+    "largestCity": "Agartala",
+    "statehood": "1972-01-21",
+    "population2011": 3673917,
+    "areaKm2": 10491.0,
+    "officialLanguages": [
+      "Bengali",
+      "English",
+      "Kokborok"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Uttar Pradesh",
+    "type": "State",
+    "isoCode": "IN-UP",
+    "vehicleCode": "UP",
+    "zone": "Central",
+    "capital": "Lucknow",
+    "largestCity": "Lucknow",
+    "statehood": "1950-01-26",
+    "population2011": 199812341,
+    "areaKm2": 240928.0,
+    "officialLanguages": [
+      "Hindi"
+    ],
+    "additionalOfficialLanguages": [
+      "Urdu"
+    ]
+  },
+  {
+    "name": "Uttarakhand",
+    "type": "State",
+    "isoCode": "IN-UK",
+    "vehicleCode": "UK",
+    "zone": "Central",
+    "capital": "Bhararisain (Summer) Dehradun (Winter)",
+    "largestCity": "Dehradun",
+    "statehood": "2000-11-09",
+    "population2011": 10086292,
+    "areaKm2": 53483.0,
+    "officialLanguages": [
+      "Hindi"
+    ],
+    "additionalOfficialLanguages": [
+      "Sanskrit"
+    ]
+  },
+  {
+    "name": "West Bengal",
+    "type": "State",
+    "isoCode": "IN-WB",
+    "vehicleCode": "WB",
+    "zone": "Eastern",
+    "capital": "Kolkata",
+    "largestCity": "Kolkata",
+    "statehood": "1950-01-26",
+    "population2011": 91276115,
+    "areaKm2": 88752.0,
+    "officialLanguages": [
+      "Bengali",
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "Nepali",
+      "Hindi",
+      "Odia",
+      "Punjabi",
+      "Santali",
+      "Telugu",
+      "Urdu",
+      "Kamatapuri",
+      "Rajbanshi",
+      "Kurmali",
+      "Kurukh"
+    ]
+  },
+  {
+    "name": "Andaman and Nicobar Islands",
+    "type": "Union Territory",
+    "isoCode": "IN-AN",
+    "vehicleCode": "AN",
+    "zone": "Southern",
+    "capital": "Port Blair",
+    "largestCity": "Port Blair",
+    "statehood": "1956-11-01",
+    "population2011": 380581,
+    "areaKm2": 8249.0,
+    "officialLanguages": [
+      "Hindi",
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Chandigarh",
+    "type": "Union Territory",
+    "isoCode": "IN-CH",
+    "vehicleCode": "CH",
+    "zone": "Northern",
+    "capital": "Chandigarh",
+    "largestCity": "Chandigarh",
+    "statehood": "1966-11-01",
+    "population2011": 1055450,
+    "areaKm2": 114.0,
+    "officialLanguages": [
+      "Hindi",
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Dadra and Nagar Haveli and Daman and Diu",
+    "type": "Union Territory",
+    "isoCode": "IN-DH",
+    "vehicleCode": "DD",
+    "zone": "Western",
+    "capital": "Daman",
+    "largestCity": "Silvassa",
+    "statehood": "2020-01-26",
+    "population2011": 587106,
+    "areaKm2": 603.0,
+    "officialLanguages": [
+      "Hindi",
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "Gujarati"
+    ]
+  },
+  {
+    "name": "Delhi",
+    "type": "Union Territory",
+    "isoCode": "IN-DL",
+    "vehicleCode": "DL",
+    "zone": "Northern",
+    "capital": "New Delhi",
+    "largestCity": "Delhi",
+    "statehood": "1956-11-01",
+    "population2011": 16787941,
+    "areaKm2": 1484.0,
+    "officialLanguages": [
+      "Hindi",
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "Urdu",
+      "Punjabi"
+    ]
+  },
+  {
+    "name": "Jammu and Kashmir",
+    "type": "Union Territory",
+    "isoCode": "IN-JK",
+    "vehicleCode": "JK",
+    "zone": "Northern",
+    "capital": "Srinagar (Summer) Jammu (Winter)",
+    "largestCity": "Srinagar",
+    "statehood": "2019-10-31",
+    "population2011": 12258433,
+    "areaKm2": 42241.0,
+    "officialLanguages": [
+      "Dogri",
+      "English",
+      "Hindi",
+      "Kashmiri",
+      "Urdu"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Ladakh",
+    "type": "Union Territory",
+    "isoCode": "IN-LA",
+    "vehicleCode": "LA",
+    "zone": "Northern",
+    "capital": "Leh (Summer) Kargil (Winter)",
+    "largestCity": "Leh",
+    "statehood": "2019-10-31",
+    "population2011": 290492,
+    "areaKm2": 59146.0,
+    "officialLanguages": [
+      "Hindi",
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "—"
+    ]
+  },
+  {
+    "name": "Lakshadweep",
+    "type": "Union Territory",
+    "isoCode": "IN-LD",
+    "vehicleCode": "LD",
+    "zone": "Southern",
+    "capital": "Kavaratti",
+    "largestCity": "Kavaratti",
+    "statehood": "1956-11-01",
+    "population2011": 64473,
+    "areaKm2": 32.0,
+    "officialLanguages": [
+      "English"
+    ],
+    "additionalOfficialLanguages": [
+      "Malayalam"
+    ]
+  },
+  {
+    "name": "Puducherry",
+    "type": "Union Territory",
+    "isoCode": "IN-PY",
+    "vehicleCode": "PY",
+    "zone": "Southern",
+    "capital": "Pondicherry",
+    "largestCity": "Pondicherry",
+    "statehood": "1962-08-16",
+    "population2011": 1247953,
+    "areaKm2": 479.0,
+    "officialLanguages": [
+      "Tamil",
+      "Telugu",
+      "Malayalam"
+    ],
+    "additionalOfficialLanguages": [
+      "English",
+      "French"
+    ]
+  }
+]
