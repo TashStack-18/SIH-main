@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const popularDestinations = VERIFIED_DESTINATIONS.slice(0, 10);
-  const featuredFestivals = VERIFIED_FESTIVALS.slice(0, 4);
+  const featuredFestivals = VERIFIED_FESTIVALS.slice(0, 6);
 
   return (
     <main role="main">
@@ -132,9 +132,6 @@ export default function HomePage() {
                     alt={fest.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.3s ease" }}
                     loading="lazy"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/images/chandigarh_hero.png";
-                    }}
                   />
                   <div
                     style={{
