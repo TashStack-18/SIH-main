@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const popularDestinations = VERIFIED_DESTINATIONS.slice(0, 10);
-  const featuredFestivals = VERIFIED_FESTIVALS.slice(0, 4);
+  const featuredFestivals = VERIFIED_FESTIVALS.slice(0, 6);
 
   return (
     <main role="main">

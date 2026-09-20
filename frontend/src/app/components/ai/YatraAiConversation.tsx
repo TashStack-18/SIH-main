@@ -89,11 +89,6 @@ export function YatraAiConversation({
       );
 
       processed = processed.replace(
-        /(?:\n|^)\*\*([^*]+(?:Overview|Highlights|Safety|Culture)[^*]*)\*\*\s*/gi,
-        '\n### 🏛️ $1\n\n'
-      );
-
-      processed = processed.replace(
         /Destination:\s*([^(.\n]+)(?:\s*\(([^)]+)\))?/gi,
         (match, name, territory) => {
           const loc = territory ? `📍 **${territory.trim()}**` : '';
@@ -110,14 +105,14 @@ export function YatraAiConversation({
       processed = processed.replace(/Coordinates:\s*([0-9.,\s-]+)(?:\.|\n|$)/gi, ' • 🧭 **GPS:** `$1`\n\n');
 
       processed = processed
-        .replace(/\.?\s*Overview:\s*/gi, '\n\n**📖 Overview**\n')
-        .replace(/\.?\s*Highlights:\s*/gi, '\n\n**🌟 Key Highlights**\n')
-        .replace(/\.?\s*Things to do:\s*/gi, '\n\n**🎯 Recommended Experiences**\n')
-        .replace(/\.?\s*Safety Guidelines:\s*/gi, '\n\n**🛡️ Safety & Practical Advice**\n')
-        .replace(/\.?\s*Nearest Emergency Medical Facility:\s*/gi, '\n\n**🏥 Emergency Response Facility**\n')
-        .replace(/\.?\s*Weather advisory:\s*/gi, '\n\n**☀️ Weather & Best Season**\n')
-        .replace(/\.?\s*Specialty dishes:\s*/gi, '\n\n**🍲 Regional Specialties**\n')
-        .replace(/\.?\s*Permits(?: REQUIRED)?:\s*/gi, '\n\n**📋 Entry & Permits**\n');
+        .replace(/(?:\n|^)\s*(?:\*\*)?\.?\s*(?:📌\s*)?Overview:(?:\*\*)?\s*/gi, '\n\n**📖 Overview**\n')
+        .replace(/(?:\n|^)\s*(?:\*\*)?\.?\s*(?:🌟\s*)?Highlights:(?:\*\*)?\s*/gi, '\n\n**🌟 Key Highlights**\n')
+        .replace(/(?:\n|^)\s*(?:\*\*)?\.?\s*(?:🎯\s*)?Things to do:(?:\*\*)?\s*/gi, '\n\n**🎯 Recommended Experiences**\n')
+        .replace(/(?:\n|^)\s*(?:\*\*)?\.?\s*(?:🛡️\s*)?Safety Guidelines:(?:\*\*)?\s*/gi, '\n\n**🛡️ Safety & Practical Advice**\n')
+        .replace(/(?:\n|^)\s*(?:\*\*)?\.?\s*(?:🏥\s*)?Nearest Emergency Medical Facility:(?:\*\*)?\s*/gi, '\n\n**🏥 Emergency Response Facility**\n')
+        .replace(/(?:\n|^)\s*(?:\*\*)?\.?\s*(?:☀️\s*)?Weather advisory:(?:\*\*)?\s*/gi, '\n\n**☀️ Weather & Best Season**\n')
+        .replace(/(?:\n|^)\s*(?:\*\*)?\.?\s*(?:🍲\s*)?Specialty dishes:(?:\*\*)?\s*/gi, '\n\n**🍲 Regional Specialties**\n')
+        .replace(/(?:\n|^)\s*(?:\*\*)?\.?\s*(?:📋\s*)?Permits(?: REQUIRED)?:(?:\*\*)?\s*/gi, '\n\n**📋 Entry & Permits**\n');
 
       processed = processed.replace(
         /(\*\*(?:🌟 Key Highlights|🎯 Recommended Experiences|🛡️ Safety & Practical Advice)\*\*)\n([^\n]+)/g,
@@ -212,7 +207,7 @@ export function YatraAiConversation({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ color: 'var(--color-accent, #FF9933)', fontSize: '1.1rem' }}>✦</span>
-              <span>{headingText}</span>
+              <span>{formatBoldAndCode(headingText)}</span>
             </div>
             {matchedPlace && (
               <Link
