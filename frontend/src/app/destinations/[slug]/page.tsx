@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { VERIFIED_DESTINATIONS } from "@/src/lib/fixtures";
+import { DestinationAlertBanner } from "@/src/app/components/safety/DestinationAlertBanner";
 
 export default async function DestinationDetailPage({
   params,
@@ -84,6 +85,9 @@ export default async function DestinationDetailPage({
       </section>
 
       <div className="container section-spacing">
+        {/* Contextual verified travel advisory banner (appears only when destination has active alert) */}
+        <DestinationAlertBanner destinationSlug={dest.slug} territoryId={dest.territoryId} />
+
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "var(--space-2xl)" }}>
           
           <section className="card" style={{ padding: "var(--space-xl)" }}>

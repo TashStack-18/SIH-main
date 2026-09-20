@@ -47,6 +47,8 @@ export const metadata: Metadata = {
 
 import { Navbar } from "@/src/app/components/Navbar";
 import { FloatingYatraAI } from "@/src/app/components/FloatingYatraAI";
+import { TravelAlertProvider } from "@/src/context/TravelAlertContext";
+import { GlobalTravelAlert } from "@/src/app/components/safety/GlobalTravelAlert";
 
 export default function RootLayout({
   children,
@@ -75,16 +77,21 @@ export default function RootLayout({
         />
       </head>
       <body className={dmSans.className} style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: "var(--color-bg-canvas, #F2F2ED)", color: "var(--color-text-primary, var(--color-primary))", fontFamily: "var(--font-family-body)", overflowX: "hidden" }}>
-        <div id="root" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-          {/* TEMPORARILY DISABLED: IntroAnimation is excluded from this deployment */}
-          <Navbar />
-          <div style={{ flexGrow: 1 }}>
-            {children}
+        <TravelAlertProvider>
+          <div id="root" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+            {/* TEMPORARILY DISABLED: IntroAnimation is excluded from this deployment */}
+            <Navbar />
+            <div style={{ flexGrow: 1 }}>
+              {children}
+            </div>
+            {/* Global event-driven travel emergency alert system */}
+            <GlobalTravelAlert />
+            {/* Persistent Yatra AI companion floating across all pages in bottom right */}
+            <FloatingYatraAI />
           </div>
-          {/* Persistent Yatra AI companion floating across all pages in bottom right */}
-          <FloatingYatraAI />
-        </div>
+        </TravelAlertProvider>
       </body>
     </html>
   );
 }
+

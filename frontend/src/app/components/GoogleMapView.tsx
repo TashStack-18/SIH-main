@@ -8,9 +8,11 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { BharatMap, BharatMapStop } from './BharatMap';
 import { VERIFIED_DESTINATIONS, VERIFIED_EMERGENCY_FACILITIES } from '@/src/lib/fixtures';
 import type { RouteCalculationResult } from '@/src/lib/providers/types';
+import { useTravelAlert } from '@/src/context/TravelAlertContext';
 
 interface UTData {
   id: string;
@@ -63,6 +65,32 @@ export default function GoogleMapView() {
   const [selectedUT, setSelectedUT] = useState<string>('DELHI');
   const [activeCategory, setActiveCategory] = useState<'ALL' | 'ATTRACTIONS' | 'EMERGENCY'>('ALL');
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>('red-fort');
+
+  // Travel Alert query integration
+  const searchParams = useSearchParams();
+  const alertIdParam = searchParams.get('alertId');
+  const { activeAlerts } = useTravelAlert();
+
+  const currentMapAlert = useMemo(() => {
+    if (!alertIdParam) return null;
+    return activeAlerts.find((a) => a.alert_id === alertIdParam) || null;
+  }, [alertIdParam, activeAlerts]);
+
+  // When alertIdParam is provided, auto-select the affected UT
+  useEffect(() => {
+    if (currentMapAlert) {
+      const terr = currentMapAlert.affected_territory_ids[0]?.toLowerCase() || '';
+      if (terr.includes('jammu') || terr.includes('kashmir')) setSelectedUT('JAMMU_KASHMIR');
+      else if (terr.includes('ladakh')) setSelectedUT('LADAKH');
+      else if (terr.includes('andaman')) setSelectedUT('ANDAMAN_NICOBAR');
+      else if (terr.includes('lakshadweep')) setSelectedUT('LADAKH');
+      else if (terr.includes('puducherry')) setSelectedUT('PUDUCHERRY');
+      else if (terr.includes('chandigarh')) setSelectedUT('CHANDIGARH');
+      else if (terr.includes('delhi')) setSelectedUT('DELHI');
+      else if (terr.includes('dadra') || terr.includes('daman') || terr.includes('diu')) setSelectedUT('DADRA_NAGAR_HAVELI_DAMAN_DIU');
+    }
+  }, [currentMapAlert]);
+
   const [liveWeather, setLiveWeather] = useState<{
     tempC: number;
     conditionText: string;
@@ -312,6 +340,61 @@ export default function GoogleMapView() {
 
       {/* Main Map & Intelligence Section */}
       <div style={{ maxWidth: '1380px', margin: '24px auto 0', padding: '0 20px' }}>
+
+        {/* Active Travel Alert Banner on Map */}
+        {currentMapAlert && (
+          <div
+            role="alert"
+            style={{
+              backgroundColor: currentMapAlert.severity === 'CRITICAL' ? '#FEF2F2' : '#FFFBEB',
+              border: `1.5px solid ${currentMapAlert.severity === 'CRITICAL' ? '#F87171' : '#FBBF24'}`,
+              borderRadius: '12px',
+              padding: '14px 18px',
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              flexWrap: 'wrap',
+              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.08)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+              <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>⚠</span>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', color: currentMapAlert.severity === 'CRITICAL' ? '#991B1B' : '#92400E' }}>
+                    Active Emergency Advisory — {currentMapAlert.category}
+                  </span>
+                  <span
+                    style={{
+                      backgroundColor: currentMapAlert.severity === 'CRITICAL' ? '#DC2626' : '#D97706',
+                      color: '#FFFFFF',
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      padding: '2px 6px',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    {currentMapAlert.severity}
+                  </span>
+                </div>
+                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0F172A' }}>
+                  {currentMapAlert.title}
+                </div>
+                <div style={{ fontSize: '0.84rem', color: '#475569', marginTop: '2px' }}>
+                  {currentMapAlert.short_message || currentMapAlert.message}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '0.72rem', color: '#047857', fontWeight: 600 }}>
+                ✓ {currentMapAlert.source_name}
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* Filter Chips Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>

@@ -35,6 +35,7 @@ import * as mapsRouteRoute from '../api/v1/maps/route/route';
 import * as paymentsCreateOrderRoute from '../api/v1/payments/create-order/route';
 import * as paymentsVerifyRoute from '../api/v1/payments/verify/route';
 import * as safetyAdvisoriesRoute from '../api/v1/safety/advisories/route';
+import * as safetyAlertsRoute from '../api/v1/safety/alerts/route';
 import * as safetyContactsRoute from '../api/v1/safety/contacts/route';
 import * as safetyLiveRoute from '../api/v1/safety/live/route';
 import * as safetyNearbyRoute from '../api/v1/safety/nearby/route';
@@ -102,6 +103,7 @@ apiRouter.all('/payments/verify', createHandler(paymentsVerifyRoute));
 
 // Safety & Emergency
 apiRouter.all('/safety/advisories', createHandler(safetyAdvisoriesRoute));
+apiRouter.all('/safety/alerts', createHandler(safetyAlertsRoute));
 apiRouter.all('/safety/contacts', createHandler(safetyContactsRoute));
 apiRouter.all('/safety/live', createHandler(safetyLiveRoute));
 apiRouter.all('/safety/nearby', createHandler(safetyNearbyRoute));

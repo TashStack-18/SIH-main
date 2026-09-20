@@ -13,6 +13,7 @@ import {
   findEmergencyServicesTool,
   searchFlightsTool,
   searchHotelsTool,
+  getVerifiedTravelAlertsTool,
 } from './readTools';
 import { createItineraryProposalTool } from './writeTools';
 
@@ -27,6 +28,7 @@ class ToolRegistry {
     this.register(findEmergencyServicesTool);
     this.register(searchFlightsTool);
     this.register(searchHotelsTool);
+    this.register(getVerifiedTravelAlertsTool);
     this.register(createItineraryProposalTool);
   }
 

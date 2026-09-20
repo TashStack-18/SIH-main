@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import GoogleMapView from "../components/GoogleMapView";
 
 export const metadata = {
@@ -8,7 +9,10 @@ export const metadata = {
 export default function MapPage() {
   return (
     <main style={{ paddingTop: "6rem" }}>
-      <GoogleMapView />
+      <Suspense fallback={<div style={{ padding: "40px", textAlign: "center" }}>Loading Map View...</div>}>
+        <GoogleMapView />
+      </Suspense>
     </main>
   );
 }
+

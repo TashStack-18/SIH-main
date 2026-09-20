@@ -11,3 +11,4 @@ export * from './safety';
 export * from './booking';
 export * from './ai';
 export * from './map';
+export * from './travelAlert';

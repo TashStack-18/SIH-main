@@ -21,6 +21,7 @@ import { VERIFIED_DESTINATIONS, VERIFIED_TERRITORIES, VERIFIED_BOOKING_PROVIDERS
 import { BharatMap } from '@/src/app/components/BharatMap';
 import { YatraAiItineraryEditor } from '@/src/app/components/YatraAiItineraryEditor';
 import AccordionGallery from '@/src/app/components/AccordionGallery';
+import { useTravelAlert } from '@/src/context/TravelAlertContext';
 export type ItineraryStep = 'DESTINATION' | 'PLANNING' | 'JOURNEY';
 import { ItineraryBuilder } from '@/src/lib/itinerary/itineraryBuilder';
 import { FeasibilityEngine, ItineraryFeasibilityReport } from '@/src/lib/itinerary/feasibilityEngine';
@@ -173,6 +174,40 @@ function ItineraryContent() {
   // Async concurrency & cancellation ref
   const versionRef = useRef(1);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Global travel safety alert integration
+  const { updateTravelContext, relevantAlerts, openAlertDetails } = useTravelAlert();
+
+  // Synchronize travel context for deterministic alert relevance
+  useEffect(() => {
+    if (itinerary) {
+      const destIds: string[] = [];
+      const stops: Array<{ destinationId?: string; location?: { lat: number; lng: number } }> = [];
+      itinerary.days?.forEach((day) => {
+        day.items?.forEach((item) => {
+          if (item.destinationId) destIds.push(item.destinationId);
+          if (item.location) stops.push({ destinationId: item.destinationId, location: item.location });
+        });
+      });
+
+      updateTravelContext({
+        selectedDestinationId: selectedDestination?.id || destinationParam || null,
+        activeItinerary: {
+          id: itinerary.id,
+          territoryId: itinerary.territoryId,
+          startDate: itinerary.startDate,
+          endDate: itinerary.endDate,
+          destinationIds: destIds,
+          stops,
+        },
+      });
+    } else if (selectedDestination || destinationParam) {
+      updateTravelContext({
+        selectedDestinationId: selectedDestination?.id || destinationParam || null,
+        activeItinerary: null,
+      });
+    }
+  }, [itinerary, selectedDestination, destinationParam, updateTravelContext]);
 
   // Live real-time stop telemetry state
   const [liveStopWeather, setLiveStopWeather] = useState<{
@@ -923,24 +958,80 @@ function ItineraryContent() {
         {/* Left Column: Timeline Days & Stops */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
 
-          {itinerary.days.map((day) => (
-            <div
-              key={day.dayNumber}
-              style={{
-                marginBottom: '40px',
-              }}
-            >
-              <div style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid #e2e8f0' }}>
-                <span style={{ color: '#C88E44', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  DAY {String(day.dayNumber).padStart(2, '0')}
-                </span>
-                <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#0f172a', margin: '8px 0 6px', letterSpacing: '-0.01em' }}>
-                  {day.title}
-                </h3>
-                <div style={{ fontSize: '0.95rem', color: '#475569', lineHeight: 1.6, maxWidth: '600px' }}>
-                  {day.summary}
+          {itinerary.days.map((day) => {
+            const dayDestIds = day.items.map((i) => (i.destinationId || '').toLowerCase());
+            const dayAlertItem = relevantAlerts.find((item) => {
+              const a = item.alert;
+              return a.affected_destination_ids.some((d) => dayDestIds.some((id) => id.includes(d.toLowerCase()) || d.toLowerCase().includes(id)));
+            });
+            const dayAlert = dayAlertItem ? dayAlertItem.alert : null;
+
+            return (
+              <div
+                key={day.dayNumber}
+                style={{
+                  marginBottom: '40px',
+                }}
+              >
+                <div style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid #e2e8f0' }}>
+                  <span style={{ color: '#C88E44', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    DAY {String(day.dayNumber).padStart(2, '0')}
+                  </span>
+                  <h3 className="font-serif" style={{ fontSize: '1.8rem', color: '#0f172a', margin: '8px 0 6px', letterSpacing: '-0.01em' }}>
+                    {day.title}
+                  </h3>
+                  <div style={{ fontSize: '0.95rem', color: '#475569', lineHeight: 1.6, maxWidth: '600px' }}>
+                    {day.summary}
+                  </div>
+
+                  {/* Contextual warning inside affected itinerary day (renders ONLY when verified alert exists) */}
+                  {dayAlert && (
+                    <div
+                      role="alert"
+                      style={{
+                        marginTop: '14px',
+                        padding: '12px 16px',
+                        backgroundColor: '#FEF2F2',
+                        borderLeft: '4px solid #DC2626',
+                        borderRadius: '0 8px 8px 0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '12px',
+                        boxShadow: '0 2px 6px rgba(220, 38, 38, 0.08)',
+                      }}
+                    >
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                          <span style={{ fontSize: '1rem', lineHeight: 1 }}>⚠</span>
+                          <span style={{ fontSize: '0.74rem', fontWeight: 800, textTransform: 'uppercase', color: '#991B1B', letterSpacing: '0.03em' }}>
+                            Active Advisory — {dayAlert.title}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '0.82rem', color: '#334155', lineHeight: 1.4 }}>
+                          {dayAlert.short_message || dayAlert.message}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => openAlertDetails(dayAlert)}
+                        style={{
+                          padding: '6px 12px',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          backgroundColor: '#DC2626',
+                          color: '#FFFFFF',
+                          border: 'none',
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  )}
                 </div>
-              </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
                 {day.items.map((item, index) => {
@@ -1025,7 +1116,8 @@ function ItineraryContent() {
                 })}
               </div>
             </div>
-          ))}
+          );
+        })}
 
           {detourRecommendations.length > 0 && (
             <div style={{ marginTop: '20px', padding: '32px 0', borderTop: '1px solid #e2e8f0' }}>
