@@ -4,6 +4,7 @@
    ========================================================================== */
 
 @import './tokens.css';
+@import './experience.css';
 
 /* --- CSS RESET & BASE --- */
 *, *::before, *::after {
@@ -96,6 +97,10 @@ ul, ol {
 
 .font-mono {
   font-family: var(--font-family-mono);
+}
+
+.font-handwriting {
+  font-family: var(--font-family-handwriting), 'Caveat', 'Kalam', cursive;
 }
 
 /* --- STITCH HERITAGE SOUL UTILITIES --- */

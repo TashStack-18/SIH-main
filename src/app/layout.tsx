@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Caveat } from "next/font/google";
 import "@/src/css/main.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { siteConfig } from "@/src/config/site";
@@ -16,6 +16,13 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-family-sans",
+  display: "swap",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-family-handwriting",
   display: "swap",
 });
 
@@ -66,7 +73,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" data-theme="light" className={`${cormorant.variable} ${dmSans.variable} ${dmSans.className}`}>
+    <html lang="en" data-theme="light" className={`${cormorant.variable} ${dmSans.variable} ${caveat.variable} ${dmSans.className}`}>
       <head>
         <script
           type="application/ld+json"
