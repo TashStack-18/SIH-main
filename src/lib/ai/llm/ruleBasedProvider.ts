@@ -30,7 +30,9 @@ export class RuleBasedProvider implements ILLMProvider {
     const startTime = Date.now();
 
     // 1. Check if tool messages exist from a previous cycle — synthesize tool results into clear Markdown!
-    const toolMessages = messages.filter((m) => m.role === 'tool');
+    const toolMessages = messages.filter(
+      (m): m is { role: 'tool'; content: string; name?: string; tool_call_id?: string } => m.role === 'tool'
+    );
     if (toolMessages.length > 0) {
       const toolSynthesis = this.synthesizeToolOutputs(toolMessages);
       return {
