@@ -215,7 +215,12 @@ export function evaluateAlertRelevance(
 }
 
 /**
- * Filter and sort alerts by relevance and severity
+ * Filter and sort alerts by relevance and severity.
+ *
+ * GENERAL BROADCAST FALLBACK:
+ * If no contextual match is found (user has no destination/itinerary selected),
+ * the highest-severity verified active alert is shown as a general travel advisory
+ * so the system always has a visible presence in the bottom-right corner.
  */
 export function filterAndRankRelevantAlerts(
   alerts: TravelAlert[],
@@ -247,6 +252,38 @@ export function filterAndRankRelevantAlerts(
     }
     return new Date(b.alert.updated_at).getTime() - new Date(a.alert.updated_at).getTime();
   });
+
+  // ── GENERAL BROADCAST FALLBACK ──────────────────────────────────────────────
+  // When there are no contextual matches, surface the highest-severity verified
+  // active alert so the system is always visible in the bottom-right corner.
+  if (relevantList.length === 0 && alerts.length > 0) {
+    const VERIFIED_STATUSES_SET = new Set(['VERIFIED', 'VERIFIED_STATIC', 'LIVE', 'UPDATED']);
+    const activeVerified = alerts
+      .filter((a) => {
+        if (!VERIFIED_STATUSES_SET.has(a.verification_status)) return false;
+        const effectiveUntil = new Date(a.effective_until);
+        return !isNaN(effectiveUntil.getTime()) && effectiveUntil >= referenceTime;
+      })
+      .sort((a, b) => {
+        const scoreA = severityScore[a.severity] || 0;
+        const scoreB = severityScore[b.severity] || 0;
+        if (scoreB !== scoreA) return scoreB - scoreA;
+        return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+      });
+
+    if (activeVerified.length > 0) {
+      const topAlert = activeVerified[0];
+      relevantList.push({
+        alert: topAlert,
+        evaluation: {
+          isRelevant: true,
+          matchType: 'DESTINATION',
+          matchReason: 'Active travel advisory in India — may affect your travel plans.',
+        },
+      });
+    }
+  }
+  // ──────────────────────────────────────────────────────────────────────────
 
   return relevantList;
 }
