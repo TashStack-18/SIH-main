@@ -531,29 +531,146 @@ function DestinationsContent() {
 
       {/* PLACES GRID — SHOWS ONLY THE DESTINATION PLACES */}
       <section>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "var(--space-lg)",
-          }}
-        >
-          <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--color-text-primary)" }}>
-            Showing {displayedDestinations.length} {displayedDestinations.length === 1 ? "Place" : "Places"}
-          </div>
-        </div>
+        {!selectedTerritoryId && !searchQuery && activeCategory === "ALL" ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "var(--space-lg)",
+              }}
+            >
+              <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--color-text-primary)" }}>
+                Explore Union Territories
+              </div>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+                gap: "var(--space-xl)",
+                marginBottom: "var(--space-2xl)",
+              }}
+            >
+              {VERIFIED_TERRITORIES.map((t) => (
+                <article
+                  key={t.id}
+                  className="destination-card card-hoverable"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    cursor: "pointer",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                    borderRadius: "var(--radius-lg)",
+                    overflow: "hidden",
+                    border: "1px solid var(--color-border-subtle)",
+                    background: "var(--color-bg-surface-elevated, #ffffff)",
+                  }}
+                  onClick={() => handleSelectTerritory(t.id)}
+                >
+                  <div style={{ height: "220px", position: "relative", overflow: "hidden" }}>
+                    <img
+                      src={t.thumbnailImage || t.heroImage}
+                      alt={t.name}
+                      loading="lazy"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%)",
+                      }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      padding: "var(--space-lg)",
+                      display: "flex",
+                      flexDirection: "column",
+                      flexGrow: 1,
+                    }}
+                  >
+                    <h2
+                      style={{
+                        fontSize: "1.35rem",
+                        fontWeight: 800,
+                        marginBottom: "6px",
+                        color: "var(--color-text-primary)",
+                      }}
+                    >
+                      {t.name}
+                    </h2>
+                    <p
+                      style={{
+                        fontSize: "0.85rem",
+                        color: "var(--color-accent, #FF9933)",
+                        fontWeight: 700,
+                        marginBottom: "10px",
+                      }}
+                    >
+                      {t.tagline}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "var(--color-text-secondary)",
+                        lineHeight: 1.5,
+                        flexGrow: 1,
+                        marginBottom: "14px",
+                      }}
+                    >
+                      {t.shortDescription}
+                    </p>
+                    <div
+                      style={{
+                        paddingTop: "12px",
+                        borderTop: "1px solid var(--color-border-subtle)",
+                        marginTop: "auto",
+                        textAlign: "center",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "0.85rem",
+                          color: "var(--color-accent, #FF9933)",
+                          fontWeight: 700,
+                        }}
+                      >
+                        Explore {territoryCounts[t.id] || territoryCounts[t.code] || 0} Places →
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "var(--space-lg)",
+              }}
+            >
+              <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--color-text-primary)" }}>
+                Showing {displayedDestinations.length} {displayedDestinations.length === 1 ? "Place" : "Places"}
+              </div>
+            </div>
 
-        {displayedDestinations.length > 0 ? (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-              gap: "var(--space-xl)",
-              marginBottom: "var(--space-2xl)",
-            }}
-          >
-            {displayedDestinations.map((dest) => (
+            {displayedDestinations.length > 0 ? (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+                  gap: "var(--space-xl)",
+                  marginBottom: "var(--space-2xl)",
+                }}
+              >
+                {displayedDestinations.map((dest) => (
               <article
                 key={dest.id}
                 className="destination-card card-hoverable"
@@ -615,7 +732,8 @@ function DestinationsContent() {
                     </span>
                     <span
                       style={{
-                        background: "rgba(255, 153, 51, 0.9)",
+                        background: "rgba(15, 23, 42, 0.8)",
+                        backdropFilter: "blur(4px)",
                         color: "#FFFFFF",
                         fontSize: "0.72rem",
                         fontWeight: 700,
@@ -759,6 +877,8 @@ function DestinationsContent() {
             </button>
           </div>
         )}
+        </>
+      )}
 
         {/* Emergency Support Strip when a territory is filtered */}
         {selectedTerritoryId && currentTerritory && (
