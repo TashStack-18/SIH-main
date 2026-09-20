@@ -179,7 +179,7 @@ export function LiveSafetyAlertsPopover({ isTransparent, isDark, isMobile, onClo
                 width: "100%",
               }
             : {
-                padding: "6px 14px",
+                padding: "8px 14px",
                 fontSize: "0.875rem",
                 fontWeight: 600,
                 color: (isDark || isTransparent) ? "#FFFFFF" : "var(--color-text-primary)",
@@ -189,7 +189,7 @@ export function LiveSafetyAlertsPopover({ isTransparent, isDark, isMobile, onClo
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                borderRadius: "var(--radius-pill, 9999px)",
+                borderRadius: 0,
                 transition: "all 0.2s ease",
                 textShadow: (isDark || isTransparent) ? "0 1px 4px rgba(0, 0, 0, 0.6)" : "none",
                 whiteSpace: "nowrap",

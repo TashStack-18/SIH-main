@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { VERIFIED_DESTINATIONS, VERIFIED_BOOKABLE_EXPERIENCES, VERIFIED_BOOKING_PROVIDERS } from "@/src/lib/fixtures";
-import { FloatingYatraAI } from "@/src/app/components/FloatingYatraAI";
 
 const BOOKING_CATEGORIES = [
   { id: "flights", label: "Flights" },
@@ -425,8 +424,6 @@ function BookingsContent() {
         </section>
       )}
 
-      {/* Floating Yatra AI widget remains available contextually */}
-      <FloatingYatraAI />
     </main>
   );
 }

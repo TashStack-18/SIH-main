@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
-import { VERIFIED_TERRITORIES } from "@/src/lib/fixtures";
+import { VERIFIED_TERRITORIES, VERIFIED_DESTINATIONS } from "@/src/lib/fixtures";
 
 export function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -10,6 +10,10 @@ export function HeroCarousel() {
 
   const territories = VERIFIED_TERRITORIES;
   const current = territories[currentIndex] || territories[0];
+  const currentDest = VERIFIED_DESTINATIONS.find((d) => d.territoryId === current.id);
+  const itineraryHref = currentDest
+    ? `/itinerary?destination=${currentDest.slug}&territory=${current.id}`
+    : `/itinerary?territory=${current.id}`;
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % territories.length);
@@ -99,7 +103,7 @@ export function HeroCarousel() {
 
             {/* Secondary Action: Plan Experience */}
             <Link
-              href="/itinerary"
+              href={itineraryHref}
               className="hero-btn-secondary"
             >
               <span>Plan Experience</span>

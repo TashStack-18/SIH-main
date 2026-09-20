@@ -46,6 +46,7 @@ export const metadata: Metadata = {
 };
 
 import { Navbar } from "@/src/app/components/Navbar";
+import { FloatingYatraAI } from "@/src/app/components/FloatingYatraAI";
 
 export default function RootLayout({
   children,
@@ -80,6 +81,8 @@ export default function RootLayout({
           <div style={{ flexGrow: 1 }}>
             {children}
           </div>
+          {/* Persistent Yatra AI companion floating across all pages in bottom right */}
+          <FloatingYatraAI />
         </div>
       </body>
     </html>

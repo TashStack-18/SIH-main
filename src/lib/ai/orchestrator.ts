@@ -151,12 +151,18 @@ export class YatraAiOrchestrator {
       }
     }
 
-    // If finalContent is empty after tool execution (e.g. from fallback engine), generate synthesis
+    // If finalContent is empty after tool execution, let the engine synthesize human-readable text
     if (!finalContent) {
-      const lastToolMsg = messages.filter((m) => m.role === 'tool').pop();
-      if (lastToolMsg) {
-        finalContent = `Here is the verified information retrieved from our live services:\n\n${lastToolMsg.content}`;
-      } else {
+      try {
+        const toolCompletion = await llm.generateChatCompletion(messages, [], {
+          modelClass: 'FAST',
+          temperature: 0.2,
+        });
+        finalContent = toolCompletion.content || '';
+      } catch (err) {
+        console.warn('[Orchestrator] Error during tool synthesis pass:', err);
+      }
+      if (!finalContent) {
         finalContent = `I have verified our official knowledge base regarding your query. How else may I assist your travel planning?`;
       }
     }

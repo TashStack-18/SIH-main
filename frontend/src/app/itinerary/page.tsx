@@ -248,10 +248,22 @@ function ItineraryContent() {
   // Mode A & Initial Handoff Loader
   // -------------------------------------------------------------
   useEffect(() => {
-    if (destinationParam && step === 'DESTINATION') {
-      const match = VERIFIED_DESTINATIONS.find(
-        (d) => d.id === destinationParam || d.slug === destinationParam || d.id.toLowerCase() === destinationParam.toLowerCase()
-      );
+    if ((destinationParam || territoryParam) && step === 'DESTINATION') {
+      let match = destinationParam
+        ? VERIFIED_DESTINATIONS.find(
+            (d) => d.id === destinationParam || d.slug === destinationParam || d.id.toLowerCase() === destinationParam.toLowerCase()
+          )
+        : null;
+
+      if (!match && (territoryParam || destinationParam)) {
+        const query = (territoryParam || destinationParam)!.toLowerCase();
+        const matchedUt = VERIFIED_TERRITORIES.find(
+          (t) => t.id.toLowerCase() === query || t.slug.toLowerCase() === query || t.name.toLowerCase() === query
+        );
+        if (matchedUt) {
+          match = VERIFIED_DESTINATIONS.find((d) => d.territoryId === matchedUt.id) || null;
+        }
+      }
 
       if (match) {
         setSelectedDestination(match);
@@ -270,7 +282,7 @@ function ItineraryContent() {
         }
       }
     }
-  }, [destinationParam, step, selectedDuration, selectedStyle, selectedTravellers]);
+  }, [destinationParam, territoryParam, step, selectedDuration, selectedStyle, selectedTravellers]);
 
   // -------------------------------------------------------------
   // Recalculate Routes, Feasibility, Detours & Optimization
@@ -576,7 +588,7 @@ function ItineraryContent() {
   // -------------------------------------------------------------
   if (step === 'DESTINATION') {
     return (
-      <main className="container section-spacing" role="main" style={{ maxWidth: '1280px', margin: '0 auto', paddingTop: "6rem" }}>
+      <main className="container section-spacing" role="main" style={{ maxWidth: '1280px', margin: '0 auto', paddingTop: "1.5rem" }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h1 className="font-serif" style={{ fontSize: 'clamp(1.9rem, 4vw, 2.8rem)', color: 'var(--color-text-primary, #ffffff)', margin: '8px 0 12px' }}>
             Choose a destination to start planning
@@ -617,7 +629,7 @@ function ItineraryContent() {
   // -------------------------------------------------------------
   if (step === 'PLANNING' && selectedUt) {
     return (
-      <main className="container section-spacing" role="main" style={{ maxWidth: '640px', margin: '0 auto', display: 'flex', flexDirection: 'column', minHeight: '60vh', justifyContent: 'center', paddingTop: "6rem" }}>
+      <main className="container section-spacing" role="main" style={{ maxWidth: '640px', margin: '0 auto', display: 'flex', flexDirection: 'column', minHeight: '60vh', justifyContent: 'center', paddingTop: "1.5rem" }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h2 className="font-serif" style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', color: '#0f172a', margin: '0 0 4px', letterSpacing: '-0.01em' }}>
             {selectedUt.name}

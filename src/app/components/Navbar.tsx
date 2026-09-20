@@ -542,14 +542,21 @@ export function Navbar() {
                 }}
               >Theme: {isDark ? 'Dark' : 'Light'}</button>
 
-              <Link
-                href="/ai"
-                onClick={() => setIsMenuOpen(false)}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("open-yatra-ai"));
+                  }
+                }}
                 style={{
                   fontSize: '1.1rem', fontWeight: 600, textDecoration: 'none',
-                  color: 'var(--color-accent)', padding: '8px 0'
+                  color: 'var(--color-accent)', padding: '8px 0',
+                  background: 'transparent', border: 'none', textAlign: 'left',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px'
                 }}
-              >Yatra AI</Link>
+              >✦ Yatra AI</button>
 
               <Link
                 href="/safety"

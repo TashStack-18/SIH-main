@@ -24,6 +24,20 @@ export class HybridRetrievalEngine {
     'dnh-dd': ['daman', 'diu', 'dadra', 'silvassa', 'nagar haveli'],
   };
 
+  private normalizeSlug(s?: string | null): string {
+    if (!s) return '';
+    const lower = s.toLowerCase().replace(/_/g, '-');
+    if (lower.includes('andaman')) return 'andaman-nicobar';
+    if (lower.includes('jammu') || lower.includes('kashmir')) return 'jammu-kashmir';
+    if (lower.includes('dadra') || lower.includes('daman') || lower.includes('diu') || lower.includes('dnh')) return 'dnh-dd';
+    if (lower.includes('ladakh')) return 'ladakh';
+    if (lower.includes('lakshadweep')) return 'lakshadweep';
+    if (lower.includes('delhi')) return 'delhi';
+    if (lower.includes('puducherry') || lower.includes('pondicherry')) return 'puducherry';
+    if (lower.includes('chandigarh')) return 'chandigarh';
+    return lower;
+  }
+
   public search(query: string, filter?: RAGFilter, topK = 6): RAGSearchResult[] {
     const chunks = knowledgeIngestion.getChunks();
     const queryTokens = this.tokenize(query);
@@ -43,9 +57,13 @@ export class HybridRetrievalEngine {
     for (const chunk of chunks) {
       // 1. Metadata Filtering
       const targetTerritory = filter?.territorySlug || detectedTerritory;
-      if (targetTerritory && chunk.territorySlug && chunk.territorySlug !== targetTerritory) {
-        // If query explicitly mentions a territory, skip chunks belonging to unrelated territories
-        continue;
+      if (targetTerritory && chunk.territorySlug && chunk.category !== 'SAFETY') {
+        const normTarget = this.normalizeSlug(targetTerritory);
+        const normChunk = this.normalizeSlug(chunk.territorySlug);
+        if (normTarget && normChunk && normTarget !== normChunk) {
+          // If query explicitly mentions a territory, skip chunks belonging to unrelated territories
+          continue;
+        }
       }
       if (filter?.destinationId && chunk.destinationId && chunk.destinationId !== filter.destinationId) {
         continue;

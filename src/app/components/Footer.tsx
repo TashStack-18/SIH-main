@@ -49,7 +49,6 @@ export function Footer() {
     { label: 'Smart Itinerary AI', href: '/itinerary' },
     { label: 'Interactive 3D Map', href: '/map' },
     { label: '2026 Cultural Festivals', href: '/festivals' },
-    { label: 'Dishaara AI Companion', href: '/ai' },
     { label: 'Safety & Emergency Hub', href: '/safety' },
   ];
 

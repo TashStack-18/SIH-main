@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import type { AIMessage } from '@/src/types';
+import { linkifyPlaces, findPlaceForHeading, QuickPlaceRedirectionStrip } from './placeNavigation';
 
 interface YatraAiConversationProps {
   messages: AIMessage[];
@@ -67,6 +68,304 @@ export function YatraAiConversation({
   };
 
   const isInitialWelcome = messages.length <= 1;
+
+  // Preprocessor to segregate clustered RAG blocks and unstructured text
+  const preprocessAndFormatAIResponse = (text: string): string => {
+    if (!text) return '';
+
+    if (
+      text.includes('Destination:') ||
+      text.includes('Overview:') ||
+      text.includes('Highlights:') ||
+      text.includes('Things to do:') ||
+      text.includes('Safety Guidelines:') ||
+      text.includes('Coordinates:')
+    ) {
+      let processed = text;
+
+      processed = processed.replace(
+        /Based on verified \*\*Bharat Safe Yatra\*\* official intelligence:\s*/gi,
+        'Based on verified **Bharat Safe Yatra** official intelligence:\n\n'
+      );
+
+      processed = processed.replace(
+        /(?:\n|^)\*\*([^*]+(?:Overview|Highlights|Safety|Culture)[^*]*)\*\*\s*/gi,
+        '\n### 🏛️ $1\n\n'
+      );
+
+      processed = processed.replace(
+        /Destination:\s*([^(.\n]+)(?:\s*\(([^)]+)\))?/gi,
+        (match, name, territory) => {
+          const loc = territory ? `📍 **${territory.trim()}**` : '';
+          return `### 🏛️ ${name.trim()}\n${loc}`;
+        }
+      );
+
+      processed = processed.replace(
+        /\.?\s*Tagline:\s*([^.\n]+)(?:\.|\n|$)/gi,
+        '\n*$1*\n\n---\n'
+      );
+
+      processed = processed.replace(/Type:\s*([^.\n]+)(?:\.|\n|$)/gi, ' • 🏷️ **Type:** $1');
+      processed = processed.replace(/Coordinates:\s*([0-9.,\s-]+)(?:\.|\n|$)/gi, ' • 🧭 **GPS:** `$1`\n\n');
+
+      processed = processed
+        .replace(/\.?\s*Overview:\s*/gi, '\n\n**📖 Overview**\n')
+        .replace(/\.?\s*Highlights:\s*/gi, '\n\n**🌟 Key Highlights**\n')
+        .replace(/\.?\s*Things to do:\s*/gi, '\n\n**🎯 Recommended Experiences**\n')
+        .replace(/\.?\s*Safety Guidelines:\s*/gi, '\n\n**🛡️ Safety & Practical Advice**\n')
+        .replace(/\.?\s*Nearest Emergency Medical Facility:\s*/gi, '\n\n**🏥 Emergency Response Facility**\n')
+        .replace(/\.?\s*Weather advisory:\s*/gi, '\n\n**☀️ Weather & Best Season**\n')
+        .replace(/\.?\s*Specialty dishes:\s*/gi, '\n\n**🍲 Regional Specialties**\n')
+        .replace(/\.?\s*Permits(?: REQUIRED)?:\s*/gi, '\n\n**📋 Entry & Permits**\n');
+
+      processed = processed.replace(
+        /(\*\*(?:🌟 Key Highlights|🎯 Recommended Experiences|🛡️ Safety & Practical Advice)\*\*)\n([^\n]+)/g,
+        (match, header, body) => {
+          const items = body
+            .split(/[;]\s*/)
+            .map((item: string) => item.trim().replace(/^\.+|\.+$/g, ''))
+            .filter((item: string) => item.length > 2);
+          if (items.length > 1) {
+            return `${header}\n${items.map((i: string) => `• ${i}`).join('\n')}`;
+          }
+          return match;
+        }
+      );
+
+      return processed;
+    }
+
+    return text;
+  };
+
+  const formatBoldAndCode = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*|`.*?`|\*.*?\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        const inner = part.slice(2, -2);
+        return (
+          <strong key={i} style={{ fontWeight: 700, color: 'inherit' }}>
+            {linkifyPlaces(inner)}
+          </strong>
+        );
+      }
+      if (part.startsWith('*') && part.endsWith('*') && !part.startsWith('**')) {
+        const inner = part.slice(1, -1);
+        return (
+          <em key={i} style={{ fontStyle: 'italic', opacity: 0.9 }}>
+            {linkifyPlaces(inner)}
+          </em>
+        );
+      }
+      if (part.startsWith('`') && part.endsWith('`')) {
+        return (
+          <code
+            key={i}
+            style={{
+              background: 'rgba(0, 0, 0, 0.08)',
+              padding: '2px 6px',
+              borderRadius: '4px',
+              fontSize: '0.825em',
+              fontFamily: 'monospace',
+              color: 'var(--color-accent, #B45309)',
+            }}
+          >
+            {part.slice(1, -1)}
+          </code>
+        );
+      }
+      return <React.Fragment key={i}>{linkifyPlaces(part)}</React.Fragment>;
+    });
+  };
+
+  const renderMessageContent = (rawContent: string, isUser: boolean) => {
+    if (isUser) {
+      return <div style={{ whiteSpace: 'pre-wrap' }}>{rawContent}</div>;
+    }
+
+    const content = preprocessAndFormatAIResponse(rawContent);
+    const lines = content.split('\n');
+
+    return lines.map((line, idx) => {
+      const trimmed = line.trim();
+      if (!trimmed) return <div key={idx} style={{ height: '6px' }} />;
+
+      if (line.startsWith('### ')) {
+        const headingText = line.replace('### ', '').trim();
+        const matchedPlace = findPlaceForHeading(headingText);
+        return (
+          <div
+            key={idx}
+            style={{
+              fontSize: '1rem',
+              fontWeight: 800,
+              color: 'var(--color-text-primary)',
+              margin: '12px 0 6px 0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '8px',
+              paddingBottom: '4px',
+              borderBottom: '1px solid var(--color-border-subtle)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ color: 'var(--color-accent, #FF9933)', fontSize: '1.1rem' }}>✦</span>
+              <span>{headingText}</span>
+            </div>
+            {matchedPlace && (
+              <Link
+                href={matchedPlace.url}
+                title={`Visit ${matchedPlace.name}`}
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  color: '#FFFFFF',
+                  background: 'linear-gradient(135deg, #FF9933, #EA580C)',
+                  padding: '3px 10px',
+                  borderRadius: '12px',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  boxShadow: '0 1px 3px rgba(255, 153, 51, 0.35)',
+                  flexShrink: 0,
+                }}
+              >
+                <span>Explore</span>
+                <span style={{ fontSize: '0.75em' }}>➔</span>
+              </Link>
+            )}
+          </div>
+        );
+      }
+
+      if (trimmed === '---') {
+        return (
+          <hr
+            key={idx}
+            style={{
+              margin: '10px 0',
+              border: 'none',
+              borderTop: '1px solid var(--color-border-subtle)',
+            }}
+          />
+        );
+      }
+
+      if ((line.includes('📍') || line.includes('🏷️') || line.includes('🧭')) && line.includes('•')) {
+        const badges = line.split('•').map((b) => b.trim()).filter(Boolean);
+        return (
+          <div key={idx} style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', margin: '6px 0 8px 0' }}>
+            {badges.map((badge, bIdx) => (
+              <span
+                key={bIdx}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  padding: '3px 9px',
+                  borderRadius: '9999px',
+                  background: 'rgba(255, 153, 51, 0.1)',
+                  color: 'var(--color-text-primary)',
+                  border: '1px solid rgba(255, 153, 51, 0.25)',
+                }}
+              >
+                {formatBoldAndCode(badge)}
+              </span>
+            ))}
+          </div>
+        );
+      }
+
+      const isSectionHeader =
+        line.startsWith('**') &&
+        (line.includes('Overview') ||
+          line.includes('Highlights') ||
+          line.includes('Experiences') ||
+          line.includes('Things To Do') ||
+          line.includes('Activities') ||
+          line.includes('Safety') ||
+          line.includes('Permits') ||
+          line.includes('Entry') ||
+          line.includes('Climate') ||
+          line.includes('Season') ||
+          line.includes('Specialties') ||
+          line.includes('Emergency') ||
+          line.includes('Advisories') ||
+          line.includes('Destinations'));
+
+      if (isSectionHeader) {
+        return (
+          <div
+            key={idx}
+            style={{
+              fontSize: '0.825rem',
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              letterSpacing: '0.04em',
+              color: 'var(--color-accent, #B45309)',
+              marginTop: '12px',
+              marginBottom: '5px',
+            }}
+          >
+            {formatBoldAndCode(line)}
+          </div>
+        );
+      }
+
+      if (line.startsWith('• ') || line.startsWith('- ')) {
+        return (
+          <div
+            key={idx}
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '8px',
+              margin: '3px 0',
+              padding: '5px 10px',
+              borderRadius: '8px',
+              background: 'rgba(0, 0, 0, 0.025)',
+              border: '1px solid rgba(0, 0, 0, 0.04)',
+              lineHeight: 1.5,
+              fontSize: '0.85rem',
+            }}
+          >
+            <span style={{ color: 'var(--color-accent, #FF9933)', fontWeight: 800 }}>✦</span>
+            <div style={{ flex: 1, color: 'var(--color-text-primary)' }}>{formatBoldAndCode(line.substring(2))}</div>
+          </div>
+        );
+      }
+
+      if (line.startsWith('💡') || line.startsWith('🔗') || line.startsWith('*All guidance')) {
+        return (
+          <div
+            key={idx}
+            style={{
+              margin: '10px 0 4px',
+              padding: '8px 12px',
+              borderRadius: '8px',
+              background: 'rgba(245, 158, 11, 0.08)',
+              border: '1px solid rgba(245, 158, 11, 0.25)',
+              fontSize: '0.785rem',
+              color: 'var(--color-text-secondary)',
+              lineHeight: 1.5,
+            }}
+          >
+            {formatBoldAndCode(line)}
+          </div>
+        );
+      }
+
+      return (
+        <p key={idx} style={{ margin: '4px 0', lineHeight: 1.6, fontSize: '0.875rem' }}>
+          {formatBoldAndCode(line)}
+        </p>
+      );
+    });
+  };
 
   return (
     <div
@@ -210,17 +509,32 @@ export function YatraAiConversation({
               {/* Message Body */}
               <div
                 style={{
-                  background: isUser ? 'var(--color-primary)' : 'var(--color-bg-surface-elevated)',
-                  color: isUser ? 'var(--color-text-inverse)' : 'var(--color-text-primary)',
+                  background: isUser
+                    ? 'linear-gradient(135deg, #1E293B, #0F172A)'
+                    : 'var(--color-bg-surface-elevated)',
+                  color: isUser ? '#FFFFFF' : 'var(--color-text-primary)',
                   padding: '14px 18px',
                   borderRadius: 'var(--radius-lg)',
-                  border: isUser ? 'none' : '1px solid var(--color-border-subtle)',
+                  border: isUser
+                    ? '1px solid rgba(255, 255, 255, 0.15)'
+                    : '1px solid var(--color-border-subtle)',
                   fontSize: '0.9rem',
                   lineHeight: 1.55,
-                  whiteSpace: 'pre-line',
+                  boxShadow: isUser
+                    ? '0 4px 14px rgba(15, 23, 42, 0.3)'
+                    : 'none',
                 }}
               >
-                {msg.content}
+                {isUser ? (
+                  <div style={{ color: '#FFFFFF', whiteSpace: 'pre-wrap', fontWeight: 500, lineHeight: 1.55 }}>
+                    {msg.content}
+                  </div>
+                ) : (
+                  <>
+                    {renderMessageContent(msg.content, isUser)}
+                    <QuickPlaceRedirectionStrip text={msg.content} />
+                  </>
+                )}
               </div>
 
               {/* Source Provenance Strip */}

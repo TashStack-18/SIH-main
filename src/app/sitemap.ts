@@ -11,7 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/safety',
     '/festivals',
     '/territories',
-    '/ai',
     '/privacy'
   ].map((route) => ({
     url: `${siteConfig.url}${route}`,
