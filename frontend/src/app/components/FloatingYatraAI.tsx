@@ -29,6 +29,15 @@ export function FloatingYatraAI() {
     window.addEventListener("open-yatra-ai", handleOpen);
     return () => window.removeEventListener("open-yatra-ai", handleOpen);
   }, []);
+
+  // Close overlay on route change
+  const { usePathname, useSearchParams } = require('next/navigation');
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname, searchParams]);
+
   // Auto-scroll to bottom of conversation
   useEffect(() => {
     if (isOpen && messagesEndRef.current) {
