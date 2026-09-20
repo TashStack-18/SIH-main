@@ -348,7 +348,7 @@ export const Card = ({
           <p
             style={{
               textAlign: "left",
-              fontFamily: "var(--font-mono, monospace)",
+              fontFamily: "var(--font-family-sans, sans-serif)",
               fontSize: "0.825rem",
               fontWeight: 700,
               letterSpacing: "0.06em",
@@ -361,21 +361,22 @@ export const Card = ({
             {card.category}
           </p>
         )}
-        <p
+        <h3
+          className="font-serif"
           style={{
             marginTop: "2px",
             textAlign: "left",
-            fontFamily: "var(--font-mono, monospace)",
-            fontSize: "1.45rem",
+            fontFamily: "var(--font-family-serif), 'Cormorant Garamond', Georgia, serif",
+            fontSize: "1.65rem",
             fontWeight: 700,
-            lineHeight: 1.25,
+            lineHeight: 1.2,
             color: "#ffffff",
             letterSpacing: "-0.01em",
             textShadow: "0 2px 8px rgba(0,0,0,0.7)",
           }}
         >
           {card.title}
-        </p>
+        </h3>
       </div>
 
       {/* Background Image (Vibrant Full Color + Smooth Hover Zoom) */}
