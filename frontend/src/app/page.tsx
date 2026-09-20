@@ -132,9 +132,6 @@ export default function HomePage() {
                     alt={fest.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.3s ease" }}
                     loading="lazy"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/images/chandigarh_hero.png";
-                    }}
                   />
                   <div
                     style={{
