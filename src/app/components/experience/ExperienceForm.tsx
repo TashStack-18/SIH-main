@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { VERIFIED_DESTINATIONS } from "@/src/lib/fixtures";
 
 interface PhotoPreview {
-  file: File;
+  file?: File;
   url: string;
 }
 
@@ -13,9 +13,12 @@ export function ExperienceForm() {
   const router = useRouter();
   
   const [destinationId, setDestinationId] = useState("");
-  const [rating, setRating] = useState(0);
+  const [title, setTitle] = useState("");
+  const [userName, setUserName] = useState("");
+  const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [text, setText] = useState("");
+  const [travelTips, setTravelTips] = useState("");
   const [photos, setPhotos] = useState<PhotoPreview[]>([]);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,10 +29,8 @@ export function ExperienceForm() {
       const selectedFiles = Array.from(e.target.files);
       const newPhotos = selectedFiles.map((file) => ({
         file,
-        url: URL.createObjectURL(file), // Using object URL to mock upload preview
+        url: URL.createObjectURL(file),
       }));
-      
-      // Limit to 5 photos for the mock
       setPhotos((prev) => [...prev, ...newPhotos].slice(0, 5));
     }
   };
@@ -47,14 +48,15 @@ export function ExperienceForm() {
     setIsSubmitting(true);
     setError(null);
 
+    const selectedDest = VERIFIED_DESTINATIONS.find((d) => d.id === destinationId);
+
     try {
-      // Simulate photo upload delay (since we don't have a real S3 backend)
       if (photos.length > 0) {
-        await new Promise(resolve => setTimeout(resolve, photos.length * 500));
+        await new Promise((resolve) => setTimeout(resolve, photos.length * 200));
       }
 
-      // We send the object URLs as strings. In a real app, we'd send the S3/Cloudinary URLs.
-      const photoUrls = photos.map(p => p.url);
+      const photoUrls = photos.map((p) => p.url);
+      const defaultPhoto = selectedDest?.image || "/images/Pangong Tso.jpeg";
 
       const res = await fetch("/api/v1/experience", {
         method: "POST",
@@ -63,74 +65,178 @@ export function ExperienceForm() {
         },
         body: JSON.stringify({
           destinationId,
-          rating,
+          destinationName: selectedDest?.name || "Verified Bharat Destination",
+          territoryId: selectedDest?.territoryId || "UT",
+          territoryName: selectedDest?.territoryName || "Union Territory",
+          title: title.trim() || (selectedDest ? `Memories from ${selectedDest.name}` : "My Bharat Journey"),
+          rating: Number(rating),
           text,
-          photos: photoUrls,
-          userId: "anonymous_traveler" // Mock user
+          travelTips: travelTips.trim() || undefined,
+          photos: photoUrls.length > 0 ? photoUrls : [defaultPhoto],
+          userId: userName.trim().toLowerCase().replace(/\s+/g, "_") || "community_traveler",
+          userName: userName.trim() || "Community Traveler",
         }),
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error?.message || "Failed to submit experience");
 
-      // Redirect to the experience feed on success
       router.push("/experience");
       router.refresh();
       
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "Failed to publish experience");
       setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       {error && (
-        <div className="bg-[var(--color-danger)]/10 text-[var(--color-danger)] p-4 rounded-lg text-sm border border-[var(--color-danger)]/20">
+        <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm border border-red-200">
           {error}
         </div>
       )}
 
       {/* 1. Destination Select */}
-      <div className="flex flex-col gap-2" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <label htmlFor="destination" className="text-sm font-bold text-[var(--color-text-primary)]">
-          Where did you go? <span className="text-[var(--color-danger)]">*</span>
+      <div className="flex flex-col gap-2">
+        <label htmlFor="destination" className="text-xs font-bold uppercase tracking-wider text-[#172B5B]">
+          Where did you explore? <span className="text-red-500">*</span>
         </label>
         <select
           id="destination"
           value={destinationId}
           onChange={(e) => setDestinationId(e.target.value)}
           disabled={isSubmitting}
-          className="w-full text-sm focus:outline-none transition-colors"
-          style={{ border: 'none', backgroundColor: 'var(--color-bg-surface-elevated)', borderRadius: '9999px', padding: '12px 24px', outline: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
+          required
+          className="w-full px-4 py-3 bg-[#F7F6F1] border border-[#172B5B]/15 rounded-xl text-sm text-[#172B5B] focus:outline-none focus:border-[#159BC5] cursor-pointer"
         >
-          <option value="" disabled>Select a destination...</option>
-          {VERIFIED_DESTINATIONS.map(dest => (
+          <option value="" disabled>Select a destination across the 8 Union Territories...</option>
+          {VERIFIED_DESTINATIONS.map((dest) => (
             <option key={dest.id} value={dest.id}>
-              {dest.name} ({dest.territoryName})
+              {dest.name} — {dest.territoryName}
             </option>
           ))}
         </select>
       </div>
 
-      {/* 2. Photos */}
-      <div className="flex flex-col gap-2" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <label className="text-sm font-bold text-[var(--color-text-primary)]">
-          Photos
+      {/* 2. Story Headline */}
+      <div className="flex flex-col gap-2">
+        <label htmlFor="title" className="text-xs font-bold uppercase tracking-wider text-[#172B5B]">
+          Story Headline
         </label>
-        <p className="text-xs text-[var(--color-text-secondary)] mb-2">
-          Upload up to 5 photos to share the visual experience.
-        </p>
-        
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+        <input
+          id="title"
+          type="text"
+          placeholder="e.g. Kayaking through hidden beaches & mangroves"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          disabled={isSubmitting}
+          className="w-full px-4 py-3 bg-[#F7F6F1] border border-[#172B5B]/15 rounded-xl text-sm text-[#172B5B] placeholder:text-[#7980A3] focus:outline-none focus:border-[#159BC5]"
+        />
+      </div>
+
+      {/* 3. Rating */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs font-bold uppercase tracking-wider text-[#172B5B]">
+          Your Rating <span className="text-red-500">*</span>
+        </label>
+        <div className="flex items-center gap-2" onMouseLeave={() => setHoverRating(0)}>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              type="button"
+              disabled={isSubmitting}
+              onClick={() => setRating(star)}
+              onMouseEnter={() => setHoverRating(star)}
+              className="p-1 focus:outline-none transition-transform hover:scale-110 cursor-pointer"
+              aria-label={`Rate ${star} stars`}
+            >
+              <svg 
+                width="28" 
+                height="28" 
+                viewBox="0 0 24 24" 
+                fill={(hoverRating || rating) >= star ? "#D4A94E" : "none"} 
+                stroke={(hoverRating || rating) >= star ? "#D4A94E" : "#7980A3"} 
+                strokeWidth="1.5"
+                className="transition-colors"
+              >
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </button>
+          ))}
+          <span className="text-sm font-serif font-bold text-[#172B5B] ml-2">
+            {(hoverRating || rating)}.0 / 5.0
+          </span>
+        </div>
+      </div>
+
+      {/* 4. Story Text */}
+      <div className="flex flex-col gap-2">
+        <label htmlFor="experience" className="text-xs font-bold uppercase tracking-wider text-[#172B5B]">
+          Your Story & Reflections <span className="text-red-500">*</span>
+        </label>
+        <textarea
+          id="experience"
+          rows={5}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          disabled={isSubmitting}
+          required
+          placeholder="Describe your journey, encounters with locals, scenic views, and unforgettable moments..."
+          className="w-full bg-[#F7F6F1] border border-[#172B5B]/15 rounded-xl px-4 py-3 text-sm text-[#172B5B] placeholder:text-[#7980A3] focus:outline-none focus:border-[#159BC5] resize-y"
+        />
+      </div>
+
+      {/* 5. Practical Tips */}
+      <div className="flex flex-col gap-2">
+        <label htmlFor="tips" className="text-xs font-bold uppercase tracking-wider text-[#172B5B]">
+          Practical Recommendations / Hidden Tips (Optional)
+        </label>
+        <input
+          id="tips"
+          type="text"
+          placeholder="e.g. Best time for photography, local permits, must-try food stall..."
+          value={travelTips}
+          onChange={(e) => setTravelTips(e.target.value)}
+          disabled={isSubmitting}
+          className="w-full px-4 py-3 bg-[#F7F6F1] border border-[#172B5B]/15 rounded-xl text-sm text-[#172B5B] placeholder:text-[#7980A3] focus:outline-none focus:border-[#159BC5]"
+        />
+      </div>
+
+      {/* 6. Author Name */}
+      <div className="flex flex-col gap-2">
+        <label htmlFor="author" className="text-xs font-bold uppercase tracking-wider text-[#172B5B]">
+          Your Name
+        </label>
+        <input
+          id="author"
+          type="text"
+          placeholder="e.g. Simran Kaur"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          disabled={isSubmitting}
+          className="w-full px-4 py-3 bg-[#F7F6F1] border border-[#172B5B]/15 rounded-xl text-sm text-[#172B5B] placeholder:text-[#7980A3] focus:outline-none focus:border-[#159BC5]"
+        />
+      </div>
+
+      {/* 7. Photos */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs font-bold uppercase tracking-wider text-[#172B5B]">
+          Travel Photography (Up to 5 Photos)
+        </label>
+        <div className="flex flex-wrap gap-4 mt-1">
           {photos.map((photo, idx) => (
-            <div key={idx} style={{ position: 'relative', width: '240px', height: '140px', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--color-border-subtle)', backgroundColor: 'var(--color-bg-surface-elevated)', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-              <img src={photo.url} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div 
+              key={idx} 
+              className="relative w-28 h-20 rounded-xl overflow-hidden border border-[#172B5B]/15 bg-white shadow-sm"
+            >
+              <img src={photo.url} alt="Preview" className="w-full h-full object-cover" />
               <button
                 type="button"
                 onClick={() => removePhoto(idx)}
                 disabled={isSubmitting}
-                style={{ position: 'absolute', top: '12px', right: '12px', width: '28px', height: '28px', backgroundColor: 'rgba(0,0,0,0.6)', color: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: 'none', fontSize: '14px', backdropFilter: 'blur(4px)' }}
+                className="absolute top-1.5 right-1.5 w-6 h-6 bg-black/60 text-white rounded-full flex items-center justify-center text-xs backdrop-blur-sm hover:bg-black/80"
               >
                 ✕
               </button>
@@ -138,18 +244,15 @@ export function ExperienceForm() {
           ))}
 
           {photos.length < 5 && (
-            <label style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '2px dashed var(--color-border-subtle)', borderRadius: '16px', cursor: 'pointer', backgroundColor: 'transparent', width: '240px', height: '140px', transition: 'all 0.2s ease', opacity: 0.8 }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-primary)" strokeWidth="2" style={{ marginBottom: '8px' }}>
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-              <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-primary)' }}>Add Photo</span>
+            <label className="w-28 h-20 flex flex-col items-center justify-center border-2 border-dashed border-[#172B5B]/20 rounded-xl cursor-pointer hover:border-[#159BC5] hover:text-[#159BC5] text-[#7980A3] transition-colors">
+              <span className="text-xl font-bold">+</span>
+              <span className="text-[11px] font-bold">Add Photo</span>
               <input 
                 type="file" 
                 accept="image/*" 
                 multiple 
                 onChange={handlePhotoSelect} 
-                style={{ display: 'none' }}
+                className="hidden"
                 disabled={isSubmitting}
               />
             </label>
@@ -157,76 +260,20 @@ export function ExperienceForm() {
         </div>
       </div>
 
-      {photos.length > 0 && (
-        <>
-          {/* 3. Rating */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-[var(--color-text-primary)]">
-              Rating <span className="text-[var(--color-danger)]">*</span>
-            </label>
-            <div className="flex gap-2" onMouseLeave={() => setHoverRating(0)}>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  type="button"
-                  disabled={isSubmitting}
-                  onClick={() => setRating(star)}
-                  onMouseEnter={() => setHoverRating(star)}
-                  className="w-10 h-10 flex items-center justify-center focus:outline-none transition-transform hover:scale-110 disabled:opacity-50 disabled:hover:scale-100"
-                  aria-label={`Rate ${star} stars`}
-                >
-                  <svg 
-                    width="28" 
-                    height="28" 
-                    viewBox="0 0 24 24" 
-                    fill={(hoverRating || rating) >= star ? "var(--color-accent)" : "none"} 
-                    stroke={(hoverRating || rating) >= star ? "var(--color-accent)" : "var(--color-border-subtle)"} 
-                    strokeWidth="1.5"
-                    className="transition-colors"
-                  >
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                  </svg>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 4. Comment / Experience */}
-          <div className="flex flex-col gap-2" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label htmlFor="experience" className="text-sm font-bold text-[var(--color-text-primary)]">
-              Your Experience <span className="text-[var(--color-danger)]">*</span>
-            </label>
-            <p className="text-xs text-[var(--color-text-secondary)] mb-1">
-              What did you enjoy? What should another traveler know?
-            </p>
-            <textarea
-              id="experience"
-              rows={5}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              disabled={isSubmitting}
-              placeholder="Share details about your visit, practical tips, best time to go, crowd levels..."
-              className="w-full bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-accent)] transition-colors resize-y"
-              style={{ border: '1px solid var(--color-border-subtle)', backgroundColor: 'var(--color-bg-surface)' }}
-            />
-          </div>
-        </>
-      )}
-
-      <div className="pt-4 border-t border-[var(--color-border-subtle)]" style={{ paddingTop: '16px', borderTop: '1px solid var(--color-border-subtle)' }}>
+      {/* Submit CTA */}
+      <div className="pt-4 border-t border-[#172B5B]/10">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="btn btn-primary w-full py-4 text-base font-bold flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-          style={{ padding: '16px', borderRadius: '8px', minHeight: '56px' }}
+          className="w-full py-4 rounded-full bg-[#172B5B] text-white font-bold text-sm tracking-wide shadow-md hover:bg-[#323652] hover:shadow-lg disabled:opacity-70 transition-all cursor-pointer"
         >
           {isSubmitting ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              Publishing...
-            </>
+            <span className="inline-flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
+              Publishing Your Story...
+            </span>
           ) : (
-            "Publish Experience"
+            "Publish Experience →"
           )}
         </button>
       </div>

@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       return Errors.badRequest('Invalid JSON body');
     }
 
-    const { destinationId, rating, text, photos, userId } = body;
+    const { destinationId, destinationName, territoryId, territorySlug, territoryName, title, rating, text, photos, userId, userName, userAvatar, travelTips } = body;
 
     if (!destinationId || !rating || !text) {
       return Errors.badRequest('destinationId, rating, and text are required');
@@ -41,13 +41,23 @@ export async function POST(req: NextRequest) {
 
     // Usually we would extract userId from the auth token, but we'll accept it from the body for the mock
     const finalUserId = userId || 'anonymous_traveler';
+    const finalUserName = userName || (finalUserId === 'anonymous_traveler' ? 'Anonymous Traveler' : finalUserId);
 
     const experience = createExperience({
       destinationId,
+      destinationName,
+      territoryId,
+      territorySlug,
+      territoryName,
+      title: title || undefined,
+      travelTips: travelTips || undefined,
       rating: Number(rating),
       text,
       photos: Array.isArray(photos) ? photos : [],
       userId: finalUserId,
+      userName: finalUserName,
+      userAvatar: userAvatar || undefined,
+      likesCount: 0,
     });
 
     return ok({ experience });
