@@ -283,7 +283,6 @@ export function Navbar() {
     { label: "Destinations", href: "/destinations" },
     { label: "Itinerary", href: "/itinerary" },
     { label: "Experience", href: "/experience" },
-    { label: "Festivals", href: "/festivals" },
     { label: "Booking", href: "/bookings" },
   ];
 
