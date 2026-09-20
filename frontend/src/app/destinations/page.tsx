@@ -713,6 +713,7 @@ function DestinationsContent() {
                     <Link
                       href={`/destinations/${dest.slug}`}
                       className="btn btn-sm btn-outline"
+                      style={{ whiteSpace: "nowrap", flexShrink: 0 }}
                       onClick={(e) => e.stopPropagation()}
                     >
                       Explore Place →
@@ -720,6 +721,7 @@ function DestinationsContent() {
                     <Link
                       href={`/itinerary?destination=${dest.slug}&territory=${dest.territoryId}`}
                       className="btn btn-sm btn-primary"
+                      style={{ whiteSpace: "nowrap", flexShrink: 0 }}
                       onClick={(e) => e.stopPropagation()}
                     >
                       + Itinerary

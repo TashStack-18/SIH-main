@@ -70,8 +70,16 @@ export default function FestivalsClient({ festivals }: { festivals: any[] }) {
             animated={false}
             colors={['#C88E44', '#f59e0b', '#78350f']}
           >
-            <div style={{ position: "relative", height: "230px", overflow: "hidden" }}>
-              <img src={fest.image} alt={fest.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+            <div style={{ position: "relative", height: "230px", overflow: "hidden", borderTopLeftRadius: "20px", borderTopRightRadius: "20px" }}>
+              <img
+                src={fest.image}
+                alt={fest.name}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                loading="lazy"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/images/chandigarh_hero.png";
+                }}
+              />
             </div>
 
             <div style={{ padding: "24px", display: "flex", flexDirection: "column", flexGrow: 1 }}>
@@ -190,12 +198,34 @@ export default function FestivalsClient({ festivals }: { festivals: any[] }) {
               </div>
 
               {/* Footer Actions */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "18px", borderTop: "1px solid rgba(45, 27, 20, 0.08)" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: "12px",
+                  paddingTop: "18px",
+                  borderTop: "1px solid rgba(45, 27, 20, 0.08)",
+                  marginTop: "auto",
+                }}
+              >
                 <a 
                   href={fest.officialSource.url} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  style={{ fontSize: "0.75rem", fontWeight: 700, color: "#8E8076", textDecoration: "none", transition: "color 0.2s" }}
+                  title={`Source: ${fest.officialSource.name}`}
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                    color: "#8E8076",
+                    textDecoration: "none",
+                    transition: "color 0.2s",
+                    maxWidth: "56%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    flexShrink: 1,
+                  }}
                   onMouseOver={(e) => e.currentTarget.style.color = '#C88E44'}
                   onMouseOut={(e) => e.currentTarget.style.color = '#8E8076'}
                 >
@@ -212,7 +242,13 @@ export default function FestivalsClient({ festivals }: { festivals: any[] }) {
                     fontWeight: 700,
                     textDecoration: "none",
                     boxShadow: "0 4px 12px rgba(200, 142, 68, 0.3)",
-                    transition: "transform 0.2s ease, box-shadow 0.2s ease"
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minWidth: "105px",
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.transform = 'translateY(-2px)';

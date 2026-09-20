@@ -111,34 +111,111 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: "var(--space-lg)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "var(--space-xl)" }}>
             {featuredFestivals.map(fest => (
               <div
                 key={fest.id}
                 className="festival-card card-hoverable card"
                 style={{
-                  padding: "var(--space-lg)",
                   display: "flex",
-                  flexDirection: "column"
+                  flexDirection: "column",
+                  overflow: "hidden",
+                  borderRadius: "var(--radius-lg)",
+                  border: "1px solid var(--color-border-subtle)",
+                  background: "var(--color-bg-surface-elevated)",
                 }}
               >
-                <div className="festival-date-badge" style={{ background: "var(--color-primary)", color: "var(--color-text-inverse)" }}>
-                  <span>{fest.displayDate}</span>
+                {/* Festival Picture Banner */}
+                <div style={{ position: "relative", height: "190px", overflow: "hidden" }}>
+                  <img
+                    src={fest.image}
+                    alt={fest.name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.3s ease" }}
+                    loading="lazy"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/images/chandigarh_hero.png";
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: "linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%)",
+                    }}
+                  />
+                  <div
+                    className="festival-date-badge"
+                    style={{
+                      position: "absolute",
+                      top: "12px",
+                      left: "12px",
+                      background: "rgba(15, 23, 42, 0.85)",
+                      backdropFilter: "blur(4px)",
+                      color: "#FFFFFF",
+                      padding: "4px 10px",
+                      borderRadius: "6px",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                    }}
+                  >
+                    <span>{fest.displayDate}</span>
+                  </div>
                 </div>
-                <h3 className="font-serif" style={{ fontSize: "1.2rem", color: "var(--color-text-primary)", marginTop: "6px" }}>
-                  {fest.name}
-                </h3>
-                <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-accent)", marginBottom: "6px" }}>
-                  {fest.location} ({fest.territoryName})
-                </div>
-                <p style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", lineHeight: 1.5, flexGrow: 1 }}>
-                  {fest.description}
-                </p>
-                <div style={{ paddingTop: "12px", borderTop: "1px solid var(--color-border-subtle)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.775rem", color: "var(--color-text-muted)", fontWeight: 600 }}>{fest.category}</span>
-                  <Link href="/festivals" style={{ fontSize: "0.825rem", fontWeight: 700, color: "var(--color-accent)" }} className="hover-accent">
-                    View Details →
-                  </Link>
+
+                <div style={{ padding: "var(--space-lg)", display: "flex", flexDirection: "column", flexGrow: 1 }}>
+                  <h3 className="font-serif" style={{ fontSize: "1.25rem", color: "var(--color-text-primary)", marginBottom: "4px", lineHeight: 1.3 }}>
+                    {fest.name}
+                  </h3>
+                  <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-accent)", marginBottom: "8px" }}>
+                    📍 {fest.location} ({fest.territoryName})
+                  </div>
+                  <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)", lineHeight: 1.55, flexGrow: 1, marginBottom: "14px" }}>
+                    {fest.description}
+                  </p>
+                  <div
+                    style={{
+                      paddingTop: "12px",
+                      borderTop: "1px solid var(--color-border-subtle)",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: "10px",
+                      marginTop: "auto",
+                    }}
+                  >
+                    <span style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                      {fest.category}
+                    </span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+                      <Link
+                        href={`/itinerary?festival=${fest.id}`}
+                        className="btn btn-sm btn-primary"
+                        style={{
+                          whiteSpace: "nowrap",
+                          flexShrink: 0,
+                          fontSize: "0.78rem",
+                          padding: "6px 14px",
+                          fontWeight: 700,
+                          borderRadius: "var(--radius-pill)",
+                        }}
+                      >
+                        + Itinerary
+                      </Link>
+                      <Link
+                        href="/festivals"
+                        style={{
+                          fontSize: "0.825rem",
+                          fontWeight: 700,
+                          color: "var(--color-accent)",
+                          whiteSpace: "nowrap",
+                          flexShrink: 0,
+                        }}
+                        className="hover-accent"
+                      >
+                        View Details →
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
